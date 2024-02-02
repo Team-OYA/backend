@@ -7,7 +7,7 @@ assignees: ''
 
 ---
 
-##  💗 구현할 목록 💗
+##  💗 구현할 목록 
 - TO-DO A
 - TO-DO B
 - TO-DO C
