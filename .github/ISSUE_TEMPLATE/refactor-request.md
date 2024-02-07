@@ -7,7 +7,8 @@ assignees: ''
 
 ---
 
-##  ⚠️ 수정 목록  ⚠️
+## ⚠️ 수정 목록 ⚠️
+
 - TO-DO A
 - TO-DO B
 - TO-DO C
