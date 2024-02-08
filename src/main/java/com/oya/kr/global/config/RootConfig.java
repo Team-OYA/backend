@@ -14,13 +14,13 @@ import org.springframework.context.annotation.PropertySource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.java.Log;
 
 @Configuration
 @ComponentScan(basePackages = {"com.oya.kr"})
 @PropertySource("classpath:secret/database.properties")
 @MapperScan(basePackages = {"com.oya.kr.test.mapper", "com.oya.kr.user.mapper"})
-@Slf4j
+@Log
 public class RootConfig {
 
 	@Value("${datasource.driver-class-name}")

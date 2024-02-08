@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
 	// global exception 처리 추가
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApplicationResponse<Void>> handleGlobalException(Exception e) {
-		log.warning(e.getMessage());
+		log.info(e.getMessage());
 		ApplicationResponse<Void> response = ApplicationResponse.fail(INTERNAL_SERVER_ERROR_CODE,
 			"서버에 문제가 발생하였습니다. 관리자에게 문의해주세요.");
 		return ResponseEntity.badRequest().body(response);
