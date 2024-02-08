@@ -1,6 +1,6 @@
 package com.oya.kr.config;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.sql.Connection;
 
@@ -8,22 +8,21 @@ import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.oya.kr.global.config.RootConfig;
 
-import lombok.extern.log4j.Log4j;
+import lombok.extern.java.Log;
 
+@Log
 @WebAppConfiguration
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {RootConfig.class})
-@Log4j
 public class RootConfigTests {
 
 	@Autowired
@@ -34,22 +33,21 @@ public class RootConfigTests {
 
 	@Test
 	public void testConnection() {
-		try (Connection con = dataSource.getConnection()) {
-			log.info(con.toString());
-		} catch (Exception e) {
-			Assert.fail(e.getMessage());
-		}
+		assertDoesNotThrow(() -> {
+			try (Connection con = dataSource.getConnection()) {
+				log.info(con.toString());
+			}
+		});
 	}
 
 	@Test
 	public void testMyBatis() {
-		try (SqlSession session = sqlSessionFactory.openSession();
-			 Connection con = session.getConnection()) {
-			log.info(session);
-			log.info(con);
-		} catch (Exception e) {
-			fail(e.getMessage());
-		}
+		assertDoesNotThrow(() -> {
+			try (SqlSession session = sqlSessionFactory.openSession();
+				 Connection con = session.getConnection()) {
+				log.info(session.toString());
+				log.info(con.toString());
+			}
+		}, "예외가 발생하면 실패합니다.");
 	}
-
 }
