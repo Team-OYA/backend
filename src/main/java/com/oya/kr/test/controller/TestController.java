@@ -1,6 +1,6 @@
 package com.oya.kr.test.controller;
 
-import static com.oya.kr.global.exception.GlobalErrorCode.*;
+import static com.oya.kr.test.exception.ErrorCodeList.*;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,12 +18,12 @@ import lombok.extern.java.Log;
 @Log
 public class TestController {
 
-	@GetMapping("/1")
+	@GetMapping("/success")
 	public ResponseEntity<ApplicationResponse<String>> successTest() {
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(ApplicationResponse.success("data"));
 	}
 
-	@GetMapping("/2")
+	@GetMapping("/error")
 	public ResponseEntity<ApplicationResponse<String>> errorTest() {
 		throw new ApplicationException(ERROR_TEST);
 	}
