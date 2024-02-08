@@ -1,12 +1,15 @@
-package com.oya.kr.global.exception;
+package com.oya.kr.test.exception;
 
 import org.springframework.http.HttpStatus;
+
+import com.oya.kr.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum GlobalErrorCode implements ErrorCode {
-	ERROR_TEST("S001", HttpStatus.BAD_REQUEST, "테스트 에러입니다.");
+public enum ErrorCodeList implements ErrorCode {
+	ERROR_TEST("T0001", HttpStatus.BAD_REQUEST, "에러 테스트입니다."),
+	;
 
 	private final String code;
 	private final HttpStatus httpStatus;
