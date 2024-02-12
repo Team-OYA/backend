@@ -23,4 +23,5 @@ public class User extends Base {
     private RegistrationType registrationType;
     private UserType userType;
     private String businessRegistrationNumber;
+    private String profileUrl;
 }
