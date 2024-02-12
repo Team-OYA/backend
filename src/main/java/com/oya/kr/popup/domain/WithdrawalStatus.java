@@ -2,7 +2,7 @@ package com.oya.kr.popup.domain;
 
 public enum WithdrawalStatus {
 
-    WAITING("waiting", "철회 대기"),
+    DO_NOT_APPLY("do not apply", "철회 신청하지 않음"),
     REQUEST("request", "철회 요청"),
     APPROVAL("approval", "철회 승인"),
     REJECTION("rejection", "철회 거절"),
