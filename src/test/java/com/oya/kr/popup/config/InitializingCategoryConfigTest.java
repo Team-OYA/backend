@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,17 @@ class InitializingCategoryConfigTest extends SpringApplicationTest {
 
     @Autowired
     private CategoryMapper categoryMapper;
+
+    /**
+     * 테스트 후 데이터 초기화
+     *
+     * @author 김유빈
+     * @since 2024.02.13
+     */
+    @AfterEach
+    void init() {
+        categoryMapper.deleteAll();
+    }
 
     /**
      * 팝업스토어 카테고리 정보 초기화 테스트 작성
