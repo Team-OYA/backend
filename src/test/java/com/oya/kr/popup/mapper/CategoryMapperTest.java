@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,13 +31,24 @@ class CategoryMapperTest {
     private CategoryMapper categoryMapper;
 
     /**
+     * 테스트 전 데이터 초기화
+     *
+     * @author 김유빈
+     * @since 2024.02.13
+     */
+    @BeforeEach
+    void setUp() {
+        categoryMapper.deleteAll();
+    }
+
+    /**
      * 테스트 후 데이터 초기화
      *
      * @author 김유빈
      * @since 2024.02.13
      */
     @AfterEach
-    void setUp() {
+    void init() {
         categoryMapper.deleteAll();
     }
 

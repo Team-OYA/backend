@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.popup.mapper.CategoryMapper">
 
-    <select id="findByName" parameterType="String" resultType="com.oya.kr.popup.domain.Category">
+    <select id="findByName" parameterType="String" resultType="category">
         SELECT NAME
         FROM CATEGORY
         WHERE NAME = #{name}
     </select>
 
-    <insert id="save" parameterType="com.oya.kr.popup.domain.Category">
+    <insert id="save" parameterType="category">
         INSERT INTO CATEGORY (NAME)
         VALUES (#{name})
     </insert>
