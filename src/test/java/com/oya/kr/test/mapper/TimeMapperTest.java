@@ -3,21 +3,14 @@ package com.oya.kr.test.mapper;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.oya.kr.global.config.RootConfig;
+import com.oya.kr.common.SpringApplicationTest;
 
 import lombok.extern.java.Log;
 
 @Log
-@WebAppConfiguration
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {RootConfig.class})
-public class TimeMapperTest {
+public class TimeMapperTest extends SpringApplicationTest {
 
 	@Autowired
 	private TimeMapper timeMapper;

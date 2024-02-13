@@ -9,23 +9,16 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.oya.kr.global.config.RootConfig;
+import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.popup.domain.Category;
 
 /**
  * @author 김유빈
  * @since 2024.02.13
  */
-@WebAppConfiguration
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = RootConfig.class)
-class CategoryMapperTest {
+class CategoryMapperTest extends SpringApplicationTest {
 
     @Autowired
     private CategoryMapper categoryMapper;
