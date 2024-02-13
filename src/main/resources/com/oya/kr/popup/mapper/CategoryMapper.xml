@@ -8,6 +8,11 @@
         WHERE NAME = #{name}
     </select>
 
+    <select id="findAll" resultType="category">
+        SELECT NAME
+        FROM CATEGORY
+    </select>
+
     <insert id="save" parameterType="category">
         INSERT INTO CATEGORY (NAME)
         VALUES (#{name})

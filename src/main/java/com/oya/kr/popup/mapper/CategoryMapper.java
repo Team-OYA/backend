@@ -1,5 +1,6 @@
 package com.oya.kr.popup.mapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.oya.kr.popup.domain.Category;
@@ -11,6 +12,8 @@ import com.oya.kr.popup.domain.Category;
 public interface CategoryMapper {
 
     Optional<Category> findByName(String name);
+
+    List<Category> findAll();
 
     void save(Category category);
 
