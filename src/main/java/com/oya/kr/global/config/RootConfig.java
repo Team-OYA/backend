@@ -19,7 +19,9 @@ import lombok.extern.java.Log;
 @Configuration
 @ComponentScan(basePackages = {"com.oya.kr"})
 @PropertySource("classpath:secret/database.properties")
-@MapperScan(basePackages = {"com.oya.kr.test.mapper", "com.oya.kr.user.mapper"})
+@MapperScan(basePackages = {
+	"com.oya.kr.test.mapper",
+	"com.oya.kr.popup.mapper"})
 @Log
 public class RootConfig {
 
