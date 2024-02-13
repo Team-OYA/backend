@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.user.mapper.UserMapper">
+
+    <insert id="insertUser" parameterType="com.oya.kr.user.service.dto.JoinRequestDto">
+        INSERT INTO USERS (
+        NICKNAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, REGISTRATION_TYPE,
+        USER_TYPE, BUSINESS_REGISTRATION_NUMBER, PROFILE_URL, CREATE_DATE, MODIFIED_DATE, DELETED
+        )
+        VALUES (
+        #{joinRequest.nickname},
+        #{joinRequest.email},
+        #{joinRequest.password},
+        #{joinRequest.birthDate},
+        #{joinRequest.gender, typeHandler=com.oya.kr.user.domain.enums.Gender$TypeHandler},
+        #{joinRequest.registrationType, typeHandler=com.oya.kr.user.domain.enums.RegistrationType$TypeHandler},
+        #{joinRequest.userType, typeHandler=com.oya.kr.user.domain.enums.UserType$TypeHandler},
+        #{joinRequest.businessRegistrationNumber, jdbcType=VARCHAR},
+        #{joinRequest.profileUrl, jdbcType=VARCHAR},
+        CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, '0'
+        )
+    </insert>
+
+    <select id="duplicatedEmail" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM USERS WHERE EMAIL = #{email}
+    </select>
+
+    <select id="duplicatedNickname" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM USERS WHERE NICKNAME = #{email}
+    </select>
+
+    <select id="findByEmail" resultType="com.oya.kr.user.domain.User">
+        SELECT * FROM USERS WHERE email = #{email}
+    </select>
+</mapper>
