@@ -3,6 +3,8 @@ package com.oya.kr.global.config;
 import javax.sql.DataSource;
 
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.type.EnumOrdinalTypeHandler;
+import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +13,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import com.oya.kr.user.domain.enums.Gender;
+import com.oya.kr.user.domain.enums.RegistrationType;
+import com.oya.kr.user.domain.enums.UserType;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
@@ -49,6 +54,15 @@ public class RootConfig {
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource());
+		registerEnumOrdinalTypeHandler(sqlSessionFactoryBean);
 		return sqlSessionFactoryBean.getObject();
+	}
+
+	private void registerEnumOrdinalTypeHandler(SqlSessionFactoryBean sqlSessionFactoryBean) throws Exception {
+		SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBean.getObject();
+		TypeHandlerRegistry typeHandlerRegistry = sqlSessionFactory.getConfiguration().getTypeHandlerRegistry();
+		typeHandlerRegistry.register(Gender.class, EnumOrdinalTypeHandler.class);
+		typeHandlerRegistry.register(RegistrationType.class, EnumOrdinalTypeHandler.class);
+		typeHandlerRegistry.register(UserType.class, EnumOrdinalTypeHandler.class);
 	}
 }
