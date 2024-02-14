@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.popup.mapper.CategoryMapper">
+
+    <select id="findByName" parameterType="String" resultType="categoryResponse">
+        SELECT ID, NAME
+        FROM CATEGORY
+        WHERE NAME = #{name}
+    </select>
+
+    <select id="findAll" resultType="categoryResponse">
+        SELECT ID, NAME
+        FROM CATEGORY
+    </select>
+
+    <insert id="save" parameterType="categoryRequest">
+        INSERT INTO CATEGORY (NAME)
+        VALUES (#{name})
+    </insert>
+    
+    <delete id="deleteAll">
+        DELETE FROM CATEGORY
+    </delete>
+
+</mapper>

@@ -1,5 +1,8 @@
 package com.oya.kr.popup.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum Category {
 
     FOOD("food", "식품"),

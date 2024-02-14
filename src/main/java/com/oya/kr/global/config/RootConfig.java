@@ -2,10 +2,10 @@ package com.oya.kr.global.config;
 
 import javax.sql.DataSource;
 
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ import lombok.extern.java.Log;
 @Configuration
 @ComponentScan(basePackages = {"com.oya.kr"})
 @PropertySource("classpath:secret/database.properties")
-@MapperScan(basePackages = {"com.oya.kr.test.mapper", "com.oya.kr.user.mapper"})
+@MapperScan(basePackages = {"com.oya.kr"})
 @Log
 public class RootConfig {
 
@@ -46,9 +46,10 @@ public class RootConfig {
 	}
 
 	@Bean
-	public SqlSessionFactory sqlSessionFactory() throws Exception {
+	public SqlSessionFactoryBean sqlSessionFactory(ApplicationContext applicationContext) {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource());
-		return sqlSessionFactoryBean.getObject();
+		sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatis/mybatis-config.xml"));
+		return sqlSessionFactoryBean;
 	}
 }

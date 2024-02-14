@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+    <!-- @author 김유빈 -->
+    <!-- @since 2024.02.13 -->
+
+    <!-- SqlSessionTemplate 관련 설정 -->
+    <settings>
+        <setting name="jdbcTypeForNull" value="NULL"/>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <!-- 별칭 작성 부분 -->
+    <typeAliases>
+
+        <!-- domain -->
+        <typeAlias type="com.oya.kr.popup.domain.Category" alias="category"/>
+
+        <!-- mapper request -->
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.CategoryRequest" alias="categoryRequest"/>
+
+        <!-- mapper response -->
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
+
+    </typeAliases>
+</configuration>

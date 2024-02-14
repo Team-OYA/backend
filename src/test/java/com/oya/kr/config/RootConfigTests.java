@@ -9,21 +9,14 @@ import javax.sql.DataSource;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.oya.kr.global.config.RootConfig;
+import com.oya.kr.common.SpringApplicationTest;
 
 import lombok.extern.java.Log;
 
 @Log
-@WebAppConfiguration
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {RootConfig.class})
-public class RootConfigTests {
+public class RootConfigTests extends SpringApplicationTest {
 
 	@Autowired
 	private DataSource dataSource;
