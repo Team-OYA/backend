@@ -9,9 +9,4 @@ import lombok.RequiredArgsConstructor;
 public class JoinResponse {
 	private final long userId;
 	private final String email;
-
-	// public JoinResponse(UserVo user) {
-	// 	this.userId = user.getUserId();
-	// 	this.email = user.getEmail();
-	// }
 }

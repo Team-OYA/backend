@@ -2,8 +2,6 @@ package com.oya.kr.user.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.LocalDate;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +9,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.oya.kr.global.config.RootConfig;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
-import com.oya.kr.user.service.dto.JoinRequestDto;
+import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
 
 import lombok.extern.java.Log;
 
@@ -30,6 +27,12 @@ class UserMapperTest {
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+	/**
+	 * 사용자 로그인 테스트
+	 *
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
 	@Test
 	void insertUser() {
 		// Given
@@ -37,18 +40,18 @@ class UserMapperTest {
 			"TestUser",
 			"testuser@example.com",
 			"password123",
-			"991026",
+			"19991026",
 			0,
 			1,
 			null,
 			null
 		);
-		JoinRequestDto joinRequestDto = new JoinRequestDto(bCryptPasswordEncoder, joinRequest);
+		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder, joinRequest);
 
 		// When
-		int result = userMapper.insertUser(joinRequestDto);
+		int result = userMapper.insertUser(signupUserMapperRequest);
 
 		// Then
-		// assertNotNull(joinRequestDto.getId());
+		assertNotNull(signupUserMapperRequest);
 	}
 }

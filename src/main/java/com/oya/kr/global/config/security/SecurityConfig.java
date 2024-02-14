@@ -48,8 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		http.authorizeRequests()
-			.antMatchers("/join", "/login", "/").permitAll()
-			.antMatchers("/mypage", "/users/reissue").authenticated()
+			.antMatchers("/api/v1/join", "/api/v1/login").permitAll()
+			.antMatchers("/api/v1/mypage", "/api/v1/users/reissue").authenticated()
 			.anyRequest().permitAll();
 	}
 

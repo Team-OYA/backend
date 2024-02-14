@@ -21,6 +21,10 @@ import com.oya.kr.user.mapper.UserMapper;
 
 import lombok.extern.java.Log;
 
+/**
+ * @author 이상민
+ * @since 2024.02.12
+ */
 @Log
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
@@ -38,6 +42,10 @@ class UserServiceTest {
 		MockitoAnnotations.initMocks(this);
 	}
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
 	@DisplayName("duplicated_Email() : 이메일이 중복되었을 때")
 	@Test
 	void duplicated_Email(){
@@ -52,6 +60,10 @@ class UserServiceTest {
 		assertEquals(EXISTENT_EMAIL.getMessage(), exception.getMessage());
 	}
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
 	@DisplayName("duplicated_nickname() : 닉네임이 중복되었을 때")
 	@Test
 	void duplicated_nickname(){

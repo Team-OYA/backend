@@ -2,23 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.user.mapper.UserMapper">
 
-    <resultMap id="userResultMap" type="com.oya.kr.user.domain.User">
-        <id property="id" column="id"/>
-        <result property="nickname" column="nickname"/>
-        <result property="email" column="email"/>
-        <result property="password" column="password"/>
-        <result property="birthDate" column="birth_date"/>
-        <result property="gender" column="gender"/>
-        <result property="registrationType" column="registration_type"/>
-        <result property="userType" column="user_type"/>
-        <result property="businessRegistrationNumber" column="business_registration_number"/>
-        <result property="profileUrl" column="profile_url"/>
-        <result property="createDate" column="create_date"/>
-        <result property="modifiedDate" column="modified_date"/>
-        <result property="deleted" column="deleted"/>
-    </resultMap>
-
-    <insert id="insertUser" parameterType="com.oya.kr.user.service.dto.JoinRequestDto">
+    <insert id="insertUser" parameterType="com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest">
         INSERT INTO USERS (
         NICKNAME, EMAIL, PASSWORD, BIRTH_DATE, GENDER, REGISTRATION_TYPE,
         USER_TYPE, BUSINESS_REGISTRATION_NUMBER, PROFILE_URL
@@ -27,10 +11,10 @@
         #{joinRequest.nickname},
         #{joinRequest.email},
         #{joinRequest.password},
-        TO_DATE(#{joinRequest.birthDate}, 'YYYYMMDD'),
-        #{joinRequest.gender, jdbcType=INTEGER, typeHandler=com.oya.kr.user.domain.enums.Gender$TypeHandler},
-        #{joinRequest.registrationType, jdbcType=INTEGER, typeHandler=com.oya.kr.user.domain.enums.RegistrationType$TypeHandler},
-        #{joinRequest.userType, typeHandler=com.oya.kr.user.domain.enums.UserType$TypeHandler},
+        #{joinRequest.birthDate},
+        #{joinRequest.gender, jdbcType=INTEGER},
+        #{joinRequest.registrationType, jdbcType=INTEGER},
+        #{joinRequest.userType},
         #{joinRequest.businessRegistrationNumber, jdbcType=VARCHAR},
         #{joinRequest.profileUrl, jdbcType=VARCHAR}
         )
@@ -48,8 +32,11 @@
         SELECT COUNT(*) FROM USERS WHERE NICKNAME = #{email}
     </select>
 
-    <select id="findByEmail" resultMap="userResultMap">
-        SELECT * FROM USERS
-        WHERE email = #{email}
+    <select id="findByEmail" resultType="com.oya.kr.user.mapper.dto.response.UserMapperResponse">
+        SELECT
+            *
+        FROM USERS
+        WHERE EMAIL = #{email}
     </select>
+
 </mapper>

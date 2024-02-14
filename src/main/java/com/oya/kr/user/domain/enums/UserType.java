@@ -1,11 +1,10 @@
 package com.oya.kr.user.domain.enums;
 
-import org.apache.ibatis.type.MappedTypes;
+import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
 
-import com.oya.kr.global.util.CodeEnum;
-import com.oya.kr.global.util.CodeEnumTypeHandler;
+import com.oya.kr.global.exception.ApplicationException;
 
-public enum UserType implements CodeEnum {
+public enum UserType {
 
     USER("user"),
     BUSINESS("business"),
@@ -18,18 +17,6 @@ public enum UserType implements CodeEnum {
         this.name = name;
     }
 
-    @MappedTypes(UserType.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<UserType> {
-        public TypeHandler() {
-            super(UserType.class);
-        }
-    }
-
-    @Override
-    public String getCode() {
-        return name;
-    }
-
     public static UserType getUserTypeEnum(int code){
         switch (code) {
             case 0:
@@ -40,5 +27,14 @@ public enum UserType implements CodeEnum {
                 return UserType.ADMINISTRATOR;
         }
         return null;
+    }
+
+    public static UserType findByName(String name) {
+        for (UserType enumValue : UserType.values()) {
+            if (enumValue.name.equals(name)) {
+                return enumValue;
+            }
+        }
+        throw new ApplicationException(WRONG_ENUM);
     }
 }

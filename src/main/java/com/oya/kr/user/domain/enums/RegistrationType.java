@@ -1,11 +1,14 @@
 package com.oya.kr.user.domain.enums;
 
+import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
+
 import org.apache.ibatis.type.MappedTypes;
 
+import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.util.CodeEnum;
 import com.oya.kr.global.util.CodeEnumTypeHandler;
 
-public enum RegistrationType implements CodeEnum {
+public enum RegistrationType{
 
     BASIC("basic"),
     KAKAO("kakao"),
@@ -17,15 +20,12 @@ public enum RegistrationType implements CodeEnum {
         this.name = name;
     }
 
-    @MappedTypes(RegistrationType.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<RegistrationType> {
-        public TypeHandler() {
-            super(RegistrationType.class);
+    public static RegistrationType findByName(String name) {
+        for (RegistrationType enumValue : RegistrationType.values()) {
+            if (enumValue.name.equals(name)) {
+                return enumValue;
+            }
         }
-    }
-
-    @Override
-    public String getCode() {
-        return name;
+        throw new ApplicationException(WRONG_ENUM);
     }
 }
