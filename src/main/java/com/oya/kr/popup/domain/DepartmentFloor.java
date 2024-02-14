@@ -1,9 +1,12 @@
 package com.oya.kr.popup.domain;
 
+import lombok.Getter;
+
 /**
  * @author 김유빈
  * @since 2024.02.14
  */
+@Getter
 public enum DepartmentFloor {
 
     B1("DF000001", "b1", "지하 1층"),
