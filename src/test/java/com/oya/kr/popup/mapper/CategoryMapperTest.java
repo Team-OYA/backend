@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.popup.domain.Category;
+import com.oya.kr.popup.mapper.dto.request.CategoryRequest;
+import com.oya.kr.popup.mapper.dto.response.CategoryResponse;
 
 /**
  * @author 김유빈
@@ -56,10 +58,11 @@ class CategoryMapperTest extends SpringApplicationTest {
     void findByName() {
         // given
         Category category = Category.FOOD;
-        categoryMapper.save(category);
+        CategoryRequest request = new CategoryRequest(category.getName());
+        categoryMapper.save(request);
 
         // when
-        Optional<Category> savedCategory = categoryMapper.findByName(category.name());
+        Optional<CategoryResponse> savedCategory = categoryMapper.findByName(category.getName());
 
         // then
         assertThat(savedCategory).isPresent();
@@ -76,9 +79,10 @@ class CategoryMapperTest extends SpringApplicationTest {
     void save() {
         // given
         Category category = Category.FOOD;
+        CategoryRequest request = new CategoryRequest(category.getName());
 
         // when & then
-        assertThatCode(() -> categoryMapper.save(category))
+        assertThatCode(() -> categoryMapper.save(request))
             .doesNotThrowAnyException();
     }
 }

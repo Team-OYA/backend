@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.popup.domain.Category;
 import com.oya.kr.popup.mapper.CategoryMapper;
+import com.oya.kr.popup.mapper.dto.response.CategoryResponse;
 
 /**
  * @author 김유빈
@@ -43,7 +44,7 @@ class InitializingCategoryConfigTest extends SpringApplicationTest {
     @Test
     void initCategory() {
         // given
-        List<Category> categories = categoryMapper.findAll();
+        List<CategoryResponse> categories = categoryMapper.findAll();
 
         // when & then
         assertThat(categories.size()).isEqualTo(Category.values().length);

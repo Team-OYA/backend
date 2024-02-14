@@ -16,5 +16,11 @@
         <!-- domain -->
         <typeAlias type="com.oya.kr.popup.domain.Category" alias="category"/>
 
+        <!-- mapper request -->
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.CategoryRequest" alias="categoryRequest"/>
+
+        <!-- mapper response -->
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
+
     </typeAliases>
 </configuration>
