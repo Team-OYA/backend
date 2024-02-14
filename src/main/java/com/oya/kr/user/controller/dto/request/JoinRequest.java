@@ -1,51 +1,32 @@
 package com.oya.kr.user.controller.dto.request;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Getter
+@RequiredArgsConstructor
 @NoArgsConstructor(force = true)
+@Builder
 public class JoinRequest {
 
 	private final String email;
-	private String nickname;
-	private String password;
-
-	private String birthDate;
-
-	private int gender;
-	private int userType;
-
-	private String businessRegistrationNumber;
-	private String profileUrl;
+	private final String nickname;
+	private final String password;
+	private final String birthDate;
+	private final int gender;
+	private final int userType;
+	private final String businessRegistrationNumber;
+	private final String profileUrl;
 
 	// 사업체
-	private String nameOfCompany; // 상호
-	private String nameOfRepresentative; // 대표자
-	private String dateOfBusinessCommencement; // 개업일
-	private String businessItem; // 종목
-	private String connectedNumber;
-	private String faxNumber;
-	private String businessAddress; // 사업장 소재지
-
-	public JoinRequest(String nickname, String email, String password, String birthDate, int gender, int userType,
-		String businessRegistrationNumber, String profileUrl) {
-		this.nickname = nickname;
-		this.email = email;
-		this.password = password;
-		this.birthDate = birthDate;
-		this.gender = gender;
-		this.userType = userType;
-		this.businessRegistrationNumber = businessRegistrationNumber;
-		this.profileUrl = profileUrl;
-	}
-
-	public JoinRequest(String email) {
-		this.email = email;
-	}
-
-	public JoinRequest(String email, String nickname) {
-		this.email = email;
-		this.nickname = nickname;
-	}
+	private final String nameOfCompany; // 상호
+	private final String nameOfRepresentative; // 대표자
+	private final String dateOfBusinessCommencement; // 개업일
+	private final String businessItem; // 종목
+	private final String connectedNumber;
+	private final String faxNumber;
+	private final String zipCode;
+	private final String businessAddress; // 사업장 소재지
 }

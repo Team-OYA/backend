@@ -10,12 +10,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.jdbc.datasource.init.DataSourceInitializer;
+import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 import lombok.extern.java.Log;
 
+/**
+ * @author 이상민
+ * @since 2024.02.12
+ */
 @Configuration
 @ComponentScan(basePackages = {"com.oya.kr"})
 @PropertySource("classpath:secret/database.properties")

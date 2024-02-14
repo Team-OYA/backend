@@ -12,6 +12,10 @@ public enum RegistrationType {
 
 	private final String name;
 
+	public String getName() {
+		return name;
+	}
+
 	RegistrationType(String name) {
 		this.name = name;
 	}

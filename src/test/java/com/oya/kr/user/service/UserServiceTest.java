@@ -1,41 +1,37 @@
 package com.oya.kr.user.service;
 
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.oya.kr.global.config.RootConfig;
+import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.mapper.UserMapper;
-
-import lombok.extern.java.Log;
+import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
 
 /**
  * @author 이상민
  * @since 2024.02.12
  */
-@Log
-@WebAppConfiguration
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {RootConfig.class})
-class UserServiceTest {
+class UserServiceTest extends SpringApplicationTest {
 
 	@InjectMocks
 	private UserService userService;
-
 	@Mock
 	private UserMapper userMapper;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@BeforeEach
 	void setUp() {
@@ -80,4 +76,54 @@ class UserServiceTest {
 		assertEquals(EXISTENT_NICKNAME.getMessage(), exception.getMessage());
 	}
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
+	@DisplayName("사용자가 존재하지 않으면 에러가 발생한다.")
+	@Test
+	void findByEmail_doesnt_user() {
+		// given
+		// when
+		// then
+		assertThatThrownBy(() -> userService.findByEmail("noexist@gmail.com"))
+			.isInstanceOf(ApplicationException.class)
+			.hasMessageContaining(NOT_EXIST_USER.getMessage());
+	}
+
+	/**
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
+	@DisplayName("이메일로 사용자 정보를 불러올 수 있다.")
+	@Test
+	void findByEmail() {
+		// given
+		JoinRequest joinRequest = JoinRequest.builder()
+			.email("example@example.com")
+			.nickname("JohnDoe")
+			.password("password123")
+			.birthDate("19900101")
+			.gender(1)
+			.userType(2)
+			.businessRegistrationNumber("1234567890")
+			.profileUrl("/profile/johndoe.jpg")
+			.nameOfCompany("ABC Inc.")
+			.nameOfRepresentative("John Doe")
+			.dateOfBusinessCommencement("20220101")
+			.businessItem("IT Services")
+			.connectedNumber("01012345678")
+			.faxNumber("0212345678")
+			.zipCode("123456")
+			.businessAddress("123 Main St, City, Country")
+			.build();
+		SignupUserMapperRequest request = new SignupUserMapperRequest(bCryptPasswordEncoder, joinRequest);
+		userMapper.insertUser(request);
+
+		// when
+		// then
+		assertThatThrownBy(() -> userService.findByEmail(request.getEmail()))
+			.isInstanceOf(ApplicationException.class)
+			.hasMessage(NOT_EXIST_USER.getMessage());
+	}
 }

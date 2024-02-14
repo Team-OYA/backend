@@ -17,6 +17,10 @@ public enum UserType {
 		this.name = name;
 	}
 
+	public String getName() {
+		return name;
+	}
+
 	public static UserType getUserTypeEnum(int code) {
 		switch (code) {
 			case 0:

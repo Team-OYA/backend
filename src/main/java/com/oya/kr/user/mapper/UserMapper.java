@@ -10,7 +10,7 @@ import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 public interface UserMapper {
 	Optional<UserMapperResponse> findByEmail(@Param("email") String email);
 
-	int insertUser(@Param("joinRequest") SignupUserMapperRequest joinRequest);
+	int insertUser(SignupUserMapperRequest signupUserMapperRequest);
 
 	Integer duplicatedEmail(String email);
 

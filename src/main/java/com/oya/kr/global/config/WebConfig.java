@@ -4,6 +4,10 @@ import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatche
 
 import com.oya.kr.global.config.security.SecurityConfig;
 
+/**
+ * @author 이상민
+ * @since 2024.02.12
+ */
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
 	@Override

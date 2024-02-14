@@ -18,6 +18,10 @@ import com.oya.kr.global.jwt.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.12
+ */
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
@@ -25,6 +29,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private final static String TOKEN_PREFIX = "Bearer ";
 	private final TokenProvider tokenProvider;
 
+	/**
+	 * security 필터
+	 *
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
@@ -51,6 +61,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		}
 	}
 
+	/**
+	 * header에서 accessToken 얻기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
 	private String getAccessToken(String authorizationHeader) {
 		if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
 			return authorizationHeader.substring(TOKEN_PREFIX.length());
@@ -58,6 +74,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		return null;
 	}
 
+	/**
+	 * security 적용안되는 url 찾기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
 	private boolean isAuthenticationRequired(HttpServletRequest request) {
 		String requestURI = request.getRequestURI();
 		return !("/api/v1/login".equals(requestURI) || "/api/v1/join".equals(requestURI));

@@ -29,16 +29,33 @@ public class SignupUserMapperRequest {
 	private String businessRegistrationNumber;
 	private String profileUrl;
 
+	private String nameOfCompany; // 상호
+	private String nameOfRepresentative; // 대표자
+	private LocalDate dateOfBusinessCommencement; // 개업일
+	private String businessItem; // 종목
+	private String connectedNumber;
+	private String faxNumber;
+	private String zipCode;
+	private String businessAddress; // 사업장 소재지
+
 	public SignupUserMapperRequest(BCryptPasswordEncoder bCryptPasswordEncoder, JoinRequest joinRequest) {
 		this.birthDate = dateFormat(joinRequest.getBirthDate());
 		this.nickname = joinRequest.getNickname();
 		this.email = joinRequest.getEmail();
 		this.businessRegistrationNumber = joinRequest.getBusinessRegistrationNumber();
-		this.registrationType = RegistrationType.BASIC.name();
+		this.registrationType = RegistrationType.BASIC.getName();
 		this.profileUrl = joinRequest.getProfileUrl();
-		this.gender = Gender.getGenderEnum(joinRequest.getGender()).name();
+		this.gender = Gender.getGenderEnum(joinRequest.getGender()).getName();
 		this.password = encodePassword(bCryptPasswordEncoder, joinRequest.getPassword());
-		this.userType = UserType.getUserTypeEnum(joinRequest.getUserType()).name();
+		this.userType = UserType.getUserTypeEnum(joinRequest.getUserType()).getName();
+		this.nameOfCompany = joinRequest.getNameOfCompany();
+		this.nameOfRepresentative = joinRequest.getNameOfRepresentative();
+		this.dateOfBusinessCommencement = dateFormat(joinRequest.getDateOfBusinessCommencement());
+		this.businessItem = joinRequest.getBusinessItem();
+		this.connectedNumber = joinRequest.getConnectedNumber();
+		this.faxNumber = joinRequest.getFaxNumber();
+		this.zipCode = joinRequest.getZipCode();
+		this.businessAddress = joinRequest.getBusinessAddress();
 	}
 
 	public LocalDate dateFormat(String date) {

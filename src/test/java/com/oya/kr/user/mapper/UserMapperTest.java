@@ -3,24 +3,14 @@ package com.oya.kr.user.mapper;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 
-import com.oya.kr.global.config.RootConfig;
+import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
 
-import lombok.extern.java.Log;
-
-@Log
-@WebAppConfiguration
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {RootConfig.class})
-class UserMapperTest {
+class UserMapperTest extends SpringApplicationTest {
 
 	@Autowired
 	private UserMapper userMapper;
@@ -28,7 +18,7 @@ class UserMapperTest {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	/**
-	 * 사용자 로그인 테스트
+	 * 회원가입
 	 *
 	 * @author 이상민
 	 * @since 2024.02.12
@@ -36,21 +26,29 @@ class UserMapperTest {
 	@Test
 	void insertUser() {
 		// Given
-		JoinRequest joinRequest = new JoinRequest(
-			"TestUser",
-			"testuser@example.com",
-			"password123",
-			"19991026",
-			0,
-			1,
-			null,
-			null
-		);
+		JoinRequest request = JoinRequest.builder()
+			.email("example@example.com")
+			.nickname("JohnDoe")
+			.password("password123")
+			.birthDate("19900101")
+			.gender(1)
+			.userType(2)
+			.businessRegistrationNumber("1234567890")
+			.profileUrl("/profile/johndoe.jpg")
+			.nameOfCompany("ABC Inc.")
+			.nameOfRepresentative("John Doe")
+			.dateOfBusinessCommencement("20220101")
+			.businessItem("IT Services")
+			.connectedNumber("01012345678")
+			.faxNumber("0212345678")
+			.zipCode("123456")
+			.businessAddress("123 Main St, City, Country")
+			.build();
 		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder,
-			joinRequest);
+			request);
 
 		// When
-		int result = userMapper.insertUser(signupUserMapperRequest);
+		userMapper.insertUser(signupUserMapperRequest);
 
 		// Then
 		assertNotNull(signupUserMapperRequest);

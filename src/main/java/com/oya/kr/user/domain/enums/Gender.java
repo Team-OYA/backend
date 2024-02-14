@@ -10,6 +10,10 @@ public enum Gender {
 	WOMAN("woman"),
 	;
 
+	public String getName() {
+		return name;
+	}
+
 	private final String name;
 
 	Gender(String name) {

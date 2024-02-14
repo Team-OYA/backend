@@ -1,5 +1,7 @@
 package com.oya.kr.user.domain;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -13,6 +15,7 @@ import com.oya.kr.user.domain.enums.UserType;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -24,27 +27,30 @@ public class User extends Base {
 	private String nickname;
 	private String email;
 	private String password;
-	private Date birthDate;
+	private LocalDate birthDate;
 	private Gender gender;
 	private RegistrationType registrationType;
 	private UserType userType;
 	private String businessRegistrationNumber;
 	private String profileUrl;
 
-	public User(UserMapperResponse userMapperResponse) {
-		this.id = userMapperResponse.getId();
-		this.createdDate = userMapperResponse.getCreatedDate();
-		this.modifiedDate = userMapperResponse.getModifiedDate();
-		this.deleted = userMapperResponse.isDeleted();
-		this.nickname = userMapperResponse.getNickname();
-		this.email = userMapperResponse.getEmail();
-		this.password = userMapperResponse.getPassword();
-		this.birthDate = userMapperResponse.getBirthDate();
-		this.gender = Gender.findByName(userMapperResponse.getGender());
-		this.registrationType = RegistrationType.findByName(userMapperResponse.getRegistrationType());
-		this.userType = UserType.findByName(userMapperResponse.getUserType());
-		this.businessRegistrationNumber = userMapperResponse.getBusinessRegistrationNumber();
-		this.profileUrl = userMapperResponse.getProfileUrl();
+	@Builder
+	public User(Long id, LocalDateTime createdDate, LocalDateTime modifiedDate, boolean deleted,
+		      String nickname, String email, String password, LocalDate birthDate, Gender gender,
+		RegistrationType registrationType, UserType userType, String businessRegistrationNumber, String profileUrl) {
+		this.id = id;
+		this.createdDate = createdDate;
+		this.modifiedDate = modifiedDate;
+		this.deleted = deleted;
+		this.nickname = nickname;
+		this.email = email;
+		this.password = password;
+		this.birthDate = birthDate;
+		this.gender = gender;
+		this.registrationType = registrationType;
+		this.userType = userType;
+		this.businessRegistrationNumber = businessRegistrationNumber;
+		this.profileUrl = profileUrl;
 	}
 
 	public static String encodePassword(BCryptPasswordEncoder bCryptPasswordEncoder, String password) {

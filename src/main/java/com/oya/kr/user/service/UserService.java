@@ -36,18 +36,15 @@ public class UserService {
 	/**
 	 * 회원가입
 	 *
-	 * @return MyPageResponse
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
 	public void signUp(JoinRequest joinRequest) {
 		duplicatedEmail(joinRequest.getEmail());
-		duplicatedEmail(joinRequest.getNickname());
-
-		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder,
-			joinRequest);
+		duplicationNickname(joinRequest.getNickname());
+		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder, joinRequest);
 		int data = userMapper.insertUser(signupUserMapperRequest);
-		if (data < 0) {
+		if (data != -1) {
 			throw new ApplicationException(NOT_RESISTER_USER);
 		}
 	}
@@ -81,7 +78,7 @@ public class UserService {
 	/**
 	 * 로그인
 	 *
-	 * @return MyPageResponse
+	 * @return JwtTokenResponse
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
@@ -100,18 +97,25 @@ public class UserService {
 		return new JwtTokenResponse("Bearer ", accessToken, refreshToken);
 	}
 
+	/**
+	 * 이메일로 유저 정보 불러오기
+	 *
+	 * @return User
+	 * @author 이상민
+	 * @since 2024.02.13
+	 */
 	public User findByEmail(String email) {
 		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
 			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
-		return new User(userMapperResponse);
+		return userMapperResponse.toModel();
 	}
 
 	/**
 	 * 토큰 재발급
 	 *
-	 * @return MyPageResponse
+	 * @return JwtTokenResponse
 	 * @author 이상민
-	 * @since 2024.01.22
+	 * @since 2024.02.12
 	 */
 	public JwtTokenResponse reissueAccessToken(User user, String accessToken) {
 		// accessToken으로 refreshToken 찾기
