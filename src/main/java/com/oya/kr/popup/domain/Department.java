@@ -9,9 +9,9 @@ import lombok.Getter;
 @Getter
 public enum Department {
 
-    THE_HYUNDAI("DP000000", "the hyundai", "더현대"),
-    HYUNDAI("DP000001", "hyundai", "현대백화점"),
-    HYUNDAI_OUTLET("DP000002", "hyundai outlet", "현대아울렛"),
+    THE_HYUNDAI("DP000001", "the hyundai", "더현대"),
+    HYUNDAI("DP000002", "hyundai", "현대백화점"),
+    HYUNDAI_OUTLET("DP000003", "hyundai outlet", "현대아울렛"),
     ;
 
     private final String code;
