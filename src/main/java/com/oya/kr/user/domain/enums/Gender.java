@@ -2,6 +2,8 @@ package com.oya.kr.user.domain.enums;
 
 import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
 
+import java.util.Arrays;
+
 import com.oya.kr.global.exception.ApplicationException;
 
 public enum Gender {
@@ -21,21 +23,16 @@ public enum Gender {
 	}
 
 	public static Gender getGenderEnum(int code) {
-		switch (code) {
-			case 0:
-				return Gender.MAN;
-			case 1:
-				return Gender.WOMAN;
+		if (code == 0) {
+			return Gender.MAN;
 		}
-		return null;
+		return Gender.WOMAN;
 	}
 
 	public static Gender findByName(String name) {
-		for (Gender enumValue : Gender.values()) {
-			if (enumValue.name.equals(name)) {
-				return enumValue;
-			}
-		}
-		throw new ApplicationException(WRONG_ENUM);
+		return Arrays.stream(Gender.values())
+			.filter(enumValue -> enumValue.name.equals(name))
+			.findFirst()
+			.orElseThrow(() -> new ApplicationException(WRONG_ENUM));
 	}
 }

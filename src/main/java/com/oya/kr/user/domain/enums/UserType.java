@@ -2,6 +2,8 @@ package com.oya.kr.user.domain.enums;
 
 import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
 
+import java.util.Arrays;
+
 import com.oya.kr.global.exception.ApplicationException;
 
 public enum UserType {
@@ -27,18 +29,15 @@ public enum UserType {
 				return UserType.USER;
 			case 1:
 				return UserType.BUSINESS;
-			case 2:
+			default:
 				return UserType.ADMINISTRATOR;
 		}
-		return null;
 	}
 
 	public static UserType findByName(String name) {
-		for (UserType enumValue : UserType.values()) {
-			if (enumValue.name.equals(name)) {
-				return enumValue;
-			}
-		}
-		throw new ApplicationException(WRONG_ENUM);
+		return Arrays.stream(UserType.values())
+			.filter(enumValue -> enumValue.name.equals(name))
+			.findFirst()
+			.orElseThrow(() -> new ApplicationException(WRONG_ENUM));
 	}
 }
