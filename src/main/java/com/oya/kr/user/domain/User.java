@@ -1,13 +1,7 @@
 package com.oya.kr.user.domain;
 
-import java.time.LocalDate;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -16,6 +10,7 @@ import com.oya.kr.global.domain.Base;
 import com.oya.kr.user.domain.enums.Gender;
 import com.oya.kr.user.domain.enums.RegistrationType;
 import com.oya.kr.user.domain.enums.UserType;
+import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,6 +30,22 @@ public class User extends Base {
     private UserType userType;
     private String businessRegistrationNumber;
     private String profileUrl;
+
+    public User(UserMapperResponse userMapperResponse) {
+        this.id = userMapperResponse.getId();
+        this.createdDate = userMapperResponse.getCreatedDate();
+        this.modifiedDate = userMapperResponse.getModifiedDate();
+        this.deleted = userMapperResponse.isDeleted();
+        this.nickname = userMapperResponse.getNickname();
+        this.email = userMapperResponse.getEmail();
+        this.password = userMapperResponse.getPassword();
+        this.birthDate = userMapperResponse.getBirthDate();
+        this.gender = Gender.findByName(userMapperResponse.getGender());
+        this.registrationType = RegistrationType.findByName(userMapperResponse.getRegistrationType());
+        this.userType = UserType.findByName(userMapperResponse.getUserType());
+        this.businessRegistrationNumber = userMapperResponse.getBusinessRegistrationNumber();
+        this.profileUrl = userMapperResponse.getProfileUrl();
+    }
 
     public static String encodePassword(BCryptPasswordEncoder bCryptPasswordEncoder, String password) {
         return bCryptPasswordEncoder.encode(password);

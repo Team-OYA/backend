@@ -16,6 +16,8 @@ import com.oya.kr.user.controller.dto.request.LoginRequest;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
+import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
+import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 import com.oya.kr.user.service.dto.JoinRequestDto;
 
 import lombok.RequiredArgsConstructor;
@@ -43,8 +45,8 @@ public class UserService {
 		duplicatedEmail(joinRequest.getEmail());
 		duplicatedEmail(joinRequest.getNickname());
 
-		JoinRequestDto joinRequestDto = new JoinRequestDto(bCryptPasswordEncoder, joinRequest);
-		int data = userMapper.insertUser(joinRequestDto);
+		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder, joinRequest);
+		int data = userMapper.insertUser(signupUserMapperRequest);
 		if(data < 0){
 			throw new ApplicationException(NOT_RESISTER_USER);
 		}
@@ -93,18 +95,15 @@ public class UserService {
 		if (!user.checkPassword(bCryptPasswordEncoder, loginRequest.getPassword())) {
 			throw new ApplicationException(NOT_CORRECTED_PASSWORD);
 		}
-
 		String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
 		String refreshToken = tokenProvider.createRefreshToken(user);
 		return new JwtTokenResponse("Bearer ", accessToken, refreshToken);
 	}
 
 	public User findByEmail(String email) {
-		User user = userMapper.findByEmail(email);
-		if(user == null){
-			throw new ApplicationException(NOT_EXIST_USER);
-		}
-		return user;
+		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
+			.orElseThrow(()-> new ApplicationException(NOT_EXIST_USER));
+		return new User(userMapperResponse);
 	}
 
 	/**

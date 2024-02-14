@@ -1,11 +1,14 @@
 package com.oya.kr.user.domain.enums;
 
+import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
+
 import org.apache.ibatis.type.MappedTypes;
 
+import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.util.CodeEnum;
 import com.oya.kr.global.util.CodeEnumTypeHandler;
 
-public enum Gender implements CodeEnum  {
+public enum Gender  {
 
     MAN("man"),
     WOMAN("woman"),
@@ -15,18 +18,6 @@ public enum Gender implements CodeEnum  {
 
     Gender(String name) {
         this.name = name;
-    }
-
-    @MappedTypes(Gender.class)
-    public static class TypeHandler extends CodeEnumTypeHandler<Gender> {
-        public TypeHandler() {
-            super(Gender.class);
-        }
-    }
-
-    @Override
-    public String getCode() {
-        return name;
     }
 
     public static Gender getGenderEnum(int code) {
@@ -39,4 +30,12 @@ public enum Gender implements CodeEnum  {
         return null;
     }
 
+    public static Gender findByName(String name) {
+        for (Gender enumValue : Gender.values()) {
+            if (enumValue.name.equals(name)) {
+                return enumValue;
+            }
+        }
+        throw new ApplicationException(WRONG_ENUM);
+    }
 }

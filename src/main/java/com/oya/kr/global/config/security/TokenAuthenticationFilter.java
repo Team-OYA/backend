@@ -61,6 +61,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
 	private boolean isAuthenticationRequired(HttpServletRequest request) {
 		String requestURI = request.getRequestURI();
-		return !("/login".equals(requestURI) || "/join".equals(requestURI));
+		return !("/api/v1/login".equals(requestURI) || "/api/v1/join".equals(requestURI));
 	}
 }

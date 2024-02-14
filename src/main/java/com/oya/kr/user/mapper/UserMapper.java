@@ -4,13 +4,13 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.oya.kr.user.domain.User;
-import com.oya.kr.user.service.dto.JoinRequestDto;
+import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
+import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 public interface UserMapper {
-	User findByEmail(@Param("email") String email);
+	Optional<UserMapperResponse> findByEmail(@Param("email") String email);
 
-	int insertUser(@Param("joinRequest") JoinRequestDto joinRequest);
+	int insertUser(@Param("joinRequest") SignupUserMapperRequest joinRequest);
 
 	Integer duplicatedEmail(String email);
 

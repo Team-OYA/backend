@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oya.kr.global.dto.ApplicationResponse;
@@ -28,7 +29,7 @@ import lombok.extern.java.Log;
  */
 @RestController
 @RequiredArgsConstructor
-@Log
+@RequestMapping("/api/v1")
 public class UserController {
 
 	private final UserService userService;
@@ -125,7 +126,7 @@ public class UserController {
 
 	@GetMapping("/mypage")
 	public void me(Principal principal){
-		log.info(principal.getName());
+		// log.info(principal.getName());
 	}
 
 }
