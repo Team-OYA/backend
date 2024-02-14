@@ -46,3 +46,4 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 		return new MappingJackson2HttpMessageConverter();
 	}
 }
+
