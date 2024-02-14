@@ -8,7 +8,7 @@ import lombok.Getter;
 public class Base {
 
     protected Long id;
-    protected LocalDateTime createDate;
+    protected LocalDateTime createdDate;
     protected LocalDateTime modifiedDate;
     protected boolean deleted;
 }

@@ -2,6 +2,7 @@ package com.oya.kr.user.service.dto;
 
 import static com.oya.kr.user.domain.User.*;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -22,7 +23,7 @@ public class JoinRequestDto {
 	private final String nickname;
 	private final String email;
 	private String password;
-	private LocalDate birthDate;
+	private Date birthDate;
 	private Gender gender;
 	private final RegistrationType registrationType;
 	private UserType userType;
@@ -32,7 +33,7 @@ public class JoinRequestDto {
 	// 사업체
 	private String nameOfCompany; // 상호
 	private String nameOfRepresentative; // 대표자
-	private LocalDate dateOfBusinessCommencement; // 개업일
+	private Date dateOfBusinessCommencement; // 개업일
 	private String businessItem; // 종목
 	private String connectedNumber;
 	private String faxNumber;
@@ -60,10 +61,11 @@ public class JoinRequestDto {
 		}
 	}
 
-	public LocalDate dateFormat(String date){
+	public Date dateFormat(String date) {
 		if (date != null && !date.isEmpty()) {
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
-			return LocalDate.parse(date, formatter);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+			LocalDate localDate = LocalDate.parse(date, formatter);
+			return Date.valueOf(localDate);
 		} else {
 			return null;
 		}

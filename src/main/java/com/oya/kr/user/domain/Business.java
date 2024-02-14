@@ -21,5 +21,6 @@ public class Business extends Base {
 	private String businessItem; // 종목
 	private String connectedNumber;
 	private String faxNumber;
+	private String zipCode;
 	private String businessAddress; // 사업장 소재지
 }
