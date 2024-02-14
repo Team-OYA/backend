@@ -17,6 +17,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import com.oya.kr.global.config.RootConfig;
+import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.JwtProperties;
 import com.oya.kr.global.jwt.TokenProvider;
 
@@ -64,11 +65,9 @@ public class TokenProviderTest {
 			.build()
 			.createToken(jwtProperties);
 
-		// when
-		boolean result = tokenProvider.validToken(token);
-
-		// then
-		assertFalse(result);
+		// when & then
+		assertThatThrownBy(() -> tokenProvider.validToken(token))
+			.isInstanceOf(ApplicationException.class);
 	}
 
 	@DisplayName("getAuthentication() : 토큰 기반으로 인증 정보를 가져올 수 있다.")

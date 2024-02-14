@@ -1,5 +1,13 @@
 package com.oya.kr.global.config;
 
+import java.util.List;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import com.oya.kr.global.config.security.SecurityConfig;
@@ -8,7 +16,10 @@ import com.oya.kr.global.config.security.SecurityConfig;
  * @author 이상민
  * @since 2024.02.12
  */
-public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
+@Configuration
+@EnableWebMvc
+public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer
+    implements WebMvcConfigurer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
@@ -23,6 +34,16 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 	@Override
 	protected String[] getServletMappings() {
 		return new String[] {"/"};
+	}
+
+	@Override
+	public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+		converters.add(mappingJackson2HttpMessageConverter());
+	}
+
+	@Bean
+	public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter() {
+		return new MappingJackson2HttpMessageConverter();
 	}
 }
 
