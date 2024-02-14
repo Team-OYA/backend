@@ -107,7 +107,7 @@ public class UserService {
 	public User findByEmail(String email) {
 		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
 			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
-		return userMapperResponse.toModel();
+		return userMapperResponse.toDomain();
 	}
 
 	/**

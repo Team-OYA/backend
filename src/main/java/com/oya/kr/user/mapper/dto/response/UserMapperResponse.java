@@ -2,7 +2,6 @@ package com.oya.kr.user.mapper.dto.response;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.domain.enums.Gender;
@@ -31,7 +30,7 @@ public class UserMapperResponse {
 	private final boolean deleted;
 
 
-	public User toModel(){
+	public User toDomain(){
 		return User.builder()
 			.id(this.id)
 			.createdDate(this.createdDate)

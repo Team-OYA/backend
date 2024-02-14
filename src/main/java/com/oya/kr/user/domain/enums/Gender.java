@@ -6,15 +6,14 @@ import java.util.Arrays;
 
 import com.oya.kr.global.exception.ApplicationException;
 
+import lombok.Getter;
+
+@Getter
 public enum Gender {
 
 	MAN("man"),
 	WOMAN("woman"),
 	;
-
-	public String getName() {
-		return name;
-	}
 
 	private final String name;
 

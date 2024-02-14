@@ -6,6 +6,9 @@ import java.util.Arrays;
 
 import com.oya.kr.global.exception.ApplicationException;
 
+import lombok.Getter;
+
+@Getter
 public enum RegistrationType {
 
 	BASIC("basic"),
@@ -13,10 +16,6 @@ public enum RegistrationType {
 	;
 
 	private final String name;
-
-	public String getName() {
-		return name;
-	}
 
 	RegistrationType(String name) {
 		this.name = name;
