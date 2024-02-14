@@ -2,6 +2,8 @@ package com.oya.kr.user.controller;
 
 import java.security.Principal;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +32,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
 public class UserController {
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final UserService userService;
 
@@ -127,7 +131,7 @@ public class UserController {
 
 	@GetMapping("/mypage")
 	public void me(Principal principal) {
-		// log.info(principal.getName());
+		logger.info(principal.getName());
 	}
 
 }
