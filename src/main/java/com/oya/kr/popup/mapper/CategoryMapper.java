@@ -12,11 +12,11 @@ import com.oya.kr.popup.mapper.dto.response.CategoryResponse;
  */
 public interface CategoryMapper {
 
-    Optional<CategoryResponse> findByName(String name);
+	Optional<CategoryResponse> findByName(String name);
 
-    List<CategoryResponse> findAll();
+	List<CategoryResponse> findAll();
 
-    void save(CategoryRequest category);
+	void save(CategoryRequest category);
 
-    void deleteAll();
+	void deleteAll();
 }

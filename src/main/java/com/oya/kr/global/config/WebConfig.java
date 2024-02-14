@@ -10,10 +10,16 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import com.oya.kr.global.config.security.SecurityConfig;
+
+/**
+ * @author 이상민
+ * @since 2024.02.12
+ */
 @Configuration
 @EnableWebMvc
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer
-	implements WebMvcConfigurer {
+    implements WebMvcConfigurer {
 
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
@@ -22,7 +28,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
 	@Override
 	protected Class<?>[] getServletConfigClasses() {
-		return new Class[] {ServletConfig.class};
+		return new Class[] {ServletConfig.class, SecurityConfig.class};
 	}
 
 	@Override

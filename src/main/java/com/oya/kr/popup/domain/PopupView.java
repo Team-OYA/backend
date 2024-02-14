@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PopupView extends Base {
 
-    private Popup popup;
-    private User user;
+	private Popup popup;
+	private User user;
 }

@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Community extends Base {
 
-    private User user;
-    private String title;
-    private String description;
-    private Category category;
-    private CommunityType communityType;
+	private User user;
+	private String title;
+	private String description;
+	private Category category;
+	private CommunityType communityType;
 }
