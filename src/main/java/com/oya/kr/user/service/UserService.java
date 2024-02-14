@@ -3,6 +3,8 @@ package com.oya.kr.user.service;
 import static com.oya.kr.global.jwt.TokenProvider.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 public class UserService {
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final UserMapper userMapper;
 
@@ -53,8 +57,8 @@ public class UserService {
 	 * @since 2024.02.13
 	 */
 	public void duplicatedEmail(String email) {
-		Integer count1 = userMapper.duplicatedEmail(email);
-		if (count1 != null && count1 > 0) {
+		Integer count = userMapper.duplicatedEmail(email);
+		if (count != null && count > 0) {
 			throw new ApplicationException(EXISTENT_EMAIL);
 		}
 	}
@@ -66,12 +70,11 @@ public class UserService {
 	 * @since 2024.02.13
 	 */
 	public void duplicationNickname(String nickname) {
-		Integer count2 = userMapper.duplicatedNickname(nickname);
-		if (count2 != null && count2 > 0) {
+		Integer count = userMapper.duplicatedNickname(nickname);
+		if (count != null && count > 0) {
 			throw new ApplicationException(EXISTENT_NICKNAME);
 		}
 	}
-
 
 	/**
 	 * 로그인
@@ -82,15 +85,26 @@ public class UserService {
 	 */
 	@Transactional(readOnly = true)
 	public JwtTokenResponse login(LoginRequest loginRequest) {
+		Integer count = userMapper.duplicatedEmail(loginRequest.getEmail());
+		if(count == 0){
+			throw new ApplicationException(NOT_EXISTENT_EMAIL);
+		}
 		User user = findByEmail(loginRequest.getEmail());
+		if (!user.checkPassword(bCryptPasswordEncoder, loginRequest.getPassword())) {
+			throw new ApplicationException(NOT_CORRECTED_PASSWORD);
+		}
+
 		String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
 		String refreshToken = tokenProvider.createRefreshToken(user);
 		return new JwtTokenResponse("Bearer ", accessToken, refreshToken);
 	}
 
 	public User findByEmail(String email) {
-		return userMapper.findByEmail(email)
-			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
+		User user = userMapper.findByEmail(email);
+		if(user == null){
+			throw new ApplicationException(NOT_EXIST_USER);
+		}
+		return user;
 	}
 
 	/**

@@ -10,7 +10,6 @@ import java.util.Set;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import com.oya.kr.global.exception.ApplicationException;
@@ -92,7 +91,8 @@ public class TokenProvider {
 	public Authentication getAuthentication(String token){
 		Claims claims = getClaims(token);
 		Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("USER"));
-		return new UsernamePasswordAuthenticationToken(new User(claims.getSubject(), "", authorities), token, authorities);
+		CustomUserDetails userDetails = new CustomUserDetails(claims.getSubject(), "", authorities);
+		return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
 	}
 
 	// 토큰 기반으로 유저 ID를 가져오는 메서드

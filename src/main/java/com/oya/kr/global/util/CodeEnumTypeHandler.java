@@ -9,6 +9,10 @@ import java.util.EnumSet;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeHandler;
 
+/**
+ * @author 이상민
+ * @since 2024.02.13
+ */
 public abstract class CodeEnumTypeHandler<E extends Enum<E> & CodeEnum> implements TypeHandler<CodeEnum> {
 
 	private Class<E> type;
