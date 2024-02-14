@@ -21,7 +21,6 @@ import com.oya.kr.user.domain.User;
 import com.oya.kr.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 
 /**
  * @author 이상민
@@ -57,7 +56,8 @@ public class UserController {
 	 * @since 2024.02.13
 	 */
 	@PostMapping("/duplicated/email")
-	public ResponseEntity<ApplicationResponse<String>> duplicationEmail(@RequestBody DuplicatedEmailRequest duplicatedEmailRequest) {
+	public ResponseEntity<ApplicationResponse<String>> duplicationEmail(
+		@RequestBody DuplicatedEmailRequest duplicatedEmailRequest) {
 		userService.duplicatedEmail(duplicatedEmailRequest.getEmail());
 		return ResponseEntity.ok(ApplicationResponse.success("사용가능한 이메일입니다."));
 	}
@@ -71,7 +71,8 @@ public class UserController {
 	 * @since 2024.02.13
 	 */
 	@PostMapping("/duplicated/nickname")
-	public ResponseEntity<ApplicationResponse<String>> duplicationNickname(@RequestBody DuplicatedNicknameRequest duplicatedNicknameRequest) {
+	public ResponseEntity<ApplicationResponse<String>> duplicationNickname(
+		@RequestBody DuplicatedNicknameRequest duplicatedNicknameRequest) {
 		userService.duplicationNickname(duplicatedNicknameRequest.getNickname());
 		return ResponseEntity.ok(ApplicationResponse.success("사용가능한 넥네임입니다."));
 	}
@@ -85,7 +86,7 @@ public class UserController {
 	 * @since 2024.02.13
 	 */
 	@PostMapping("/login")
-	public ResponseEntity<ApplicationResponse<JwtTokenResponse>> login(@RequestBody LoginRequest loginRequest){
+	public ResponseEntity<ApplicationResponse<JwtTokenResponse>> login(@RequestBody LoginRequest loginRequest) {
 		JwtTokenResponse jwtTokenResponse = userService.login(loginRequest);
 		return ResponseEntity.ok(ApplicationResponse.success(jwtTokenResponse));
 	}
@@ -119,13 +120,13 @@ public class UserController {
 		return ResponseEntity.ok(ApplicationResponse.success("로그아웃되었습니다."));
 	}
 
-	private String getAccessToken(){
+	private String getAccessToken() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return authentication.getCredentials().toString();
 	}
 
 	@GetMapping("/mypage")
-	public void me(Principal principal){
+	public void me(Principal principal) {
 		// log.info(principal.getName());
 	}
 

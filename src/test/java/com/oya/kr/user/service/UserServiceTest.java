@@ -48,7 +48,7 @@ class UserServiceTest {
 	 */
 	@DisplayName("duplicated_Email() : 이메일이 중복되었을 때")
 	@Test
-	void duplicated_Email(){
+	void duplicated_Email() {
 		// given
 		String email = "testuser@example.com";
 
@@ -56,7 +56,8 @@ class UserServiceTest {
 		when(userMapper.duplicatedEmail(email)).thenReturn(1);
 
 		// then
-		ApplicationException exception = assertThrows(ApplicationException.class, () -> userService.duplicatedEmail(email));
+		ApplicationException exception = assertThrows(ApplicationException.class,
+			() -> userService.duplicatedEmail(email));
 		assertEquals(EXISTENT_EMAIL.getMessage(), exception.getMessage());
 	}
 
@@ -66,7 +67,7 @@ class UserServiceTest {
 	 */
 	@DisplayName("duplicated_nickname() : 닉네임이 중복되었을 때")
 	@Test
-	void duplicated_nickname(){
+	void duplicated_nickname() {
 		// given
 		String nickname = "TestUser";
 
@@ -74,7 +75,8 @@ class UserServiceTest {
 		when(userMapper.duplicatedNickname(nickname)).thenReturn(1);
 
 		// then
-		ApplicationException exception = assertThrows(ApplicationException.class, () -> userService.duplicationNickname(nickname));
+		ApplicationException exception = assertThrows(ApplicationException.class,
+			() -> userService.duplicationNickname(nickname));
 		assertEquals(EXISTENT_NICKNAME.getMessage(), exception.getMessage());
 	}
 

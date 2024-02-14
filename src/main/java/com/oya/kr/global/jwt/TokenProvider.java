@@ -30,20 +30,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TokenProvider {
 
-	private final JwtProperties jwtProperties;
+	public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
 
 	// private final RedisDao redisDao;
-
-	public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
 	private static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
+	private final JwtProperties jwtProperties;
 
-	public String generateToken(com.oya.kr.user.domain.User user, Duration expiredAt){
+	public String generateToken(com.oya.kr.user.domain.User user, Duration expiredAt) {
 		Date now = new Date();
 		return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
 	}
 
 	// refreshToken 생성
-	public String createRefreshToken(com.oya.kr.user.domain.User user){
+	public String createRefreshToken(com.oya.kr.user.domain.User user) {
 		String refreshToken = generateToken(user, REFRESH_TOKEN_DURATION);
 		// redis에 저장
 		return refreshToken;
@@ -63,7 +62,7 @@ public class TokenProvider {
 			.compact(); // JWT 토큰 생성
 	}
 
-	public boolean validToken(String token){
+	public boolean validToken(String token) {
 		try {
 			Jwts.parser()
 				.setSigningKey(jwtProperties.getSecretkey())
@@ -88,7 +87,7 @@ public class TokenProvider {
 	}
 
 	// 토큰 기반으로 인증 정보를 가져오는 메서드
-	public Authentication getAuthentication(String token){
+	public Authentication getAuthentication(String token) {
 		Claims claims = getClaims(token);
 		Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("USER"));
 		CustomUserDetails userDetails = new CustomUserDetails(claims.getSubject(), "", authorities);
@@ -96,7 +95,7 @@ public class TokenProvider {
 	}
 
 	// 토큰 기반으로 유저 ID를 가져오는 메서드
-	public Long getUserId(String token){
+	public Long getUserId(String token) {
 		Claims claims = getClaims(token);
 		return claims.get("id", Long.class);
 	}

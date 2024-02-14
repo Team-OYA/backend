@@ -17,14 +17,13 @@ import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
-	private final TokenProvider tokenProvider;
 	private final static String HEADER_AUTHORIZATION = "Authorization";
 	private final static String TOKEN_PREFIX = "Bearer ";
+	private final TokenProvider tokenProvider;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -53,7 +52,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	}
 
 	private String getAccessToken(String authorizationHeader) {
-		if(authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)){
+		if (authorizationHeader != null && authorizationHeader.startsWith(TOKEN_PREFIX)) {
 			return authorizationHeader.substring(TOKEN_PREFIX.length());
 		}
 		return null;

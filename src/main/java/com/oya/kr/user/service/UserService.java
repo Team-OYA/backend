@@ -18,7 +18,6 @@ import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
-import com.oya.kr.user.service.dto.JoinRequestDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,9 +44,10 @@ public class UserService {
 		duplicatedEmail(joinRequest.getEmail());
 		duplicatedEmail(joinRequest.getNickname());
 
-		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder, joinRequest);
+		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder,
+			joinRequest);
 		int data = userMapper.insertUser(signupUserMapperRequest);
-		if(data < 0){
+		if (data < 0) {
 			throw new ApplicationException(NOT_RESISTER_USER);
 		}
 	}
@@ -88,7 +88,7 @@ public class UserService {
 	@Transactional(readOnly = true)
 	public JwtTokenResponse login(LoginRequest loginRequest) {
 		Integer count = userMapper.duplicatedEmail(loginRequest.getEmail());
-		if(count == 0){
+		if (count == 0) {
 			throw new ApplicationException(NOT_EXISTENT_EMAIL);
 		}
 		User user = findByEmail(loginRequest.getEmail());
@@ -102,7 +102,7 @@ public class UserService {
 
 	public User findByEmail(String email) {
 		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
-			.orElseThrow(()-> new ApplicationException(NOT_EXIST_USER));
+			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
 		return new User(userMapperResponse);
 	}
 
@@ -116,7 +116,7 @@ public class UserService {
 	public JwtTokenResponse reissueAccessToken(User user, String accessToken) {
 		// accessToken으로 refreshToken 찾기
 		String refreshToken = "";
-		if(tokenProvider.validToken(refreshToken)){
+		if (tokenProvider.validToken(refreshToken)) {
 			String newAccessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
 			return new JwtTokenResponse("Bearer ", newAccessToken, refreshToken);
 		}
@@ -125,6 +125,5 @@ public class UserService {
 
 	public void logout(User user, String accessToken) {
 	}
-
 
 }

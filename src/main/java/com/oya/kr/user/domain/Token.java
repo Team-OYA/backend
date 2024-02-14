@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Token extends Base {
 
-    private User user;
-    private String accessToken;
-    private String refreshToken;
+	private User user;
+	private String accessToken;
+	private String refreshToken;
 }

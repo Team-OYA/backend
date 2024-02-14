@@ -29,11 +29,11 @@ public class JwtFactory {
 		this.claims = claims != null ? claims : this.claims;
 	}
 
-	public static JwtFactory withDefaultValue(){
+	public static JwtFactory withDefaultValue() {
 		return JwtFactory.builder().build();
 	}
 
-	public String createToken(JwtProperties jwtProperties){
+	public String createToken(JwtProperties jwtProperties) {
 		return Jwts.builder()
 			.setSubject(subject)
 			.setHeaderParam(Header.TYPE, Header.JWT_TYPE)

@@ -49,17 +49,8 @@ public class RootConfig {
 	public SqlSessionFactoryBean sqlSessionFactory(ApplicationContext applicationContext) {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource());
-		registerEnumOrdinalTypeHandler(sqlSessionFactoryBean);
-		return sqlSessionFactoryBean.getObject();
-		sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:/mybatis/mybatis-config.xml"));
+		sqlSessionFactoryBean.setConfigLocation(
+			applicationContext.getResource("classpath:/mybatis/mybatis-config.xml"));
 		return sqlSessionFactoryBean;
-	}
-
-	private void registerEnumOrdinalTypeHandler(SqlSessionFactoryBean sqlSessionFactoryBean) throws Exception {
-		SqlSessionFactory sqlSessionFactory = sqlSessionFactoryBean.getObject();
-		TypeHandlerRegistry typeHandlerRegistry = sqlSessionFactory.getConfiguration().getTypeHandlerRegistry();
-		typeHandlerRegistry.register(Gender.class, EnumOrdinalTypeHandler.class);
-		typeHandlerRegistry.register(RegistrationType.class, EnumOrdinalTypeHandler.class);
-		typeHandlerRegistry.register(UserType.class, EnumOrdinalTypeHandler.class);
 	}
 }

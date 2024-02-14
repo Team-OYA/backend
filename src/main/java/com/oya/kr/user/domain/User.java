@@ -21,44 +21,44 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends Base {
 
-    private String nickname;
-    private String email;
-    private String password;
-    private Date birthDate;
-    private Gender gender;
-    private RegistrationType registrationType;
-    private UserType userType;
-    private String businessRegistrationNumber;
-    private String profileUrl;
+	private String nickname;
+	private String email;
+	private String password;
+	private Date birthDate;
+	private Gender gender;
+	private RegistrationType registrationType;
+	private UserType userType;
+	private String businessRegistrationNumber;
+	private String profileUrl;
 
-    public User(UserMapperResponse userMapperResponse) {
-        this.id = userMapperResponse.getId();
-        this.createdDate = userMapperResponse.getCreatedDate();
-        this.modifiedDate = userMapperResponse.getModifiedDate();
-        this.deleted = userMapperResponse.isDeleted();
-        this.nickname = userMapperResponse.getNickname();
-        this.email = userMapperResponse.getEmail();
-        this.password = userMapperResponse.getPassword();
-        this.birthDate = userMapperResponse.getBirthDate();
-        this.gender = Gender.findByName(userMapperResponse.getGender());
-        this.registrationType = RegistrationType.findByName(userMapperResponse.getRegistrationType());
-        this.userType = UserType.findByName(userMapperResponse.getUserType());
-        this.businessRegistrationNumber = userMapperResponse.getBusinessRegistrationNumber();
-        this.profileUrl = userMapperResponse.getProfileUrl();
-    }
+	public User(UserMapperResponse userMapperResponse) {
+		this.id = userMapperResponse.getId();
+		this.createdDate = userMapperResponse.getCreatedDate();
+		this.modifiedDate = userMapperResponse.getModifiedDate();
+		this.deleted = userMapperResponse.isDeleted();
+		this.nickname = userMapperResponse.getNickname();
+		this.email = userMapperResponse.getEmail();
+		this.password = userMapperResponse.getPassword();
+		this.birthDate = userMapperResponse.getBirthDate();
+		this.gender = Gender.findByName(userMapperResponse.getGender());
+		this.registrationType = RegistrationType.findByName(userMapperResponse.getRegistrationType());
+		this.userType = UserType.findByName(userMapperResponse.getUserType());
+		this.businessRegistrationNumber = userMapperResponse.getBusinessRegistrationNumber();
+		this.profileUrl = userMapperResponse.getProfileUrl();
+	}
 
-    public static String encodePassword(BCryptPasswordEncoder bCryptPasswordEncoder, String password) {
-        return bCryptPasswordEncoder.encode(password);
-    }
+	public static String encodePassword(BCryptPasswordEncoder bCryptPasswordEncoder, String password) {
+		return bCryptPasswordEncoder.encode(password);
+	}
 
-    /**
-     * 비밀번호 확인
-     *
-     * @return boolean
-     * @author 이상민
-     * @since 2024.02.13
-     */
-    public boolean checkPassword(PasswordEncoder passwordEncoder, String password) {
-        return passwordEncoder.matches(password, this.password);
-    }
+	/**
+	 * 비밀번호 확인
+	 *
+	 * @return boolean
+	 * @author 이상민
+	 * @since 2024.02.13
+	 */
+	public boolean checkPassword(PasswordEncoder passwordEncoder, String password) {
+		return passwordEncoder.matches(password, this.password);
+	}
 }

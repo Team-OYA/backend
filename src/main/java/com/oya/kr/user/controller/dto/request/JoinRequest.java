@@ -1,16 +1,14 @@
 package com.oya.kr.user.controller.dto.request;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Getter
 @NoArgsConstructor(force = true)
 public class JoinRequest {
 
-	private String nickname;
 	private final String email;
+	private String nickname;
 	private String password;
 
 	private String birthDate;

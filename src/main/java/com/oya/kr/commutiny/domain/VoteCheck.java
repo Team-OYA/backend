@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VoteCheck extends Base {
 
-    private Vote vote;
-    private User user;
+	private Vote vote;
+	private User user;
 }

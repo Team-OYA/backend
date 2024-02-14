@@ -15,9 +15,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Popup extends Base {
 
-    private Plan plan;
-    private String title;
-    private String description;
-    private LocalDateTime pulledDate;
-    private WithdrawalStatus withdrawalStatus;
+	private Plan plan;
+	private String title;
+	private String description;
+	private LocalDateTime pulledDate;
+	private WithdrawalStatus withdrawalStatus;
 }

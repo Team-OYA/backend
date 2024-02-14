@@ -7,5 +7,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryRequest {
 
-    private final String name;
+	private final String name;
 }

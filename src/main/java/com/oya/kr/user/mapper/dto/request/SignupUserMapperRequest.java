@@ -29,7 +29,7 @@ public class SignupUserMapperRequest {
 	private String businessRegistrationNumber;
 	private String profileUrl;
 
-	public SignupUserMapperRequest(BCryptPasswordEncoder bCryptPasswordEncoder, JoinRequest joinRequest){
+	public SignupUserMapperRequest(BCryptPasswordEncoder bCryptPasswordEncoder, JoinRequest joinRequest) {
 		this.birthDate = dateFormat(joinRequest.getBirthDate());
 		this.nickname = joinRequest.getNickname();
 		this.email = joinRequest.getEmail();

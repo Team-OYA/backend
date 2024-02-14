@@ -46,7 +46,8 @@ class UserMapperTest {
 			null,
 			null
 		);
-		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder, joinRequest);
+		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder,
+			joinRequest);
 
 		// When
 		int result = userMapper.insertUser(signupUserMapperRequest);

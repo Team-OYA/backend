@@ -16,14 +16,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Plan extends Base {
 
-    private User user;
-    private String office;
-    private int floor;
-    private String location;
-    private LocalDateTime openDate;
-    private LocalDateTime closeDate;
-    private String businessPlanUrl;
-    private EntranceStatus entranceStatus;
-    private String contactInformation;
-    private Category category;
+	private User user;
+	private String office;
+	private int floor;
+	private String location;
+	private LocalDateTime openDate;
+	private LocalDateTime closeDate;
+	private String businessPlanUrl;
+	private EntranceStatus entranceStatus;
+	private String contactInformation;
+	private Category category;
 }
