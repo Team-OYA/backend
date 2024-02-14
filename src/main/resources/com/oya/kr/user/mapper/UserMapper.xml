@@ -36,7 +36,7 @@
         WHERE NICKNAME = #{email}
     </select>
 
-    <select id="findByEmail" resultType="com.oya.kr.user.mapper.dto.response.UserMapperResponse">
+    <select id="findByEmail" resultType="userMapperResponse">
         SELECT ID,
                NICKNAME,
                EMAIL,
