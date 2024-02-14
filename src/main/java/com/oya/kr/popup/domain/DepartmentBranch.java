@@ -1,9 +1,16 @@
 package com.oya.kr.popup.domain;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import lombok.Getter;
+
 /**
  * @author 김유빈
  * @since 2024.02.14
  */
+@Getter
 public enum DepartmentBranch {
 
     THE_HYUNDAI_SEOUL(Department.THE_HYUNDAI, "B00140000", "the hyundai seoul", "더현대 서울"),
@@ -44,5 +51,11 @@ public enum DepartmentBranch {
         this.code = code;
         this.name = name;
         this.description = description;
+    }
+
+    public static List<DepartmentBranch> findAllByDepartment(Department department) {
+        return Arrays.stream(values())
+            .filter(branch -> branch.department == department)
+            .collect(Collectors.toUnmodifiableList());
     }
 }

@@ -1,14 +1,17 @@
 package com.oya.kr.popup.domain;
 
+import lombok.Getter;
+
 /**
  * @author 김유빈
  * @since 2024.02.14
  */
+@Getter
 public enum Department {
 
-    THE_HYUNDAI("the hyundai", "DP000000", "더현대"),
-    HYUNDAI("hyundai", "DP000001", "현대백화점"),
-    HYUNDAI_OUTLET("hyundai outlet", "DP000002", "현대아울렛"),
+    THE_HYUNDAI("DP000000", "the hyundai", "더현대"),
+    HYUNDAI("DP000001", "hyundai", "현대백화점"),
+    HYUNDAI_OUTLET("DP000002", "hyundai outlet", "현대아울렛"),
     ;
 
     private final String code;
