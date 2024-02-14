@@ -18,9 +18,12 @@
 
         <!-- mapper request -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.CategoryRequest" alias="categoryRequest"/>
+        <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest" alias="SignupUserRequest"/>
 
         <!-- mapper response -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
+
+        <typeAlias alias="LocalDate" type="java.time.LocalDate"/>
 
     </typeAliases>
 </configuration>

@@ -6,6 +6,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class CategoryResponse {
 
-    private final long id;
-    private final String name;
+	private final long id;
+	private final String name;
 }

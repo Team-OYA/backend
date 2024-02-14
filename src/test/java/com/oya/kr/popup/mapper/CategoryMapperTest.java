@@ -1,7 +1,6 @@
 package com.oya.kr.popup.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.Optional;
 
@@ -22,67 +21,67 @@ import com.oya.kr.popup.mapper.dto.response.CategoryResponse;
  */
 class CategoryMapperTest extends SpringApplicationTest {
 
-    @Autowired
-    private CategoryMapper categoryMapper;
+	@Autowired
+	private CategoryMapper categoryMapper;
 
-    /**
-     * 테스트 전 데이터 초기화
-     *
-     * @author 김유빈
-     * @since 2024.02.13
-     */
-    @BeforeEach
-    void setUp() {
-        categoryMapper.deleteAll();
-    }
+	/**
+	 * 테스트 전 데이터 초기화
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.13
+	 */
+	@BeforeEach
+	void setUp() {
+		categoryMapper.deleteAll();
+	}
 
-    /**
-     * 테스트 후 데이터 초기화
-     *
-     * @author 김유빈
-     * @since 2024.02.13
-     */
-    @AfterEach
-    void init() {
-        categoryMapper.deleteAll();
-    }
+	/**
+	 * 테스트 후 데이터 초기화
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.13
+	 */
+	@AfterEach
+	void init() {
+		categoryMapper.deleteAll();
+	}
 
-    /**
-     * findByName 메서드 테스트 작성
-     *
-     * @author 김유빈
-     * @since 2024.02.13
-     */
-    @DisplayName("이름으로 카테고리를 조회한다")
-    @Test
-    void findByName() {
-        // given
-        Category category = Category.FOOD;
-        CategoryRequest request = new CategoryRequest(category.getName());
-        categoryMapper.save(request);
+	/**
+	 * findByName 메서드 테스트 작성
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.13
+	 */
+	@DisplayName("이름으로 카테고리를 조회한다")
+	@Test
+	void findByName() {
+		// given
+		Category category = Category.FOOD;
+		CategoryRequest request = new CategoryRequest(category.getName());
+		categoryMapper.save(request);
 
-        // when
-        Optional<CategoryResponse> savedCategory = categoryMapper.findByName(category.getName());
+		// when
+		Optional<CategoryResponse> savedCategory = categoryMapper.findByName(category.getName());
 
-        // then
-        assertThat(savedCategory).isPresent();
-    }
+		// then
+		assertThat(savedCategory).isPresent();
+	}
 
-    /**
-     * save 메서드 테스트 작성
-     *
-     * @author 김유빈
-     * @since 2024.02.13
-     */
-    @DisplayName("카테고리를 저장한다")
-    @Test
-    void save() {
-        // given
-        Category category = Category.FOOD;
-        CategoryRequest request = new CategoryRequest(category.getName());
+	/**
+	 * save 메서드 테스트 작성
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.13
+	 */
+	@DisplayName("카테고리를 저장한다")
+	@Test
+	void save() {
+		// given
+		Category category = Category.FOOD;
+		CategoryRequest request = new CategoryRequest(category.getName());
 
-        // when & then
-        assertThatCode(() -> categoryMapper.save(request))
-            .doesNotThrowAnyException();
-    }
+		// when & then
+		assertThatCode(() -> categoryMapper.save(request))
+			.doesNotThrowAnyException();
+	}
 }
