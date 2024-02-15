@@ -3,6 +3,7 @@ package com.oya.kr.user.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oya.kr.global.dto.ApplicationResponse;
@@ -29,9 +30,10 @@ public class KaKaoController {
 	 * @author 이상민
 	 * @since 2024.02.15
 	 */
-	@PostMapping("/login/kakao")
+	@PostMapping("/oauth/login")
 	public ResponseEntity<ApplicationResponse<JwtTokenResponse>> loginKakao(
-		@RequestBody AccessTokenRequest accessToken) {
+		@RequestBody AccessTokenRequest accessToken,
+		@RequestParam("type") String type) {
 		return ResponseEntity.ok(ApplicationResponse.success(kaKaoLoginService.accessTokenLogin(accessToken)));
 	}
 }
