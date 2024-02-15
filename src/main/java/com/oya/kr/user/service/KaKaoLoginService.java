@@ -56,7 +56,7 @@ public class KaKaoLoginService {
 	 * @param kakaoInfo
 	 * @return TokenResponse
 	 * @author 이상민
-	 * @since 2024.01.26
+	 * @since 2024.02.15
 	 */
 	private User findOrCreateMember(KakaoInfo kakaoInfo) {
 		return userMapper.findByEmail(kakaoInfo.getEmail())

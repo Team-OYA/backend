@@ -2,8 +2,11 @@ package com.oya.kr.user.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.oya.kr.common.SpringApplicationTest;
@@ -20,10 +23,14 @@ class KaKaoLoginServiceTest extends SpringApplicationTest {
 	@Autowired
 	private KaKaoLoginService kaKaoLoginService;
 
-	@Autowired
+	@Mock
 	private UserService userService;
-	@Autowired
+	@Mock
 	private UserMapper userMapper;
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.initMocks(this);
+	}
 
 	/**
 	 * @author 이상민
@@ -46,5 +53,4 @@ class KaKaoLoginServiceTest extends SpringApplicationTest {
 		assertEquals("sample.email@example.com", user.getEmail());
 		assertEquals("SampleNickname", user.getNickname());
 	}
-
 }
