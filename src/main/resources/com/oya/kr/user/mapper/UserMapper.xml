@@ -24,6 +24,11 @@
               )}
     </insert>
 
+    <insert id="insertKakaoUser" parameterType="signupKakaoRequest">
+        INSERT INTO USERS (NICKNAME, EMAIL, PROFILE_URL, REGISTRATION_TYPE, USER_TYPE)
+        VALUES (#{nickname}, #{email}, #{profileUrl}, #{registrationType}, #{userType})
+    </insert>
+
     <select id="duplicatedEmail" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM USERS

@@ -42,7 +42,8 @@ public class UserService {
 	public void signUp(JoinRequest joinRequest) {
 		duplicatedEmail(joinRequest.getEmail());
 		duplicationNickname(joinRequest.getNickname());
-		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder, joinRequest);
+		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder,
+			joinRequest);
 		int data = userMapper.insertUser(signupUserMapperRequest);
 		if (data != -1) {
 			throw new ApplicationException(NOT_RESISTER_USER);

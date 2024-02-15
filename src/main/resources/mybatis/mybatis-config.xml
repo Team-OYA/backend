@@ -19,6 +19,7 @@
         <!-- mapper request -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.CategoryRequest" alias="categoryRequest"/>
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest" alias="SignupUserRequest"/>
+        <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupKakaoRequest" alias="signupKakaoRequest"/>
 
         <!-- mapper response -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>

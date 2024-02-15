@@ -2,12 +2,15 @@ package com.oya.kr.user.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
+import com.oya.kr.user.controller.dto.response.KakaoInfo;
+import com.oya.kr.user.mapper.dto.request.SignupKakaoRequest;
 import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
 
 class UserMapperTest extends SpringApplicationTest {
@@ -52,5 +55,26 @@ class UserMapperTest extends SpringApplicationTest {
 
 		// Then
 		assertNotNull(signupUserMapperRequest);
+	}
+
+	/**
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
+	@DisplayName("kakaoinfo를 가지고 User를 생성할 수 있다.")
+	@Test
+	void createUser(){
+		// given
+		KakaoInfo.KakaoProfile kakaoProfile = new KakaoInfo.KakaoProfile("SampleNickname", "https://example.com/sample_image.jpg");
+		KakaoInfo.KakaoAccount kakaoAccount = new KakaoInfo.KakaoAccount(kakaoProfile, "sample.email@example.com");
+		KakaoInfo kakaoInfo = new KakaoInfo();
+		kakaoInfo.setKakaoAccount(kakaoAccount);
+		SignupKakaoRequest signupKakaoRequest = new SignupKakaoRequest(kakaoInfo);
+
+		// when
+		int result = userMapper.insertKakaoUser(signupKakaoRequest);
+
+		// then
+		assertEquals(result, 1);
 	}
 }

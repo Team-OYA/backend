@@ -2,7 +2,6 @@ package com.oya.kr.user.domain;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -12,7 +11,6 @@ import com.oya.kr.global.domain.Base;
 import com.oya.kr.user.domain.enums.Gender;
 import com.oya.kr.user.domain.enums.RegistrationType;
 import com.oya.kr.user.domain.enums.UserType;
-import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -36,7 +34,7 @@ public class User extends Base {
 
 	@Builder
 	public User(Long id, LocalDateTime createdDate, LocalDateTime modifiedDate, boolean deleted,
-		      String nickname, String email, String password, LocalDate birthDate, Gender gender,
+		String nickname, String email, String password, LocalDate birthDate, Gender gender,
 		RegistrationType registrationType, UserType userType, String businessRegistrationNumber, String profileUrl) {
 		this.id = id;
 		this.createdDate = createdDate;

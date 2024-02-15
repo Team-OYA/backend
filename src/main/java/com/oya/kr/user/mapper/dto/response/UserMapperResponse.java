@@ -29,8 +29,7 @@ public class UserMapperResponse {
 	private final LocalDateTime modifiedDate;
 	private final boolean deleted;
 
-
-	public User toDomain(){
+	public User toDomain() {
 		return User.builder()
 			.id(this.id)
 			.createdDate(this.createdDate)
@@ -40,9 +39,9 @@ public class UserMapperResponse {
 			.email(this.email)
 			.password(this.password)
 			.birthDate(this.birthDate)
-			.gender(Gender.findByName(this.gender))
-			.registrationType(RegistrationType.findByName(this.registrationType))
-			.userType(UserType.findByName(this.userType))
+			.gender(this.gender != null ? Gender.findByName(this.gender) : null)
+			.registrationType(this.registrationType != null ? RegistrationType.findByName(this.registrationType) : null)
+			.userType(this.userType != null ? UserType.findByName(this.userType) : null)
 			.businessRegistrationNumber(this.businessRegistrationNumber)
 			.profileUrl(this.profileUrl)
 			.build();
