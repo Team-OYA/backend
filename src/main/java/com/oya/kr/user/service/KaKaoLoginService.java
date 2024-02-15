@@ -14,7 +14,7 @@ import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.controller.dto.response.KakaoInfo;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
-import com.oya.kr.user.mapper.dto.request.SignupKakaoRequest;
+import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -75,8 +75,8 @@ public class KaKaoLoginService {
 	public User createUser(KakaoInfo kakaoInfo) {
 		userService.duplicatedEmail(kakaoInfo.getEmail());
 		userService.duplicationNickname(kakaoInfo.getNickname());
-		SignupKakaoRequest signupKakaoRequest = new SignupKakaoRequest(kakaoInfo);
-		int result = userMapper.insertKakaoUser(signupKakaoRequest);
+		SignupBasicMapperRequest signupBasicMapperRequest = new SignupBasicMapperRequest(kakaoInfo);
+		int result = userMapper.insertAdminAndKakaoUser(signupBasicMapperRequest);
 		if (result == 0) {
 			throw new ApplicationException(NOT_RESISTER_USER);
 		}

@@ -10,8 +10,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.response.KakaoInfo;
-import com.oya.kr.user.mapper.dto.request.SignupKakaoRequest;
-import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
+import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
+import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 
 class UserMapperTest extends SpringApplicationTest {
 
@@ -47,14 +47,14 @@ class UserMapperTest extends SpringApplicationTest {
 			.zipCode("123456")
 			.businessAddress("123 Main St, City, Country")
 			.build();
-		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder,
+		SignupAdministratorMapperRequest signupAdministratorMapperRequest = new SignupAdministratorMapperRequest(bCryptPasswordEncoder,
 			request);
 
 		// When
-		userMapper.insertUser(signupUserMapperRequest);
+		userMapper.insertUser(signupAdministratorMapperRequest);
 
 		// Then
-		assertNotNull(signupUserMapperRequest);
+		assertNotNull(signupAdministratorMapperRequest);
 	}
 
 	/**
@@ -69,10 +69,10 @@ class UserMapperTest extends SpringApplicationTest {
 		KakaoInfo.KakaoAccount kakaoAccount = new KakaoInfo.KakaoAccount(kakaoProfile, "sample.email@example.com");
 		KakaoInfo kakaoInfo = new KakaoInfo();
 		kakaoInfo.setKakaoAccount(kakaoAccount);
-		SignupKakaoRequest signupKakaoRequest = new SignupKakaoRequest(kakaoInfo);
+		SignupBasicMapperRequest signupBasicMapperRequest = new SignupBasicMapperRequest(kakaoInfo);
 
 		// when
-		int result = userMapper.insertKakaoUser(signupKakaoRequest);
+		int result = userMapper.insertAdminAndKakaoUser(signupBasicMapperRequest);
 
 		// then
 		assertEquals(result, 1);

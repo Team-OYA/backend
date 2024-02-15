@@ -16,7 +16,8 @@ import com.oya.kr.user.controller.dto.request.LoginRequest;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
-import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
+import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
+import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -42,10 +43,23 @@ public class UserService {
 	public void signUp(JoinRequest joinRequest) {
 		duplicatedEmail(joinRequest.getEmail());
 		duplicationNickname(joinRequest.getNickname());
-		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder,
-			joinRequest);
-		int data = userMapper.insertUser(signupUserMapperRequest);
-		if (data != -1) {
+
+		if(joinRequest.getUserType() !=0 && joinRequest.getUserType() != 1){
+			administratorSignup(joinRequest);
+		}else{
+			SignupAdministratorMapperRequest signupAdministratorMapperRequest = new SignupAdministratorMapperRequest(bCryptPasswordEncoder,
+				joinRequest);
+			int data = userMapper.insertUser(signupAdministratorMapperRequest);
+			if (data != -1) {
+				throw new ApplicationException(NOT_RESISTER_USER);
+			}
+		}
+	}
+
+	private void administratorSignup(JoinRequest joinRequest) {
+		SignupBasicMapperRequest signupBasicMapperRequest = new SignupBasicMapperRequest(bCryptPasswordEncoder, joinRequest);
+		int result = userMapper.insertAdminAndKakaoUser(signupBasicMapperRequest);
+		if (result == 0) {
 			throw new ApplicationException(NOT_RESISTER_USER);
 		}
 	}

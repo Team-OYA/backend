@@ -18,7 +18,7 @@ import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.mapper.UserMapper;
-import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
+import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 
 /**
  * @author 이상민
@@ -105,7 +105,7 @@ class UserServiceTest extends SpringApplicationTest {
 			.password("password123")
 			.birthDate("19900101")
 			.gender(1)
-			.userType(2)
+			.userType(3)
 			.businessRegistrationNumber("1234567890")
 			.profileUrl("/profile/johndoe.jpg")
 			.nameOfCompany("ABC Inc.")
@@ -117,7 +117,7 @@ class UserServiceTest extends SpringApplicationTest {
 			.zipCode("123456")
 			.businessAddress("123 Main St, City, Country")
 			.build();
-		SignupUserMapperRequest request = new SignupUserMapperRequest(bCryptPasswordEncoder, joinRequest);
+		SignupAdministratorMapperRequest request = new SignupAdministratorMapperRequest(bCryptPasswordEncoder, joinRequest);
 		userMapper.insertUser(request);
 
 		// when
