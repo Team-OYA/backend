@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oya.kr.global.domain.Header;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
@@ -109,7 +110,7 @@ public class UserService {
 		}
 		String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
 		String refreshToken = tokenProvider.createRefreshToken(user);
-		return new JwtTokenResponse("Bearer ", accessToken, refreshToken);
+		return new JwtTokenResponse(Header.BEARER.getValue(), accessToken, refreshToken);
 	}
 
 	/**
@@ -137,7 +138,7 @@ public class UserService {
 		String refreshToken = "";
 		if (tokenProvider.validToken(refreshToken)) {
 			String newAccessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
-			return new JwtTokenResponse("Bearer ", newAccessToken, refreshToken);
+			return new JwtTokenResponse(Header.BEARER.getValue(), newAccessToken, refreshToken);
 		}
 		return null;
 	}

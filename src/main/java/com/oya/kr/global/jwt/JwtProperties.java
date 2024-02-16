@@ -8,7 +8,6 @@ import lombok.Getter;
 
 @Getter
 @Component
-@PropertySource("classpath:secret/application-jwt.yml")
 public class JwtProperties {
 	@Value("${jwt.issuer}")
 	private String issuer;

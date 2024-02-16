@@ -11,7 +11,7 @@ import lombok.Setter;
  * Access Token 으로 요청한 프로필 응답 값 변환
  *
  * @author 이상민
- * @since 2024.01.26
+ * @since 2024.02.14
  */
 @Getter
 @Setter

@@ -6,5 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class AccessTokenRequest {
-	private String accessToken;
+
+	private final String accessToken;
 }
