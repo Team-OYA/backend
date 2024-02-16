@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.popup.mapper.PlanMapper">
+
+    <insert id="save" parameterType="planSaveMapperRequest">
+        INSERT INTO PLAN(OFFICE, FLOOR, LOCATION, BUSINESS_PLAN_URL, ENTRANCE_STATUS, CONTACT_INFORMATION, CATEGORY, USER_ID)
+        VALUES (#{office}, #{floor}, null, #{businessPlanUrl}, #{entranceStatus}, #{contactInformation}, #{category}, #{userId})
+    </insert>
+
+    <delete id="deleteAll">
+        DELETE
+        FROM PLAN
+    </delete>
+
+</mapper>

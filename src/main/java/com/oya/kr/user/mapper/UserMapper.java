@@ -18,4 +18,6 @@ public interface UserMapper {
 	Integer duplicatedNickname(String nickname);
 
 	int insertAdminAndKakaoUser(SignupBasicMapperRequest signupBasicMapperRequest);
+
+	void deleteAll();
 }

@@ -1,11 +1,18 @@
 package com.oya.kr.popup.controller;
 
+import java.security.Principal;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oya.kr.global.dto.ApplicationResponse;
+import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
 import com.oya.kr.popup.service.PlanService;
@@ -48,5 +55,22 @@ public class PlanController {
     public ResponseEntity<ApplicationResponse<DepartmentFloorsWithCategoriesResponse>> findAllFloor() {
         DepartmentFloorsWithCategoriesResponse response = planService.findAllFloor();
         return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 사업계획서 제안 기능 구현
+     *
+     * @parameter
+     * @return ResponseEntity<ApplicationResponse<Void>>
+     * @author 김유빈
+     * @since 2024.02.14
+     */
+    @PostMapping
+    public ResponseEntity<ApplicationResponse<Void>> save(
+        Principal principal,
+        @RequestBody PlanSaveRequest request,
+        @RequestParam("businessPlan") MultipartFile businessPlan) {
+        planService.save(principal.getName(), request, businessPlan);
+        return ResponseEntity.ok(ApplicationResponse.success(null));
     }
 }

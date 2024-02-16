@@ -65,4 +65,15 @@ public class User extends Base {
 	public boolean checkPassword(PasswordEncoder passwordEncoder, String password) {
 		return passwordEncoder.matches(password, this.password);
 	}
+
+	/**
+	 * 사업체 판별
+	 *
+	 * @return boolean
+	 * @author 김유빈
+	 * @since 2024.02.16
+	 */
+	public boolean isBusiness() {
+		return userType.isBusiness();
+	}
 }

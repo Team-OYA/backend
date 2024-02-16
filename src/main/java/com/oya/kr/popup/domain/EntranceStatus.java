@@ -1,5 +1,8 @@
 package com.oya.kr.popup.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum EntranceStatus {
 
 	REQUEST("request", "입점 요청"),

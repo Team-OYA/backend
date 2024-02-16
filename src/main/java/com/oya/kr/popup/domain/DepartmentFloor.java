@@ -1,5 +1,11 @@
 package com.oya.kr.popup.domain;
 
+import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_DEPARTMENT_FLOOR;
+
+import java.util.Arrays;
+
+import com.oya.kr.global.exception.ApplicationException;
+
 import lombok.Getter;
 
 /**
@@ -22,5 +28,20 @@ public enum DepartmentFloor {
         this.code = code;
         this.name = name;
         this.description = description;
+    }
+
+    /**
+     * code 를 이용하여 적절한 DepartmentFloor 객체 조회
+     *
+     * @parameter String
+     * @return DepartmentFloor
+     * @author 김유빈
+     * @since 2024.02.16
+     */
+    public static DepartmentFloor from(String floor) {
+        return Arrays.stream(values())
+            .filter(it -> it.code.equals(floor))
+            .findFirst()
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_DEPARTMENT_FLOOR));
     }
 }
