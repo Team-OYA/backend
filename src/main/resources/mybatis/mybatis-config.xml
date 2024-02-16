@@ -18,10 +18,12 @@
 
         <!-- mapper request -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.CategoryRequest" alias="categoryRequest"/>
-        <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest" alias="SignupUserRequest"/>
+        <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
+        <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest" alias="signupBasicMapperRequest"/>
 
         <!-- mapper response -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
+        <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
 
         <typeAlias alias="LocalDate" type="java.time.LocalDate"/>
 

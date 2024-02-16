@@ -24,6 +24,18 @@
               )}
     </insert>
 
+    <insert id="insertAdminAndKakaoUser" parameterType="signupBasicMapperRequest">
+        INSERT INTO users (EMAIL, NICKNAME, PASSWORD, BIRTH_DATE, GENDER, REGISTRATION_TYPE, USER_TYPE, PROFILE_URL)
+        VALUES (#{email},
+                #{nickname},
+                #{password, jdbcType=VARCHAR},
+                #{birthDate, jdbcType=DATE},
+                #{gender, jdbcType=VARCHAR},
+                #{registrationType, jdbcType=VARCHAR},
+                #{userType, jdbcType=VARCHAR},
+                #{profileUrl, jdbcType=VARCHAR})
+    </insert>
+
     <select id="duplicatedEmail" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM USERS
@@ -36,7 +48,7 @@
         WHERE NICKNAME = #{email}
     </select>
 
-    <select id="findByEmail" resultType="com.oya.kr.user.mapper.dto.response.UserMapperResponse">
+    <select id="findByEmail" resultType="userMapperResponse">
         SELECT ID,
                NICKNAME,
                EMAIL,

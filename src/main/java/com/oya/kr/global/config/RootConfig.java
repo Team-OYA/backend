@@ -10,9 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.jdbc.datasource.init.DataSourceInitializer;
-import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
+import org.springframework.web.client.RestTemplate;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
@@ -25,7 +23,7 @@ import lombok.extern.java.Log;
  */
 @Configuration
 @ComponentScan(basePackages = {"com.oya.kr"})
-@PropertySource("classpath:secret/database.properties")
+@PropertySource("classpath:application.properties")
 @MapperScan(basePackages = {"com.oya.kr"})
 @Log
 public class RootConfig {
@@ -59,5 +57,10 @@ public class RootConfig {
 		sqlSessionFactoryBean.setConfigLocation(
 			applicationContext.getResource("classpath:/mybatis/mybatis-config.xml"));
 		return sqlSessionFactoryBean;
+	}
+
+	@Bean
+	public RestTemplate getRestTemplate(){
+		return new RestTemplate();
 	}
 }

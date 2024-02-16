@@ -6,6 +6,9 @@ import java.util.Arrays;
 
 import com.oya.kr.global.exception.ApplicationException;
 
+import lombok.Getter;
+
+@Getter
 public enum UserType {
 
 	USER("user"),
@@ -17,10 +20,6 @@ public enum UserType {
 
 	UserType(String name) {
 		this.name = name;
-	}
-
-	public String getName() {
-		return name;
 	}
 
 	public static UserType getUserTypeEnum(int code) {

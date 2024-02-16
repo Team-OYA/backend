@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oya.kr.global.domain.Header;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
@@ -16,7 +17,8 @@ import com.oya.kr.user.controller.dto.request.LoginRequest;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
-import com.oya.kr.user.mapper.dto.request.SignupUserMapperRequest;
+import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
+import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -42,9 +44,23 @@ public class UserService {
 	public void signUp(JoinRequest joinRequest) {
 		duplicatedEmail(joinRequest.getEmail());
 		duplicationNickname(joinRequest.getNickname());
-		SignupUserMapperRequest signupUserMapperRequest = new SignupUserMapperRequest(bCryptPasswordEncoder, joinRequest);
-		int data = userMapper.insertUser(signupUserMapperRequest);
-		if (data != -1) {
+
+		if(joinRequest.getUserType() !=0 && joinRequest.getUserType() != 1){
+			administratorSignup(joinRequest);
+		}else{
+			SignupAdministratorMapperRequest signupAdministratorMapperRequest = new SignupAdministratorMapperRequest(bCryptPasswordEncoder,
+				joinRequest);
+			int data = userMapper.insertUser(signupAdministratorMapperRequest);
+			if (data != -1) {
+				throw new ApplicationException(NOT_RESISTER_USER);
+			}
+		}
+	}
+
+	private void administratorSignup(JoinRequest joinRequest) {
+		SignupBasicMapperRequest signupBasicMapperRequest = new SignupBasicMapperRequest(bCryptPasswordEncoder, joinRequest);
+		int result = userMapper.insertAdminAndKakaoUser(signupBasicMapperRequest);
+		if (result == 0) {
 			throw new ApplicationException(NOT_RESISTER_USER);
 		}
 	}
@@ -94,7 +110,7 @@ public class UserService {
 		}
 		String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
 		String refreshToken = tokenProvider.createRefreshToken(user);
-		return new JwtTokenResponse("Bearer ", accessToken, refreshToken);
+		return new JwtTokenResponse(Header.BEARER.getValue(), accessToken, refreshToken);
 	}
 
 	/**
@@ -107,7 +123,7 @@ public class UserService {
 	public User findByEmail(String email) {
 		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
 			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
-		return userMapperResponse.toModel();
+		return userMapperResponse.toDomain();
 	}
 
 	/**
@@ -122,7 +138,7 @@ public class UserService {
 		String refreshToken = "";
 		if (tokenProvider.validToken(refreshToken)) {
 			String newAccessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
-			return new JwtTokenResponse("Bearer ", newAccessToken, refreshToken);
+			return new JwtTokenResponse(Header.BEARER.getValue(), newAccessToken, refreshToken);
 		}
 		return null;
 	}
