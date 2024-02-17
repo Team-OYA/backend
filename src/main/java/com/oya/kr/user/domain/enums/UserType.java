@@ -50,4 +50,15 @@ public enum UserType {
 	public boolean isBusiness() {
 		return this.name.equals(BUSINESS.name);
 	}
+
+	/**
+	 * 관리자 판별
+	 *
+	 * @return boolean
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	public boolean isAdministrator() {
+		return this.name.equals(ADMINISTRATOR.name);
+	}
 }

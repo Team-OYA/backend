@@ -81,6 +81,17 @@ public class Plan extends Base {
 	}
 
 	/**
+	 * 사업계획서 대기 기능 구현
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	public void waiting() {
+		validateEntranceStatusIsRequest();
+		this.entranceStatus = EntranceStatus.WAITING;
+	}
+
+	/**
 	 * 종료 날짜가 시작 날짜 이후인지 검증
 	 *
 	 * @parameter LocalDate, LocalDate

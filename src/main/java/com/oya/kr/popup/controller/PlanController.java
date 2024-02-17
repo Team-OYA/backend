@@ -87,4 +87,18 @@ public class PlanController {
         planService.withdraw(principal.getName(), planId);
         return ResponseEntity.ok(ApplicationResponse.success(null));
     }
+
+    /**
+     * 사업계획서 대기 기능 구현
+     *
+     * @parameter Principal, Long
+     * @return ResponseEntity<ApplicationResponse<Void>>
+     * @author 김유빈
+     * @since 2024.02.18
+     */
+    @PostMapping("/{planId}/wait")
+    public ResponseEntity<ApplicationResponse<Void>> wait(Principal principal, @PathVariable Long planId) {
+        planService.wait(principal.getName(), planId);
+        return ResponseEntity.ok(ApplicationResponse.success(null));
+    }
 }

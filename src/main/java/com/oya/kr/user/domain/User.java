@@ -1,6 +1,7 @@
 package com.oya.kr.user.domain;
 
 import static com.oya.kr.user.exception.UserErrorCodeList.INVALID_USER;
+import static com.oya.kr.user.exception.UserErrorCodeList.NOT_ADMINISTRATOR;
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_BUSINESS;
 
 import java.time.LocalDate;
@@ -93,6 +94,18 @@ public class User extends Base {
 	public void validateUserIsBusiness() {
 		if (!userType.isBusiness()) {
 			throw new ApplicationException(NOT_BUSINESS);
+		}
+	}
+
+	/**
+	 * 관리자 판별
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	public void validateUserIsAdministrator() {
+		if (!userType.isAdministrator()) {
+			throw new ApplicationException(NOT_ADMINISTRATOR);
 		}
 	}
 }

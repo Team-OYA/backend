@@ -19,6 +19,7 @@ public enum UserErrorCodeList implements ErrorCode {
 	NOT_CORRECTED_PASSWORD("U0008", HttpStatus.BAD_REQUEST, "잘못된 비밀번호입니다."),
 	INVALID_USER("U0009", HttpStatus.BAD_REQUEST, "사용자가 일치하지 않습니다."),
 	NOT_BUSINESS("U0010", HttpStatus.BAD_REQUEST, "사업체가 아닙니다."),
+	NOT_ADMINISTRATOR("U0011", HttpStatus.BAD_REQUEST, "관리자가 아닙니다."),
 	;
 
 	private final String code;
