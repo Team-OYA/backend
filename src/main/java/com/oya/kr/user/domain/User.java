@@ -1,5 +1,8 @@
 package com.oya.kr.user.domain;
 
+import static com.oya.kr.user.exception.UserErrorCodeList.INVALID_USER;
+import static com.oya.kr.user.exception.UserErrorCodeList.NOT_BUSINESS;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -8,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.oya.kr.global.domain.Base;
+import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.domain.enums.Gender;
 import com.oya.kr.user.domain.enums.RegistrationType;
 import com.oya.kr.user.domain.enums.UserType;
@@ -68,13 +72,27 @@ public class User extends Base {
 	}
 
 	/**
+	 * 본인 판별
+	 *
+	 * @parameter User
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	public void validateUserIsOwner(User user) {
+		if (!this.id.equals(user.id)) {
+			throw new ApplicationException(INVALID_USER);
+		}
+	}
+
+	/**
 	 * 사업체 판별
 	 *
-	 * @return boolean
 	 * @author 김유빈
 	 * @since 2024.02.16
 	 */
-	public boolean isBusiness() {
-		return userType.isBusiness();
+	public void validateUserIsBusiness() {
+		if (!userType.isBusiness()) {
+			throw new ApplicationException(NOT_BUSINESS);
+		}
 	}
 }

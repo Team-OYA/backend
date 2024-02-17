@@ -1,6 +1,7 @@
 package com.oya.kr.popup.domain;
 
 import static com.oya.kr.global.exception.GlobalErrorCodeList.CLOSE_DATE_IS_NOT_AFTER_OPEN_DATE;
+import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_ENTRANCE_STATUS_IS_REQUEST;
 
 import java.time.LocalDate;
 
@@ -66,9 +67,41 @@ public class Plan extends Base {
 			businessPlanUrl, EntranceStatus.REQUEST, contactInformation, Category.from(category));
 	}
 
+	/**
+	 * 사업계획서 철회 기능 구현
+	 *
+	 * @parameter User
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	public void withdraw(User user) {
+		this.user.validateUserIsOwner(user);
+		validateEntranceStatusIsRequest();
+		this.entranceStatus = EntranceStatus.WITHDRAWAL;
+	}
+
+	/**
+	 * 종료 날짜가 시작 날짜 이후인지 검증
+	 *
+	 * @parameter LocalDate, LocalDate
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
 	private static void validateCloseDateIsAfterOpenDate(LocalDate openDate, LocalDate closeDate) {
 		if (!closeDate.isAfter(openDate)) {
 			throw new ApplicationException(CLOSE_DATE_IS_NOT_AFTER_OPEN_DATE);
+		}
+	}
+
+	/**
+	 * 입점 상태가 요청 상태인지 검증
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	private void validateEntranceStatusIsRequest() {
+		if (!this.entranceStatus.isRequest()) {
+			throw new ApplicationException(NOT_ENTRANCE_STATUS_IS_REQUEST);
 		}
 	}
 }

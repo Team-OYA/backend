@@ -2,12 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.popup.mapper.PlanMapper">
 
+    <select id="findById" parameterType="long" resultType="planResponse">
+        SELECT ID, OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
+               CONTACT_INFORMATION, CATEGORY, USER_ID
+        FROM PLAN
+        WHERE ID = #{id} AND DELETED = 0
+    </select>
+
     <insert id="save" parameterType="planSaveMapperRequest">
         INSERT INTO PLAN(OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
                          CONTACT_INFORMATION, CATEGORY, USER_ID)
         VALUES (#{office}, #{floor}, null, #{openDate}, #{closeDate}, #{businessPlanUrl}, #{entranceStatus},
                 #{contactInformation}, #{category}, #{userId})
+        <selectKey keyProperty="planId" resultType="long" order="AFTER">
+            SELECT NVL(MAX(ID), 0)
+            FROM PLAN
+        </selectKey>
     </insert>
+
+    <update id="updateEntranceStatus" parameterType="planUpdateEntranceStatusMapperRequest">
+        UPDATE PLAN
+        SET ENTRANCE_STATUS = #{entranceStatus}
+        WHERE ID = #{id}
+    </update>
 
     <delete id="deleteAll">
         DELETE

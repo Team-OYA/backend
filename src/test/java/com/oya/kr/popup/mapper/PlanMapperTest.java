@@ -13,10 +13,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.popup.domain.Category;
-import com.oya.kr.popup.domain.Department;
+import com.oya.kr.popup.domain.DepartmentBranch;
 import com.oya.kr.popup.domain.DepartmentFloor;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.BusinessMapper;
@@ -86,6 +87,29 @@ public class PlanMapperTest extends SpringApplicationTest {
             .doesNotThrowAnyException();
     }
 
+    /**
+     * updateEntranceStatus 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.18
+     */
+    @DisplayName("사업계획서의 입점 상태를 변경한다")
+    @Test
+    void updateEntranceStatus() {
+        // given
+        User savedUser = savedUser();
+        Plan plan = createDomain(savedUser);
+        PlanSaveMapperRequest planSaveMapperRequest = PlanSaveMapperRequest.from(plan);
+        planMapper.save(planSaveMapperRequest);
+        Plan savedPlan = planMapper.findById(planSaveMapperRequest.getPlanId()).get().toDomain(savedUser);
+
+        PlanUpdateEntranceStatusMapperRequest request = PlanUpdateEntranceStatusMapperRequest.from(savedPlan);
+
+        // when & then
+        assertThatCode(() -> planMapper.updateEntranceStatus(request))
+            .doesNotThrowAnyException();
+    }
+
     private User savedUser() {
         String email = "hansalchai0131@gmail.com";
         JoinRequest request = JoinRequest.builder()
@@ -113,10 +137,10 @@ public class PlanMapperTest extends SpringApplicationTest {
     private static Plan createDomain(User savedUser) {
         return Plan.saved(
             savedUser,
-            Department.THE_HYUNDAI.getCode(),
+            DepartmentBranch.THE_HYUNDAI_SEOUL.getCode(),
             DepartmentFloor.B1.getCode(),
             LocalDate.now(),
-            LocalDate.now(),
+            LocalDate.now().plusDays(1),
             "businessPlanUrl",
             "010-1234-5678",
             Category.CLOTHING.getCode());

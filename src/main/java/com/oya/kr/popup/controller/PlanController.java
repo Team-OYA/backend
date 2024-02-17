@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -70,6 +71,20 @@ public class PlanController {
         @RequestPart("file") MultipartFile businessPlan,
         @RequestPart("data") PlanSaveRequest request) {
         planService.save(principal.getName(), request, businessPlan);
+        return ResponseEntity.ok(ApplicationResponse.success(null));
+    }
+
+    /**
+     * 사업계획서 철회 기능 구현
+     *
+     * @parameter Principal, Long
+     * @return ResponseEntity<ApplicationResponse<Void>>
+     * @author 김유빈
+     * @since 2024.02.18
+     */
+    @PostMapping("/{planId}/withdraw")
+    public ResponseEntity<ApplicationResponse<Void>> withdraw(Principal principal, @PathVariable Long planId) {
+        planService.withdraw(principal.getName(), planId);
         return ResponseEntity.ok(ApplicationResponse.success(null));
     }
 }

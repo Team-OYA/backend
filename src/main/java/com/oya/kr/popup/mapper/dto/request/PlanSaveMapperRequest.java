@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PlanSaveMapperRequest {
 
+    private long planId;
     private final long userId;
     private final String office;
     private final String floor;
