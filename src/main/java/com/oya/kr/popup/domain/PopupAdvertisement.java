@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PopupAdvertisement extends Base {
 
+	private Long id;
 	private Popup popup;
 	private int amount;
 }

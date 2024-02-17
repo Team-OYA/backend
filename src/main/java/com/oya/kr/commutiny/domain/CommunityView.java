@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommunityView extends Base {
 
+	private Long id;
 	private Community community;
 	private User user;
 }

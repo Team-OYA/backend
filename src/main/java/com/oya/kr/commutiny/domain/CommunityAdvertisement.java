@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommunityAdvertisement extends Base {
 
+	private Long id;
 	private Community community;
 	private int amount;
 }

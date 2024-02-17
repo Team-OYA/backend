@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Plan extends Base {
 
+	private Long id;
 	private User user;
 	private DepartmentBranch departmentBranch;
 	private DepartmentFloor floor;
@@ -33,6 +34,29 @@ public class Plan extends Base {
 	private String contactInformation;
 	private Category category;
 
+	public Plan(User user, DepartmentBranch departmentBranch, DepartmentFloor floor, String location,
+		LocalDate openDate, LocalDate closeDate, String businessPlanUrl, EntranceStatus entranceStatus,
+		String contactInformation, Category category) {
+		this.user = user;
+		this.departmentBranch = departmentBranch;
+		this.floor = floor;
+		this.location = location;
+		this.openDate = openDate;
+		this.closeDate = closeDate;
+		this.businessPlanUrl = businessPlanUrl;
+		this.entranceStatus = entranceStatus;
+		this.contactInformation = contactInformation;
+		this.category = category;
+	}
+
+	/**
+	 * 사업계획서 저장 정적 팩터리 메서드 구현
+	 *
+	 * @parameter User, String, String, LocalDate, LocalDate, String, String, String
+	 * @return Plan
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
 	public static Plan saved(User user, String office, String floor, LocalDate openDate, LocalDate closeDate,
 		String businessPlanUrl, String contactInformation, String category) {
 		validateCloseDateIsAfterOpenDate(openDate, closeDate);

@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 @Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Business extends Base {
+
+	private Long id;
 	private User user;
 	private String nameOfCompany; // 상호
 	private String nameOfRepresentative; // 대표자

@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends Base {
 
+	private Long id;
 	private String nickname;
 	private String email;
 	private String password;

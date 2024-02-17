@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PopupCollection extends Base {
 
+	private Long id;
 	private Popup popup;
 	private User user;
 }
