@@ -16,6 +16,12 @@ public enum GlobalErrorCodeList implements ErrorCode {
 
 	// s3
 	FAIL_CONVERT_S3_IMAGE("G0006", HttpStatus.BAD_REQUEST, "S3 이미지 파일 변환에 실패하였습니다."),
+
+	// date
+	CLOSE_DATE_IS_NOT_AFTER_OPEN_DATE("G0007", HttpStatus.BAD_REQUEST, "종료 일자가 시작 일자보다 이후여야 합니다."),
+
+	// regex
+	INVALID_FORMAT_CONTACT("G0008", HttpStatus.BAD_REQUEST, "연락처 형식이 잘못되었습니다."),
 	;
 
 	private final String code;
