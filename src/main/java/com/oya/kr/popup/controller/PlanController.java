@@ -5,9 +5,8 @@ import java.security.Principal;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -60,7 +59,7 @@ public class PlanController {
     /**
      * 사업계획서 제안 기능 구현
      *
-     * @parameter
+     * @parameter Principal, MultipartFile, PlanSaveRequest
      * @return ResponseEntity<ApplicationResponse<Void>>
      * @author 김유빈
      * @since 2024.02.14
@@ -68,8 +67,8 @@ public class PlanController {
     @PostMapping
     public ResponseEntity<ApplicationResponse<Void>> save(
         Principal principal,
-        @RequestBody PlanSaveRequest request,
-        @RequestParam("businessPlan") MultipartFile businessPlan) {
+        @RequestPart("file") MultipartFile businessPlan,
+        @RequestPart("data") PlanSaveRequest request) {
         planService.save(principal.getName(), request, businessPlan);
         return ResponseEntity.ok(ApplicationResponse.success(null));
     }

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class Plan extends Base {
 
 	private User user;
-	private Department department;
+	private DepartmentBranch departmentBranch;
 	private DepartmentFloor floor;
 	private String location;
 	private LocalDate openDate;
@@ -31,7 +31,8 @@ public class Plan extends Base {
 
 	public static Plan saved(User user, String office, String floor, LocalDate openDate, LocalDate closeDate,
 		String businessPlanUrl, String contactInformation, String category) {
-		return new Plan(user, Department.from(office), DepartmentFloor.from(floor), null, openDate, closeDate,
+		DepartmentFloor selectedFloor = DepartmentFloor.from(floor);
+		return new Plan(user, DepartmentBranch.from(office), selectedFloor, null, openDate, closeDate,
 			businessPlanUrl, EntranceStatus.REQUEST, contactInformation, Category.from(category));
 	}
 }

@@ -158,6 +158,14 @@
             <scope>runtime</scope>
         </dependency>
 
+        <!-- amazon s3 -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.638</version>
+        </dependency>
+
+
         <!-- @Inject -->
         <dependency>
             <groupId>javax.inject</groupId>

@@ -1,6 +1,6 @@
 package com.oya.kr.popup.service;
 
-import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_DEPARTMENT;
+import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_DEPARTMENT_BRANCH;
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
 import java.util.Arrays;
@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.global.support.StorageConnector;
 import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
 import com.oya.kr.popup.controller.dto.response.DepartmentCategoryResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
@@ -38,6 +39,7 @@ public class PlanService {
 
     private final UserMapper userMapper;
     private final PlanMapper planMapper;
+    private final StorageConnector s3Connector;
 
     /**
      * 현대백화점 지점 리스트 조회 기능 구현
@@ -83,7 +85,7 @@ public class PlanService {
         User savedUser = findByEmail(email);
         validateUserIsBusiness(savedUser);
 
-        String businessPlanUrl = null;
+        String businessPlanUrl = s3Connector.save(businessPlan);
 
         Plan plan = Plan.saved(savedUser, request.getOffice(), request.getFloor(), request.getOpenDate(), request.getCloseDate(),
             businessPlanUrl, request.getContactInformation(), request.getCategory());
@@ -93,7 +95,7 @@ public class PlanService {
 
     private void validateUserIsBusiness(User savedUser) {
         if (!savedUser.isBusiness()) {
-            throw new ApplicationException(NOT_EXIST_DEPARTMENT);
+            throw new ApplicationException(NOT_EXIST_DEPARTMENT_BRANCH);
         }
     }
 

@@ -3,8 +3,10 @@
 <mapper namespace="com.oya.kr.popup.mapper.PlanMapper">
 
     <insert id="save" parameterType="planSaveMapperRequest">
-        INSERT INTO PLAN(OFFICE, FLOOR, LOCATION, BUSINESS_PLAN_URL, ENTRANCE_STATUS, CONTACT_INFORMATION, CATEGORY, USER_ID)
-        VALUES (#{office}, #{floor}, null, #{businessPlanUrl}, #{entranceStatus}, #{contactInformation}, #{category}, #{userId})
+        INSERT INTO PLAN(OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
+                         CONTACT_INFORMATION, CATEGORY, USER_ID)
+        VALUES (#{office}, #{floor}, null, #{openDate}, #{closeDate}, #{businessPlanUrl}, #{entranceStatus},
+                #{contactInformation}, #{category}, #{userId})
     </insert>
 
     <delete id="deleteAll">

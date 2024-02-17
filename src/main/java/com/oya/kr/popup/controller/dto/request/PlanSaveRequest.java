@@ -2,17 +2,29 @@ package com.oya.kr.popup.controller.dto.request;
 
 import java.time.LocalDate;
 
+import com.oya.kr.global.domain.DateConvertor;
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Getter
-@RequiredArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlanSaveRequest {
 
-    private final String office;
-    private final String floor;
-    private final LocalDate openDate;
-    private final LocalDate closeDate;
-    private final String contactInformation;
-    private final String category;
+    private String office;
+    private String floor;
+    private String openDate;
+    private String closeDate;
+    private String contactInformation;
+    private String category;
+
+    public LocalDate getOpenDate() {
+        return DateConvertor.dateFormat(openDate);
+    }
+
+    public LocalDate getCloseDate() {
+        return DateConvertor.dateFormat(closeDate);
+    }
 }

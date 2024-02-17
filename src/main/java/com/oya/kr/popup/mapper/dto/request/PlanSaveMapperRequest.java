@@ -24,7 +24,7 @@ public class PlanSaveMapperRequest {
     public static PlanSaveMapperRequest from(Plan plan) {
         return new PlanSaveMapperRequest(
             plan.getUser().getId(),
-            plan.getDepartment().getCode(),
+            plan.getDepartmentBranch().getCode(),
             plan.getFloor().getCode(),
             plan.getOpenDate(),
             plan.getCloseDate(),

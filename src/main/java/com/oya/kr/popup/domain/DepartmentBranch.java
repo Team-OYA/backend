@@ -1,8 +1,12 @@
 package com.oya.kr.popup.domain;
 
+import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_DEPARTMENT_BRANCH;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.oya.kr.global.exception.ApplicationException;
 
 import lombok.Getter;
 
@@ -51,6 +55,21 @@ public enum DepartmentBranch {
         this.code = code;
         this.name = name;
         this.description = description;
+    }
+
+    /**
+     * code 를 이용하여 적절한 DepartmentBranch 객체 조회
+     *
+     * @parameter String
+     * @return DepartmentBranch
+     * @author 김유빈
+     * @since 2024.02.18
+     */
+    public static DepartmentBranch from(String branch) {
+        return Arrays.stream(values())
+            .filter(it -> it.code.equals(branch))
+            .findFirst()
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_DEPARTMENT_BRANCH));
     }
 
     public static List<DepartmentBranch> findAllByDepartment(Department department) {
