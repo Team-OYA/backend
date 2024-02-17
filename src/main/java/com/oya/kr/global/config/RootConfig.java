@@ -58,9 +58,4 @@ public class RootConfig {
 			applicationContext.getResource("classpath:/mybatis/mybatis-config.xml"));
 		return sqlSessionFactoryBean;
 	}
-
-	@Bean
-	public RestTemplate getRestTemplate(){
-		return new RestTemplate();
-	}
 }
