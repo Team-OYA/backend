@@ -101,4 +101,18 @@ public class PlanController {
         planService.wait(principal.getName(), planId);
         return ResponseEntity.ok(ApplicationResponse.success(null));
     }
+
+    /**
+     * 사업계획서 승인 기능 구현
+     *
+     * @parameter Principal, Long
+     * @return ResponseEntity<ApplicationResponse<Void>>
+     * @author 김유빈
+     * @since 2024.02.18
+     */
+    @PostMapping("/{planId}/approve")
+    public ResponseEntity<ApplicationResponse<Void>> approve(Principal principal, @PathVariable Long planId) {
+        planService.approve(principal.getName(), planId);
+        return ResponseEntity.ok(ApplicationResponse.success(null));
+    }
 }
