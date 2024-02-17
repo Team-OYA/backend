@@ -12,20 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 @Component
 public class S3Generator implements StorageGenerator {
 
-    private static final String DEFAULT_PROFILE_PATH = "/user/profile";
-
-    /**
-     * 이미지 분류 반환
-     * @since 2024.02.16
-     * @parameter
-     * @return String
-     * @author 김유빈
-     */
-    @Override
-    public String createPath() {
-        return DEFAULT_PROFILE_PATH;
-    }
-
     /**
      * 이미지 이름 생성
      * @since 2024.02.16
