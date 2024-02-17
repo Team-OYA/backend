@@ -115,4 +115,18 @@ public class PlanController {
         planService.approve(principal.getName(), planId);
         return ResponseEntity.ok(ApplicationResponse.success(null));
     }
+
+    /**
+     * 사업계획서 거절 기능 구현
+     *
+     * @parameter Principal, Long
+     * @return ResponseEntity<ApplicationResponse<Void>>
+     * @author 김유빈
+     * @since 2024.02.18
+     */
+    @PostMapping("/{planId}/deny")
+    public ResponseEntity<ApplicationResponse<Void>> deny(Principal principal, @PathVariable Long planId) {
+        planService.deny(principal.getName(), planId);
+        return ResponseEntity.ok(ApplicationResponse.success(null));
+    }
 }

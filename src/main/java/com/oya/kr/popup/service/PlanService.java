@@ -145,6 +145,23 @@ public class PlanService {
         planMapper.updateEntranceStatus(mapperRequest);
     }
 
+    /**
+     * 사업계획서 거절 기능 구현
+     *
+     * @parameter String, Long
+     * @author 김유빈
+     * @since 2024.02.18
+     */
+    public void deny(String email, Long planId) {
+        User savedUser = findUserByEmail(email);
+        savedUser.validateUserIsAdministrator();
+
+        Plan savedPlan = findPlanById(planId, savedUser);
+        savedPlan.deny();
+        PlanUpdateEntranceStatusMapperRequest mapperRequest = PlanUpdateEntranceStatusMapperRequest.from(savedPlan);
+        planMapper.updateEntranceStatus(mapperRequest);
+    }
+
     public User findUserByEmail(String email) {
         return userMapper.findByEmail(email)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))

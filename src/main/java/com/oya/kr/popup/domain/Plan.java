@@ -2,6 +2,7 @@ package com.oya.kr.popup.domain;
 
 import static com.oya.kr.global.exception.GlobalErrorCodeList.CLOSE_DATE_IS_NOT_AFTER_OPEN_DATE;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_ENTRANCE_STATUS_IS_REQUEST;
+import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_ENTRANCE_STATUS_IS_REQUEST_OR_WAITING;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_ENTRANCE_STATUS_IS_WAITING;
 
 import java.time.LocalDate;
@@ -104,6 +105,17 @@ public class Plan extends Base {
 	}
 
 	/**
+	 * 사업계획서 거절 기능 구현
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	public void deny() {
+		validateItBeInEntranceStatusOfDeny();
+		this.entranceStatus = EntranceStatus.REJECTION;
+	}
+
+	/**
 	 * 종료 날짜가 시작 날짜 이후인지 검증
 	 *
 	 * @parameter LocalDate, LocalDate
@@ -137,6 +149,18 @@ public class Plan extends Base {
 	private void validateEntranceStatusIsWaiting() {
 		if (!this.entranceStatus.isWaiting()) {
 			throw new ApplicationException(NOT_ENTRANCE_STATUS_IS_WAITING);
+		}
+	}
+
+	/**
+	 * 입점 상태가 거절 가능한 상태인지 검증
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	private void validateItBeInEntranceStatusOfDeny() {
+		if (!(this.entranceStatus.isRequest() || this.entranceStatus.isWaiting())) {
+			throw new ApplicationException(NOT_ENTRANCE_STATUS_IS_REQUEST_OR_WAITING);
 		}
 	}
 }
