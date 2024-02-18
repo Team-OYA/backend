@@ -13,7 +13,7 @@ public class VoteResponse {
 
 	private boolean isChecked; // 내가 체크를 했는지 안했는지
 
-	public void setChecked(boolean isChecked){
+	public void setChecked(boolean isChecked) {
 		this.isChecked = isChecked;
 	}
 }

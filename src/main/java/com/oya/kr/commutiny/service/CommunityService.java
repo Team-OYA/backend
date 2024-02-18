@@ -11,7 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.commutiny.controller.dto.request.CommunityRequest;
 import com.oya.kr.commutiny.controller.dto.response.CommunityResponse;
 import com.oya.kr.commutiny.controller.dto.response.VoteResponse;
@@ -22,6 +21,7 @@ import com.oya.kr.commutiny.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.commutiny.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.commutiny.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.commutiny.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.domain.enums.UserType;
@@ -51,7 +51,8 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	public void saveBasic(User user, CommunityRequest communityRequest) {
-		SaveBasicMapperRequest saveBasicMapperRequest = new SaveBasicMapperRequest(CommunityType.BASIC.getName(), user.getId(), communityRequest);
+		SaveBasicMapperRequest saveBasicMapperRequest = new SaveBasicMapperRequest(CommunityType.BASIC.getName(),
+			user.getId(), communityRequest);
 		communityMapper.saveBasic(saveBasicMapperRequest);
 	}
 
@@ -63,12 +64,13 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	public void saveVote(User user, CommunityRequest communityRequest) {
-		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType.VOTE.getName(), user.getId(), communityRequest);
+		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType.VOTE.getName(), user.getId(),
+			communityRequest);
 		communityMapper.saveBasic(request);
 		long postId = request.getPostId();
-		communityRequest.getVotes().forEach(content->
+		communityRequest.getVotes().forEach(content ->
 			communityMapper.saveVote(new SaveVoteMapperRequest(content, postId))
-			);
+		);
 	}
 
 	/**
@@ -142,8 +144,9 @@ public class CommunityService {
 	 */
 	private List<VoteResponse> addVoteResponse(User loginUser, long communityId) {
 		List<VoteResponse> voteResponseList = communityMapper.getVoteInfo(communityId);
-		voteResponseList.forEach(VoteResponse->{
-			boolean check = Boolean.parseBoolean(communityMapper.checkUserVote(VoteResponse.getVote_id(), loginUser.getId()));
+		voteResponseList.forEach(VoteResponse -> {
+			boolean check = Boolean.parseBoolean(
+				communityMapper.checkUserVote(VoteResponse.getVote_id(), loginUser.getId()));
 			VoteResponse.setChecked(check);
 		});
 		return voteResponseList;
@@ -175,23 +178,29 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	public List<CommunityResponse> readAll(User loginUser, Pagination pagination) {
-		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
+		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(
+			new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 
 	public List<CommunityResponse> readBusinessList(User loginUser, Pagination pagination) {
 		List<CommunityBasicMapperResponse> responseList =
-			communityMapper.findByType(new ReadCommunityMapperRequest(false, UserType.BUSINESS.getName(), pagination.getPageNo(), pagination.getAmount()));
+			communityMapper.findByType(
+				new ReadCommunityMapperRequest(false, UserType.BUSINESS.getName(), pagination.getPageNo(),
+					pagination.getAmount()));
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 
 	public List<CommunityResponse> readUserList(User loginUser, Pagination pagination) {
 		List<CommunityBasicMapperResponse> responseList =
-			communityMapper.findByType(new ReadCommunityMapperRequest(false, UserType.USER.getName(), pagination.getPageNo(), pagination.getAmount()));
+			communityMapper.findByType(
+				new ReadCommunityMapperRequest(false, UserType.USER.getName(), pagination.getPageNo(),
+					pagination.getAmount()));
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 
-	private List<CommunityResponse> mapToCommunityResponses(User loginUser, List<CommunityBasicMapperResponse> responseList) {
+	private List<CommunityResponse> mapToCommunityResponses(User loginUser,
+		List<CommunityBasicMapperResponse> responseList) {
 		List<CommunityResponse> communityResponses = new ArrayList<>();
 		responseList.forEach(response -> {
 			CommunityResponse communityResponse = getVoteList(response, loginUser);
