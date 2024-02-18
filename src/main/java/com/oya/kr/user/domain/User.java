@@ -1,5 +1,9 @@
 package com.oya.kr.user.domain;
 
+import static com.oya.kr.user.exception.UserErrorCodeList.INVALID_USER;
+import static com.oya.kr.user.exception.UserErrorCodeList.NOT_ADMINISTRATOR;
+import static com.oya.kr.user.exception.UserErrorCodeList.NOT_BUSINESS;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -8,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.oya.kr.global.domain.Base;
+import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.domain.enums.Gender;
 import com.oya.kr.user.domain.enums.RegistrationType;
 import com.oya.kr.user.domain.enums.UserType;
@@ -22,6 +27,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class User extends Base {
 
+	private Long id;
 	private String nickname;
 	private String email;
 	private String password;
@@ -64,5 +70,42 @@ public class User extends Base {
 	 */
 	public boolean checkPassword(PasswordEncoder passwordEncoder, String password) {
 		return passwordEncoder.matches(password, this.password);
+	}
+
+	/**
+	 * 본인 판별
+	 *
+	 * @parameter User
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	public void validateUserIsOwner(User user) {
+		if (!this.id.equals(user.id)) {
+			throw new ApplicationException(INVALID_USER);
+		}
+	}
+
+	/**
+	 * 사업체 판별
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.16
+	 */
+	public void validateUserIsBusiness() {
+		if (!userType.isBusiness()) {
+			throw new ApplicationException(NOT_BUSINESS);
+		}
+	}
+
+	/**
+	 * 관리자 판별
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.18
+	 */
+	public void validateUserIsAdministrator() {
+		if (!userType.isAdministrator()) {
+			throw new ApplicationException(NOT_ADMINISTRATOR);
+		}
 	}
 }

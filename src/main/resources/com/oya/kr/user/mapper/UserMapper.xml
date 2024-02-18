@@ -66,4 +66,9 @@
         WHERE EMAIL = #{email}
     </select>
 
+    <delete id="deleteAll">
+        DELETE
+        FROM USERS
+    </delete>
+
 </mapper>

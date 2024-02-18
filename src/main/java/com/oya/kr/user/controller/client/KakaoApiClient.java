@@ -34,9 +34,6 @@ public class KakaoApiClient {
 	@Value("${kakao.url}")
 	private String kakaoUrl;
 
-	@Autowired
-	private RestTemplate restTemplate;
-
 	/**
 	 * Access Token 을 기반으로 Email, Nickname 이 포함된 프로필 정보를 획득
 	 *
@@ -48,6 +45,7 @@ public class KakaoApiClient {
 	public KakaoInfo requestOauthInfo(AccessTokenRequest token) {
 
 		URI uri = URI.create(kakaoUrl);
+		RestTemplate restTemplate = new RestTemplate();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(Header.AUTH.getValue(), Header.BEARER.getValue() + token.getAccessToken());

@@ -17,13 +17,16 @@
         <typeAlias type="com.oya.kr.popup.domain.Category" alias="category"/>
 
         <!-- mapper request -->
-        <typeAlias type="com.oya.kr.popup.mapper.dto.request.CategoryRequest" alias="categoryRequest"/>
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest" alias="signupBasicMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.CategoryRequest" alias="categoryRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest" alias="planSaveMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest" alias="planUpdateEntranceStatusMapperRequest"/>
 
         <!-- mapper response -->
-        <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
         <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanResponse" alias="planResponse"/>
 
         <typeAlias alias="LocalDate" type="java.time.LocalDate"/>
 

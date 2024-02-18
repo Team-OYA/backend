@@ -1,4 +1,4 @@
-package com.oya.kr.commutiny.domain;
+package com.oya.kr.community.domain;
 
 import org.springframework.stereotype.Component;
 
@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class CommunityReport extends Base {
 
+	private Long id;
 	private Community community;
 	private User user;
 }
