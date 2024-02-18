@@ -37,10 +37,10 @@ public class S3Connector implements StorageConnector {
     /**
      * S3 이미지 저장
      *
-     * @since 2024.02.16
-     * @parameter MultipartFile, String, String
+     * @parameter MultipartFile
      * @return String
      * @author 김유빈
+     * @since 2024.02.16
      */
     @Override
     public String save(MultipartFile resource) {
