@@ -15,6 +15,7 @@ import com.oya.kr.global.dto.ApplicationResponse;
 import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
+import com.oya.kr.popup.controller.dto.response.PlansResponse;
 import com.oya.kr.popup.service.PlanService;
 
 import lombok.AccessLevel;
@@ -54,6 +55,20 @@ public class PlanController {
     @GetMapping("/floors")
     public ResponseEntity<ApplicationResponse<DepartmentFloorsWithCategoriesResponse>> findAllFloor() {
         DepartmentFloorsWithCategoriesResponse response = planService.findAllFloor();
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 팝업스토어 게시글이 없는 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter Principal
+     * @return ResponseEntity<ApplicationResponse<PlansResponse>>
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @GetMapping("/isNotWritten")
+    public ResponseEntity<ApplicationResponse<PlansResponse>> findAllWithoutPopup(Principal principal) {
+        PlansResponse response = planService.findAll(principal.getName());
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 

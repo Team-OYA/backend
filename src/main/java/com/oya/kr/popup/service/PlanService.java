@@ -4,6 +4,7 @@ import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_PLAN;
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -17,12 +18,15 @@ import com.oya.kr.popup.controller.dto.response.DepartmentCategoryResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
+import com.oya.kr.popup.controller.dto.response.PlanResponse;
+import com.oya.kr.popup.controller.dto.response.PlansResponse;
 import com.oya.kr.popup.domain.Category;
 import com.oya.kr.popup.domain.Department;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.mapper.PlanMapper;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest;
+import com.oya.kr.popup.mapper.dto.response.PlanMapperResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 
@@ -71,6 +75,29 @@ public class PlanService {
         return new DepartmentFloorsWithCategoriesResponse(
             Arrays.stream(categories)
                 .map(DepartmentCategoryResponse::from)
+                .collect(Collectors.toUnmodifiableList())
+        );
+    }
+
+    /**
+     * 팝업스토어 게시글이 없는 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter String
+     * @return PlansResponse
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @Transactional(readOnly = true)
+    public PlansResponse findAll(String email) {
+        User savedUser = findUserByEmail(email);
+        savedUser.validateUserIsBusiness();
+
+        List<PlanMapperResponse> planMapperResponses = planMapper.findAllWithoutPopup();
+
+        return new PlansResponse(
+            planMapperResponses.stream()
+                .map(planMapper -> planMapper.toDomain(savedUser))
+                .map(PlanResponse::from)
                 .collect(Collectors.toUnmodifiableList())
         );
     }

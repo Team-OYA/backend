@@ -1,5 +1,6 @@
 package com.oya.kr.popup.mapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
@@ -13,6 +14,8 @@ import com.oya.kr.popup.mapper.dto.response.PlanMapperResponse;
 public interface PlanMapper {
 
     Optional<PlanMapperResponse> findById(Long id);
+
+    List<PlanMapperResponse> findAllWithoutPopup();
 
     void save(PlanSaveMapperRequest request);
 

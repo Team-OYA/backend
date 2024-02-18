@@ -9,6 +9,16 @@
         WHERE ID = #{id} AND DELETED = 0
     </select>
 
+    <select id="findAllWithoutPopup" resultType="planMapperResponse">
+        SELECT ID, OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
+               CONTACT_INFORMATION, CATEGORY, USER_ID
+        FROM PLAN
+        WHERE ID NOT IN (
+            SELECT PLAN_ID
+            FROM POPUP
+        )
+    </select>
+
     <insert id="save" parameterType="planSaveMapperRequest">
         INSERT INTO PLAN(OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
                          CONTACT_INFORMATION, CATEGORY, USER_ID)
