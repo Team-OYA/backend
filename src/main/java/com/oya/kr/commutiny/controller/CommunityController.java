@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.commutiny.controller.dto.request.CommunityRequest;
 import com.oya.kr.commutiny.controller.dto.response.CommunityResponse;
 import com.oya.kr.commutiny.service.CommunityService;
@@ -95,18 +96,18 @@ public class CommunityController {
 	 */
 	@GetMapping("/communities")
 	public ResponseEntity<ApplicationResponse<List<CommunityResponse>>> reads(Principal principal,
-		@RequestParam("type") String type) {
+		@RequestParam("type") String type, Pagination pagination) {
 		User user = userService.findByEmail(principal.getName());
 		List<CommunityResponse> responses;
 		switch (type) {
 			case "all":
-				responses = communityService.readAll(user);
+				responses = communityService.readAll(user, pagination);
 				break;
 			case "business":
-				responses = communityService.readBusinessList(user);
+				responses = communityService.readBusinessList(user, pagination);
 				break;
 			case "user":
-				responses = communityService.readUserList(user);
+				responses = communityService.readUserList(user, pagination);
 				break;
 			default:
 				throw new ApplicationException(NOT_EXIST_COMMUNITY_TYPE);
