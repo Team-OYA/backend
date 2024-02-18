@@ -36,6 +36,7 @@ public class S3Connector implements StorageConnector {
 
     /**
      * S3 이미지 저장
+     *
      * @since 2024.02.16
      * @parameter MultipartFile, String, String
      * @return String

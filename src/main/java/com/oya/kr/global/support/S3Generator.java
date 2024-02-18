@@ -14,6 +14,7 @@ public class S3Generator implements StorageGenerator {
 
     /**
      * 이미지 이름 생성
+     *
      * @since 2024.02.16
      * @parameter MultipartFile
      * @return String
