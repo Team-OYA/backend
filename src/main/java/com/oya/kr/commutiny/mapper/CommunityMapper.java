@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.apache.ibatis.annotations.Param;
 
 import com.oya.kr.commutiny.controller.dto.response.VoteResponse;
+import com.oya.kr.commutiny.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.commutiny.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.commutiny.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.commutiny.mapper.dto.response.CommunityBasicMapperResponse;
@@ -23,4 +24,8 @@ public interface CommunityMapper {
 	String checkUserVote(@Param("voteId") Long voteId, @Param("userId") Long userId);
 
 	void delete(long communityId);
+
+	List<CommunityBasicMapperResponse> findByAll(boolean deleted);
+
+	List<CommunityBasicMapperResponse> findByType(ReadCommunityMapperRequest readCommunityMapperRequest);
 }

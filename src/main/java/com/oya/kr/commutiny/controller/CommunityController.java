@@ -3,6 +3,7 @@ package com.oya.kr.commutiny.controller;
 import static com.oya.kr.commutiny.exception.CommunityErrorCodeList.*;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -61,7 +62,6 @@ public class CommunityController {
 	/**
 	 * 커뮤니티 게시글 상세 조회
 	 *
-	 * @param communityId
 	 * @return CommunityResponse
 	 * @author 이상민
 	 * @since 2024.02.18
@@ -75,7 +75,6 @@ public class CommunityController {
 	/**
 	 * 커뮤니티 게시글 삭제
 	 *
-	 * @param communityId
 	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.18
@@ -85,5 +84,33 @@ public class CommunityController {
 		User user = userService.findByEmail(principal.getName());
 		communityService.delete(user, communityId);
 		return ResponseEntity.ok(ApplicationResponse.success("게시글이 삭제되었습니다."));
+	}
+
+	/**
+	 * 커뮤니티 게시글 리스트 조회 (sort : all, business, user)
+	 *
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.18
+	 */
+	@GetMapping("/communities")
+	public ResponseEntity<ApplicationResponse<List<CommunityResponse>>> reads(Principal principal,
+		@RequestParam("type") String type) {
+		User user = userService.findByEmail(principal.getName());
+		List<CommunityResponse> responses;
+		switch (type) {
+			case "all":
+				responses = communityService.readAll(user);
+				break;
+			case "business":
+				responses = communityService.readBusinessList(user);
+				break;
+			case "user":
+				responses = communityService.readUserList(user);
+				break;
+			default:
+				throw new ApplicationException(NOT_EXIST_COMMUNITY_TYPE);
+		}
+		return ResponseEntity.ok(ApplicationResponse.success(responses));
 	}
 }
