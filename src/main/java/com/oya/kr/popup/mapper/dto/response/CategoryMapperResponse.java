@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class CategoryResponse {
+public class CategoryMapperResponse {
 
 	private final long id;
 	private final String name;

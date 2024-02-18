@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.popup.mapper.PlanMapper">
 
-    <select id="findById" parameterType="long" resultType="planResponse">
+    <select id="findById" parameterType="long" resultType="planMapperResponse">
         SELECT ID, OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
                CONTACT_INFORMATION, CATEGORY, USER_ID
         FROM PLAN

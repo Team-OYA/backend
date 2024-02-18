@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest;
-import com.oya.kr.popup.mapper.dto.response.PlanResponse;
+import com.oya.kr.popup.mapper.dto.response.PlanMapperResponse;
 
 /**
  * @author 김유빈
@@ -12,7 +12,7 @@ import com.oya.kr.popup.mapper.dto.response.PlanResponse;
  */
 public interface PlanMapper {
 
-    Optional<PlanResponse> findById(Long id);
+    Optional<PlanMapperResponse> findById(Long id);
 
     void save(PlanSaveMapperRequest request);
 

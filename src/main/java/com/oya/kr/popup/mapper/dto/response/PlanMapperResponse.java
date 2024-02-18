@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class PlanResponse {
+public class PlanMapperResponse {
 
     private final long id;
     private final String office;

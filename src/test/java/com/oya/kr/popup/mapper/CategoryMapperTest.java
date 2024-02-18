@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.popup.domain.Category;
 import com.oya.kr.popup.mapper.dto.request.CategoryRequest;
-import com.oya.kr.popup.mapper.dto.response.CategoryResponse;
+import com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse;
 
 /**
  * @author 김유빈
@@ -61,7 +61,7 @@ class CategoryMapperTest extends SpringApplicationTest {
 		categoryMapper.save(request);
 
 		// when
-		Optional<CategoryResponse> savedCategory = categoryMapper.findByName(category.getName());
+		Optional<CategoryMapperResponse> savedCategory = categoryMapper.findByName(category.getName());
 
 		// then
 		assertThat(savedCategory).isPresent();

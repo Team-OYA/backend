@@ -25,8 +25,8 @@
 
         <!-- mapper response -->
         <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
-        <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
-        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanResponse" alias="planResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse" alias="categoryMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanMapperResponse" alias="planMapperResponse"/>
 
         <typeAlias alias="LocalDate" type="java.time.LocalDate"/>
 
