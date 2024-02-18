@@ -25,9 +25,10 @@ public class CommunityResponse {
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifiedDate;
 
+	private final int countView;
 	private final List<VoteResponse> voteResponseList;
 
-	public static CommunityResponse from(Community community, List<VoteResponse> voteResponseList) {
+	public static CommunityResponse from(Community community, int countView, List<VoteResponse> voteResponseList) {
 		return new CommunityResponse(
 			community.getUser().getId(),
 			community.getUser().getNickname(),
@@ -41,6 +42,7 @@ public class CommunityResponse {
 			community.getCategory().getDescription(),
 			community.getCreatedDate(),
 			community.getModifiedDate(),
+			countView,
 			voteResponseList
 		);
 	}

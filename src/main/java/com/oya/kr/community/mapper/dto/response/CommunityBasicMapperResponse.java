@@ -23,6 +23,7 @@ public class CommunityBasicMapperResponse {
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifiedDate;
 	private final boolean deleted;
+	private final int countView;
 
 	public Community toDomain(User user) {
 		Category categoryEnum = Category.findByIndex(this.popupId - 1);

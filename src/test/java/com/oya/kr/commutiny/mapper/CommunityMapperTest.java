@@ -132,6 +132,16 @@ class CommunityMapperTest extends SpringApplicationTest {
 
 		// when & then
 		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, 1, 1));
+	}
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.18
+	 */
+	@DisplayName("조회수가 존재하지 않으면 생성하고, 아니면 수정 시간을 변경할 수 있다.")
+	@Test
+	void createOrUpdateCommunityView(){
+		// given & when & then
+		communityMapper.createOrUpdateCommunityView(9L, 2L);
 	}
 }

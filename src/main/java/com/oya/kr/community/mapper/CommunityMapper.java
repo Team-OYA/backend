@@ -28,4 +28,6 @@ public interface CommunityMapper {
 	List<CommunityBasicMapperResponse> findByAll(ReadCommunityMapperRequest readCommunityMapperRequest);
 
 	List<CommunityBasicMapperResponse> findByType(ReadCommunityMapperRequest readCommunityMapperRequest);
+
+	void createOrUpdateCommunityView(@Param("communityId") Long communityId, @Param("userId") Long userId);
 }

@@ -82,6 +82,7 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	public CommunityResponse read(User loginUser, long communityId) {
+		communityMapper.createOrUpdateCommunityView(communityId, loginUser.getId());
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
 		if (response.isDeleted()) {
 			throw new ApplicationException(CommunityErrorCodeList.DELETED_COMMUNITY);
@@ -117,7 +118,7 @@ public class CommunityService {
 		if (community.getCommunityType().equals(CommunityType.VOTE)) {
 			voteResponseList = addVoteResponse(loginUser, response.getId());
 		}
-		return CommunityResponse.from(community, voteResponseList);
+		return CommunityResponse.from(community, response.getCountView(), voteResponseList);
 	}
 
 	/**
