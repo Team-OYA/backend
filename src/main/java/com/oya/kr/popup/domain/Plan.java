@@ -1,6 +1,7 @@
 package com.oya.kr.popup.domain;
 
 import static com.oya.kr.global.exception.GlobalErrorCodeList.CLOSE_DATE_IS_NOT_AFTER_OPEN_DATE;
+import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_ENTRANCE_STATUS_IS_APPROVE;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_ENTRANCE_STATUS_IS_REQUEST;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_ENTRANCE_STATUS_IS_REQUEST_OR_WAITING;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_ENTRANCE_STATUS_IS_WAITING;
@@ -149,6 +150,18 @@ public class Plan extends Base {
 	private void validateEntranceStatusIsWaiting() {
 		if (!this.entranceStatus.isWaiting()) {
 			throw new ApplicationException(NOT_ENTRANCE_STATUS_IS_WAITING);
+		}
+	}
+
+	/**
+	 * 입점 상태가 승인 상태인지 검증
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.19
+	 */
+	public void validateEntranceStatusIsApprove() {
+		if (!this.entranceStatus.isApprove()) {
+			throw new ApplicationException(NOT_ENTRANCE_STATUS_IS_APPROVE);
 		}
 	}
 

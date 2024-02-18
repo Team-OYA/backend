@@ -62,4 +62,15 @@ public enum EntranceStatus {
 	public boolean isWaiting() {
 		return this == WAITING;
 	}
+
+	/**
+	 * 입점 승인 상태 여부 반환
+	 *
+	 * @return boolean
+	 * @author 김유빈
+	 * @since 2024.02.19
+	 */
+	public boolean isApprove() {
+		return this == APPROVAL;
+	}
 }

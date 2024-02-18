@@ -1,8 +1,10 @@
 package com.oya.kr.popup.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +21,7 @@ import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
+import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.BusinessMapper;
@@ -72,6 +75,29 @@ public class PopupMapperTest extends SpringApplicationTest {
         businessMapper.deleteAll();
         planMapper.deleteAll();
         userMapper.deleteAll();
+    }
+
+    /**
+     * findAllByPlanId 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("사업계획서 아이디를 이용하여 팝업스토어 게시글 목록을 조회한다")
+    @Test
+    void findAllByPlanId() {
+        // given
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlan(savedUser);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest request = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(request);
+
+        // when
+        List<PopupMapperResponse> mapperResponses = popupMapper.findAllByPlanId(request.getPlanId());
+
+        // then
+        assertThat(mapperResponses).hasSize(1);
     }
 
     /**

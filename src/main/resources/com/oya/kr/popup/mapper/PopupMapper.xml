@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.popup.mapper.PopupMapper">
 
+    <select id="findAllByPlanId" parameterType="Long" resultType="popupMapperResponse">
+        SELECT ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID
+        FROM POPUP
+        WHERE PLAN_ID = #{planId} AND DELETED = 0
+    </select>
+
     <insert id="save" parameterType="popupSaveMapperRequest">
         INSERT INTO POPUP(TITLE, DESCRIPTION, WITHDRAWAL_STATUS, PLAN_ID)
         VALUES (#{title}, #{description}, #{withdrawalStatus}, #{planId})

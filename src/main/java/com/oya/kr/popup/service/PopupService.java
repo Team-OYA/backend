@@ -1,6 +1,7 @@
 package com.oya.kr.popup.service;
 
 import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_PLAN;
+import static com.oya.kr.popup.exception.PlanErrorCodeList.PLAN_HAS_POPUP;
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
 import org.springframework.stereotype.Service;
@@ -43,10 +44,10 @@ public class PopupService {
         User savedUser = findUserByEmail(email);
         savedUser.validateUserIsBusiness();
 
-        // todo: 사업계획서 단계 승인
-        // todo: 팝업스토어 게시글이 있으면 불가능
-
         Plan savedPlan = findPlanById(request.getPlanId(), savedUser);
+        savedPlan.validateEntranceStatusIsApprove();
+        validatePlanDoesNotHavePopup(savedPlan);
+
         Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription());
         PopupSaveMapperRequest mapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(mapperRequest);
@@ -62,5 +63,11 @@ public class PopupService {
         return planMapper.findById(id)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
             .toDomain(user);
+    }
+
+    private void validatePlanDoesNotHavePopup(Plan plan) {
+        if (!popupMapper.findAllByPlanId(plan.getId()).isEmpty()) {
+            throw new ApplicationException(PLAN_HAS_POPUP);
+        }
     }
 }
