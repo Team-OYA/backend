@@ -1,7 +1,6 @@
 package com.oya.kr.commutiny.mapper.dto.request;
 
 import com.oya.kr.commutiny.controller.dto.request.CommunityRequest;
-import com.oya.kr.commutiny.domain.CommunityType;
 import com.oya.kr.popup.domain.Category;
 
 import lombok.Getter;

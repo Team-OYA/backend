@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.commutiny.controller.dto.request.CommunityRequest;
 import com.oya.kr.commutiny.controller.dto.response.CommunityResponse;
 import com.oya.kr.commutiny.service.CommunityService;
 import com.oya.kr.global.dto.ApplicationResponse;
+import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.service.UserService;
@@ -54,7 +54,7 @@ public class CommunityController {
 			communityService.saveBasic(user, communityRequest);
 		} else if (type.equals("vote")) {
 			communityService.saveVote(user, communityRequest);
-		}else{
+		} else {
 			throw new ApplicationException(NOT_EXIST_COMMUNITY_TYPE);
 		}
 		return ResponseEntity.ok(ApplicationResponse.success("게시글 등록 성공"));
@@ -68,7 +68,8 @@ public class CommunityController {
 	 * @since 2024.02.18
 	 */
 	@GetMapping("/communities/{communityId}")
-	public ResponseEntity<ApplicationResponse<CommunityResponse>> read(Principal principal, @PathVariable long communityId) {
+	public ResponseEntity<ApplicationResponse<CommunityResponse>> read(Principal principal,
+		@PathVariable long communityId) {
 		User user = userService.findByEmail(principal.getName());
 		return ResponseEntity.ok(ApplicationResponse.success(communityService.read(user, communityId)));
 	}

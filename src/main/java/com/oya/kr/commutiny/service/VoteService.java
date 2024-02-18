@@ -2,7 +2,6 @@ package com.oya.kr.commutiny.service;
 
 import static com.oya.kr.commutiny.exception.CommunityErrorCodeList.*;
 
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,7 @@ public class VoteService {
 	public void check(User user, long votedId) {
 		VoteCheckMapperRequest request = new VoteCheckMapperRequest(user.getId(), votedId);
 		int count = voteMapper.findById(request);
-		if(count == 1){
+		if (count == 1) {
 			throw new ApplicationException(VALID_VOTE);
 		}
 		voteMapper.checkVote(request);
