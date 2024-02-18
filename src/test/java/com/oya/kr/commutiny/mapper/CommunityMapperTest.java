@@ -117,4 +117,19 @@ class CommunityMapperTest extends SpringApplicationTest {
 		// when & then
 		communityMapper.delete(communityId);
 	}
+
+	/**
+	 * @author 이상민
+	 * @since 2024.02.18
+	 */
+	@DisplayName("게시글 전체를 불러올 수 있다.")
+	@Test
+	void findByAll(){
+		// given
+		long communityId = 5;
+
+		// when & then
+		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(false);
+
+	}
 }

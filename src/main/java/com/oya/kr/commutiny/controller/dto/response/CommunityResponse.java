@@ -14,6 +14,7 @@ public class CommunityResponse {
 	private final long writeId;
 	private final String nickname;
 	private final String email;
+	private final String userType;
 
 	private final long communityId;
 	private final String title;
@@ -31,6 +32,7 @@ public class CommunityResponse {
 			community.getUser().getId(),
 			community.getUser().getNickname(),
 			community.getUser().getEmail(),
+			community.getUser().getUserType().name(),
 			community.getId(),
 			community.getTitle(),
 			community.getDescription(),
