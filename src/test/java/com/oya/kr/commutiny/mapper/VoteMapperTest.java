@@ -5,7 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.oya.kr.common.SpringApplicationTest;
-import com.oya.kr.commutiny.mapper.dto.request.VoteCheckMapperRequest;
+import com.oya.kr.community.mapper.VoteMapper;
+import com.oya.kr.community.mapper.dto.request.VoteCheckMapperRequest;
 
 /**
  * @author 이상민

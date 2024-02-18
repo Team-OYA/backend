@@ -1,6 +1,5 @@
-package com.oya.kr.commutiny.service;
+package com.oya.kr.community.service;
 
-import static com.oya.kr.commutiny.exception.CommunityErrorCodeList.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
 
 import java.util.ArrayList;
@@ -11,16 +10,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oya.kr.commutiny.controller.dto.request.CommunityRequest;
-import com.oya.kr.commutiny.controller.dto.response.CommunityResponse;
-import com.oya.kr.commutiny.controller.dto.response.VoteResponse;
-import com.oya.kr.commutiny.domain.Community;
-import com.oya.kr.commutiny.domain.CommunityType;
-import com.oya.kr.commutiny.mapper.CommunityMapper;
-import com.oya.kr.commutiny.mapper.dto.request.ReadCommunityMapperRequest;
-import com.oya.kr.commutiny.mapper.dto.request.SaveBasicMapperRequest;
-import com.oya.kr.commutiny.mapper.dto.request.SaveVoteMapperRequest;
-import com.oya.kr.commutiny.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.controller.dto.request.CommunityRequest;
+import com.oya.kr.community.controller.dto.response.CommunityResponse;
+import com.oya.kr.community.controller.dto.response.VoteResponse;
+import com.oya.kr.community.exception.CommunityErrorCodeList;
+import com.oya.kr.community.mapper.CommunityMapper;
+import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
+import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.domain.Community;
+import com.oya.kr.community.domain.CommunityType;
+import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.domain.User;
@@ -84,7 +84,7 @@ public class CommunityService {
 	public CommunityResponse read(User loginUser, long communityId) {
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
 		if (response.isDeleted()) {
-			throw new ApplicationException(DELETED_COMMUNITY);
+			throw new ApplicationException(CommunityErrorCodeList.DELETED_COMMUNITY);
 		}
 		return getVoteList(response, loginUser);
 	}
@@ -99,7 +99,7 @@ public class CommunityService {
 	 */
 	private CommunityBasicMapperResponse getCommunityResponseOrThrow(long communityId) {
 		return communityMapper.getCommunityById(communityId)
-			.orElseThrow(() -> new ApplicationException(NOT_EXIST_COMMUNITY));
+			.orElseThrow(() -> new ApplicationException(CommunityErrorCodeList.NOT_EXIST_COMMUNITY));
 	}
 
 	/**
@@ -163,7 +163,7 @@ public class CommunityService {
 	public void delete(User user, long communityId) {
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
 		if (user.getId() != response.getWriteId()) {
-			throw new ApplicationException(INVALID_COMMUNITY);
+			throw new ApplicationException(CommunityErrorCodeList.INVALID_COMMUNITY);
 		}
 		communityMapper.delete(communityId);
 	}

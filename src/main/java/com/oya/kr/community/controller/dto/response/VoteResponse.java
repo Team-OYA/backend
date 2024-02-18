@@ -1,4 +1,4 @@
-package com.oya.kr.commutiny.controller.dto.response;
+package com.oya.kr.community.controller.dto.response;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

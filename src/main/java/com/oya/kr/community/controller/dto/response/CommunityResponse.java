@@ -1,9 +1,9 @@
-package com.oya.kr.commutiny.controller.dto.response;
+package com.oya.kr.community.controller.dto.response;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.oya.kr.commutiny.domain.Community;
+import com.oya.kr.community.domain.Community;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

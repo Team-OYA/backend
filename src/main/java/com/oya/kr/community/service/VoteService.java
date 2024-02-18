@@ -1,12 +1,11 @@
-package com.oya.kr.commutiny.service;
-
-import static com.oya.kr.commutiny.exception.CommunityErrorCodeList.*;
+package com.oya.kr.community.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oya.kr.commutiny.mapper.VoteMapper;
-import com.oya.kr.commutiny.mapper.dto.request.VoteCheckMapperRequest;
+import com.oya.kr.community.exception.CommunityErrorCodeList;
+import com.oya.kr.community.mapper.VoteMapper;
+import com.oya.kr.community.mapper.dto.request.VoteCheckMapperRequest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.domain.User;
 
@@ -34,7 +33,7 @@ public class VoteService {
 		VoteCheckMapperRequest request = new VoteCheckMapperRequest(user.getId(), votedId);
 		int count = voteMapper.findById(request);
 		if (count == 1) {
-			throw new ApplicationException(VALID_VOTE);
+			throw new ApplicationException(CommunityErrorCodeList.VALID_VOTE);
 		}
 		voteMapper.checkVote(request);
 	}

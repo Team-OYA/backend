@@ -1,6 +1,6 @@
 package com.oya.kr.commutiny.mapper;
 
-import static com.oya.kr.commutiny.exception.CommunityErrorCodeList.*;
+import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -11,13 +11,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.oya.kr.common.SpringApplicationTest;
-import com.oya.kr.commutiny.controller.dto.request.CommunityRequest;
-import com.oya.kr.commutiny.controller.dto.response.VoteResponse;
-import com.oya.kr.commutiny.domain.CommunityType;
-import com.oya.kr.commutiny.mapper.dto.request.ReadCommunityMapperRequest;
-import com.oya.kr.commutiny.mapper.dto.request.SaveBasicMapperRequest;
-import com.oya.kr.commutiny.mapper.dto.request.SaveVoteMapperRequest;
-import com.oya.kr.commutiny.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.controller.dto.request.CommunityRequest;
+import com.oya.kr.community.controller.dto.response.VoteResponse;
+import com.oya.kr.community.mapper.CommunityMapper;
+import com.oya.kr.community.domain.CommunityType;
+import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
+import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
+import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.global.exception.ApplicationException;
 
 /**

@@ -1,15 +1,15 @@
-package com.oya.kr.commutiny.mapper;
+package com.oya.kr.community.mapper;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.oya.kr.commutiny.controller.dto.response.VoteResponse;
-import com.oya.kr.commutiny.mapper.dto.request.ReadCommunityMapperRequest;
-import com.oya.kr.commutiny.mapper.dto.request.SaveBasicMapperRequest;
-import com.oya.kr.commutiny.mapper.dto.request.SaveVoteMapperRequest;
-import com.oya.kr.commutiny.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.controller.dto.response.VoteResponse;
+import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
+import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 
 public interface CommunityMapper {
 

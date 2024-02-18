@@ -1,6 +1,6 @@
-package com.oya.kr.commutiny.mapper;
+package com.oya.kr.community.mapper;
 
-import com.oya.kr.commutiny.mapper.dto.request.VoteCheckMapperRequest;
+import com.oya.kr.community.mapper.dto.request.VoteCheckMapperRequest;
 
 public interface VoteMapper {
 

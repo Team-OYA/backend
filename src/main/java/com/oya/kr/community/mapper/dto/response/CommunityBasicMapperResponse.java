@@ -1,9 +1,9 @@
-package com.oya.kr.commutiny.mapper.dto.response;
+package com.oya.kr.community.mapper.dto.response;
 
 import java.time.LocalDateTime;
 
-import com.oya.kr.commutiny.domain.Community;
-import com.oya.kr.commutiny.domain.CommunityType;
+import com.oya.kr.community.domain.Community;
+import com.oya.kr.community.domain.CommunityType;
 import com.oya.kr.popup.domain.Category;
 import com.oya.kr.user.domain.User;
 

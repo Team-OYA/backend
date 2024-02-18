@@ -1,6 +1,6 @@
-package com.oya.kr.commutiny.controller;
+package com.oya.kr.community.controller;
 
-import static com.oya.kr.commutiny.exception.CommunityErrorCodeList.*;
+import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oya.kr.commutiny.controller.dto.request.CommunityRequest;
-import com.oya.kr.commutiny.controller.dto.response.CommunityResponse;
-import com.oya.kr.commutiny.service.CommunityService;
+import com.oya.kr.community.controller.dto.request.CommunityRequest;
+import com.oya.kr.community.controller.dto.response.CommunityResponse;
+import com.oya.kr.community.service.CommunityService;
 import com.oya.kr.global.dto.ApplicationResponse;
 import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.exception.ApplicationException;

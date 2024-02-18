@@ -1,4 +1,4 @@
-package com.oya.kr.commutiny.controller.dto.request;
+package com.oya.kr.community.controller.dto.request;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.oya.kr.commutiny.exception;
+package com.oya.kr.community.exception;
 
 import org.springframework.http.HttpStatus;
 

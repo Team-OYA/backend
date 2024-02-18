@@ -1,4 +1,4 @@
-package com.oya.kr.commutiny.controller;
+package com.oya.kr.community.controller;
 
 import java.security.Principal;
 
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oya.kr.commutiny.service.VoteService;
+import com.oya.kr.community.service.VoteService;
 import com.oya.kr.global.dto.ApplicationResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.service.UserService;

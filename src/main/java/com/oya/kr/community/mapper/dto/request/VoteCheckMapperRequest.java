@@ -1,4 +1,4 @@
-package com.oya.kr.commutiny.mapper.dto.request;
+package com.oya.kr.community.mapper.dto.request;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

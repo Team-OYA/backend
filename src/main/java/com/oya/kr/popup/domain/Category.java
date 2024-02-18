@@ -1,6 +1,7 @@
 package com.oya.kr.popup.domain;
 
 import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
+import static com.oya.kr.popup.exception.PlanErrorCodeList.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
