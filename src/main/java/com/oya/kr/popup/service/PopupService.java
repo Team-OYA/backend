@@ -6,9 +6,12 @@ import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.global.support.S3Connector;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
+import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.mapper.PlanMapper;
@@ -32,6 +35,7 @@ public class PopupService {
     private final UserMapper userMapper;
     private final PlanMapper planMapper;
     private final PopupMapper popupMapper;
+    private final S3Connector s3Connector;
 
     /**
      * 팝업스토어 게시글 작성 기능 구현
@@ -51,6 +55,20 @@ public class PopupService {
         Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription());
         PopupSaveMapperRequest mapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(mapperRequest);
+    }
+
+    /**
+     * 팝업스토어 게시글 이미지 작성 기능 구현
+     *
+     * @parameter String, MultipartFile
+     * @return PopupImageResponse
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    public PopupImageResponse saveImage(String email, MultipartFile image) {
+        User savedUser = findUserByEmail(email);
+        savedUser.validateUserIsBusiness();
+        return new PopupImageResponse(s3Connector.save(image));
     }
 
     private User findUserByEmail(String email) {
