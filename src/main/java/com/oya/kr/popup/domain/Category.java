@@ -1,5 +1,12 @@
 package com.oya.kr.popup.domain;
 
+import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
+
+import java.util.Arrays;
+import java.util.HashMap;
+
+import com.oya.kr.global.exception.ApplicationException;
+
 import lombok.Getter;
 
 /**
@@ -25,5 +32,31 @@ public enum Category {
         this.code = code;
         this.name = name;
         this.description = description;
+    }
+
+    /**
+     * 코드로 category index 찾기
+     *
+     * @author 이상민
+     * @since 2024.02.18
+     */
+    public static Category findByCode(String code){
+        return Arrays.stream(Category.values())
+            .filter(enumValue -> enumValue.code.equals(code))
+            .findFirst()
+            .orElseThrow(() -> new ApplicationException(WRONG_ENUM));
+    }
+
+    /**
+     * index로 category 찾기
+     *
+     * @author 이상민
+     * @since 2024.02.18
+     */
+    public static Category findByIndex(int index) {
+        if (index >= 0 && index < values().length) {
+            return values()[index];
+        }
+        throw new IllegalArgumentException("Invalid index: " + index);
     }
 }

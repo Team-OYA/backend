@@ -1,5 +1,7 @@
 package com.oya.kr.commutiny.domain;
 
+import java.time.LocalDateTime;
+
 import org.springframework.stereotype.Component;
 
 import com.oya.kr.global.domain.Base;
@@ -20,4 +22,17 @@ public class Community extends Base {
 	private String description;
 	private Category category;
 	private CommunityType communityType;
+
+	public Community(User user, String title, String description, Category category, CommunityType communityType,
+		long id, LocalDateTime createdDate, LocalDateTime modifiedDate, boolean deleted) {
+		this.user = user;
+		this.title = title;
+		this.description = description;
+		this.category = category;
+		this.communityType = communityType;
+		this.id = id;
+		this.createdDate = createdDate;
+		this.modifiedDate = modifiedDate;
+		this.deleted = deleted;
+	}
 }

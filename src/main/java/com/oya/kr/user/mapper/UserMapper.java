@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.oya.kr.commutiny.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
@@ -18,4 +19,6 @@ public interface UserMapper {
 	Integer duplicatedNickname(String nickname);
 
 	int insertAdminAndKakaoUser(SignupBasicMapperRequest signupBasicMapperRequest);
+
+	Optional<UserMapperResponse> findById(long userId);
 }

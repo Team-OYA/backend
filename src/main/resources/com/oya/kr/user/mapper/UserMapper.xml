@@ -66,4 +66,22 @@
         WHERE EMAIL = #{email}
     </select>
 
+    <select id="findById" resultType="userMapperResponse">
+        SELECT ID,
+               NICKNAME,
+               EMAIL,
+               PASSWORD,
+               BIRTH_DATE,
+               GENDER,
+               REGISTRATION_TYPE,
+               USER_TYPE,
+               BUSINESS_REGISTRATION_NUMBER,
+               PROFILE_URL,
+               CREATED_DATE,
+               MODIFIED_DATE,
+               DELETED
+        FROM USERS
+        WHERE ID = #{userId}
+    </select>
+
 </mapper>

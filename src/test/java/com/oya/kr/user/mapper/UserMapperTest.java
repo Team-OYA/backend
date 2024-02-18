@@ -77,4 +77,14 @@ class UserMapperTest extends SpringApplicationTest {
 		// then
 		assertEquals(result, 1);
 	}
+
+	/**
+	 * @author 이상민
+	 * @since 2024.02.18
+	 */
+	@DisplayName("userId를 가지고 user정보를 불러올 수 있다.")
+	@Test
+	void findById(){
+
+	}
 }
