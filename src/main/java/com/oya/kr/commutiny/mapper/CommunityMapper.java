@@ -25,7 +25,7 @@ public interface CommunityMapper {
 
 	void delete(long communityId);
 
-	List<CommunityBasicMapperResponse> findByAll(boolean deleted);
+	List<CommunityBasicMapperResponse> findByAll(ReadCommunityMapperRequest readCommunityMapperRequest);
 
 	List<CommunityBasicMapperResponse> findByType(ReadCommunityMapperRequest readCommunityMapperRequest);
 }

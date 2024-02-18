@@ -14,6 +14,7 @@ import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.commutiny.controller.dto.request.CommunityRequest;
 import com.oya.kr.commutiny.controller.dto.response.VoteResponse;
 import com.oya.kr.commutiny.domain.CommunityType;
+import com.oya.kr.commutiny.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.commutiny.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.commutiny.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.commutiny.mapper.dto.response.CommunityBasicMapperResponse;
@@ -129,7 +130,7 @@ class CommunityMapperTest extends SpringApplicationTest {
 		long communityId = 5;
 
 		// when & then
-		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(false);
+		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, 1, 1));
 
 	}
 }

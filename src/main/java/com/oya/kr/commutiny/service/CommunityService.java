@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.commutiny.controller.dto.request.CommunityRequest;
 import com.oya.kr.commutiny.controller.dto.response.CommunityResponse;
 import com.oya.kr.commutiny.controller.dto.response.VoteResponse;
@@ -168,22 +169,25 @@ public class CommunityService {
 	 * 커뮤니티 게시글 리스트 조회
 	 *
 	 * @param loginUser
+	 * @param pagination
 	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public List<CommunityResponse> readAll(User loginUser) {
-		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(false);
+	public List<CommunityResponse> readAll(User loginUser, Pagination pagination) {
+		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 
-	public List<CommunityResponse> readBusinessList(User loginUser) {
-		List<CommunityBasicMapperResponse> responseList = communityMapper.findByType(new ReadCommunityMapperRequest(false, UserType.BUSINESS.getName()));
+	public List<CommunityResponse> readBusinessList(User loginUser, Pagination pagination) {
+		List<CommunityBasicMapperResponse> responseList =
+			communityMapper.findByType(new ReadCommunityMapperRequest(false, UserType.BUSINESS.getName(), pagination.getPageNo(), pagination.getAmount()));
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 
-	public List<CommunityResponse> readUserList(User loginUser) {
-		List<CommunityBasicMapperResponse> responseList = communityMapper.findByType(new ReadCommunityMapperRequest(false, UserType.USER.getName()));
+	public List<CommunityResponse> readUserList(User loginUser, Pagination pagination) {
+		List<CommunityBasicMapperResponse> responseList =
+			communityMapper.findByType(new ReadCommunityMapperRequest(false, UserType.USER.getName(), pagination.getPageNo(), pagination.getAmount()));
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 

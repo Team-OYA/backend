@@ -8,4 +8,6 @@ import lombok.RequiredArgsConstructor;
 public class ReadCommunityMapperRequest {
 	private final boolean deleted;
 	private final String userType;
+	private final int pageNo;
+	private final int amount;
 }

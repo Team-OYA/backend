@@ -62,7 +62,8 @@
         WHERE ID = #{communityId}
     </update>
 
-    <select id="findByAll" resultType="communityBasicMapperResponse">
+    <select id="findByAll" parameterType="readCommunityMapperRequest" resultType="communityBasicMapperResponse">
+    <![CDATA[
         SELECT
             ID,
             TITLE,
@@ -78,9 +79,12 @@
         WHERE
             DELETED = #{deleted}
         ORDER BY MODIFIED_DATE
+        OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
+            ]]>
     </select>
 
     <select id="findByType" parameterType="readCommunityMapperRequest" resultType="communityBasicMapperResponse">
+        <![CDATA[
         SELECT
             c.ID,
             TITLE,
@@ -99,6 +103,8 @@
             c.DELETED = #{deleted}
           AND u.USER_TYPE = #{userType}
         ORDER BY c.MODIFIED_DATE
+        OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
+        ]]>
     </select>
 
 </mapper>
