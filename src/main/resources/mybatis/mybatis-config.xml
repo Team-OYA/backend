@@ -22,6 +22,7 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.CategoryRequest" alias="categoryRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest" alias="planSaveMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest" alias="planUpdateEntranceStatusMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest" alias="popupSaveMapperRequest"/>
 
         <!-- mapper response -->
         <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>

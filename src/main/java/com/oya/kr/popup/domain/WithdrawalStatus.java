@@ -1,5 +1,8 @@
 package com.oya.kr.popup.domain;
 
+import lombok.Getter;
+
+@Getter
 public enum WithdrawalStatus {
 
 	DO_NOT_APPLY("do not apply", "철회 신청하지 않음"),

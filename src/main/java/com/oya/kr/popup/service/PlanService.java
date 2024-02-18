@@ -189,13 +189,13 @@ public class PlanService {
         planMapper.updateEntranceStatus(mapperRequest);
     }
 
-    public User findUserByEmail(String email) {
+    private User findUserByEmail(String email) {
         return userMapper.findByEmail(email)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))
             .toDomain();
     }
 
-    public Plan findPlanById(Long id, User user) {
+    private Plan findPlanById(Long id, User user) {
         return planMapper.findById(id)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
             .toDomain(user);

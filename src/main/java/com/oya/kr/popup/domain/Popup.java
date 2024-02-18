@@ -21,4 +21,16 @@ public class Popup extends Base {
 	private String description;
 	private LocalDateTime pulledDate;
 	private WithdrawalStatus withdrawalStatus;
+
+	private Popup(Plan plan, String title, String description, LocalDateTime pulledDate, WithdrawalStatus withdrawalStatus) {
+		this.plan = plan;
+		this.title = title;
+		this.description = description;
+		this.pulledDate = pulledDate;
+		this.withdrawalStatus = withdrawalStatus;
+	}
+
+	public static Popup saved(Plan plan, String title, String description) {
+		return new Popup(plan, title, description, LocalDateTime.now(), WithdrawalStatus.DO_NOT_APPLY);
+	}
 }

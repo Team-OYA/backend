@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.popup.mapper.PopupMapper">
+
+    <insert id="save" parameterType="popupSaveMapperRequest">
+        INSERT INTO POPUP(TITLE, DESCRIPTION, WITHDRAWAL_STATUS, PLAN_ID)
+        VALUES (#{title}, #{description}, #{withdrawalStatus}, #{planId})
+        <selectKey keyProperty="popupId" resultType="long" order="AFTER">
+            SELECT NVL(MAX(ID), 0)
+            FROM POPUP
+        </selectKey>
+    </insert>
+
+    <delete id="deleteAll">
+        DELETE
+        FROM POPUP
+    </delete>
+
+</mapper>

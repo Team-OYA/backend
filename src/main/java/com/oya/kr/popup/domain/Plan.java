@@ -37,7 +37,7 @@ public class Plan extends Base {
 	private String contactInformation;
 	private Category category;
 
-	public Plan(User user, DepartmentBranch departmentBranch, DepartmentFloor floor, String location,
+	private Plan(User user, DepartmentBranch departmentBranch, DepartmentFloor floor, String location,
 		LocalDate openDate, LocalDate closeDate, String businessPlanUrl, EntranceStatus entranceStatus,
 		String contactInformation, Category category) {
 		this.user = user;
