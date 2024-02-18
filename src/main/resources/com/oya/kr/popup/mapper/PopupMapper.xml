@@ -2,8 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.popup.mapper.PopupMapper">
 
+    <select id="findById" parameterType="Long" resultType="popupMapperResponse">
+        SELECT ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, CREATED_DATE, MODIFIED_DATE, DELETED
+        FROM POPUP
+        WHERE ID = #{popupId} AND DELETED = 0
+    </select>
+
     <select id="findAllByPlanId" parameterType="Long" resultType="popupMapperResponse">
-        SELECT ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID
+        SELECT ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, CREATED_DATE, MODIFIED_DATE, DELETED
         FROM POPUP
         WHERE PLAN_ID = #{planId} AND DELETED = 0
     </select>

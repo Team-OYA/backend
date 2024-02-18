@@ -1,5 +1,11 @@
 package com.oya.kr.popup.domain;
 
+import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_WITHDRAWAL_STATUS;
+
+import java.util.Arrays;
+
+import com.oya.kr.global.exception.ApplicationException;
+
 import lombok.Getter;
 
 @Getter
@@ -17,5 +23,20 @@ public enum WithdrawalStatus {
 	WithdrawalStatus(String name, String description) {
 		this.name = name;
 		this.description = description;
+	}
+
+	/**
+	 * name 를 이용하여 적절한 WithdrawalStatus 객체 조회
+	 *
+	 * @parameter String
+	 * @return WithdrawalStatus
+	 * @author 김유빈
+	 * @since 2024.02.19
+	 */
+	public static WithdrawalStatus from(String name) {
+		return Arrays.stream(values())
+			.filter(it -> it.name.equals(name))
+			.findFirst()
+			.orElseThrow(() -> new ApplicationException(NOT_EXIST_WITHDRAWAL_STATUS));
 	}
 }

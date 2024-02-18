@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -75,6 +76,29 @@ public class PopupMapperTest extends SpringApplicationTest {
         businessMapper.deleteAll();
         planMapper.deleteAll();
         userMapper.deleteAll();
+    }
+
+    /**
+     * findById 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("아이디를 이용하여 팝업스토어 게시글을 조회한다")
+    @Test
+    void findById() {
+        // given
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlan(savedUser);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest request = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(request);
+
+        // when
+        Optional<PopupMapperResponse> mapperResponse = popupMapper.findById(request.getPopupId());
+
+        // then
+        assertThat(mapperResponse).isPresent();
     }
 
     /**

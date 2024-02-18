@@ -22,7 +22,19 @@ public class Popup extends Base {
 	private LocalDateTime pulledDate;
 	private WithdrawalStatus withdrawalStatus;
 
-	private Popup(Plan plan, String title, String description, LocalDateTime pulledDate, WithdrawalStatus withdrawalStatus) {
+	public Popup(Plan plan, String title, String description, LocalDateTime pulledDate, WithdrawalStatus withdrawalStatus) {
+		super();
+		this.plan = plan;
+		this.title = title;
+		this.description = description;
+		this.pulledDate = pulledDate;
+		this.withdrawalStatus = withdrawalStatus;
+	}
+
+	public Popup(Long id, Plan plan, String title, String description, LocalDateTime pulledDate,
+		WithdrawalStatus withdrawalStatus, LocalDateTime createdDate, LocalDateTime modifiedDate, boolean deleted) {
+		super(createdDate, modifiedDate, deleted);
+		this.id = id;
 		this.plan = plan;
 		this.title = title;
 		this.description = description;

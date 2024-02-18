@@ -2,6 +2,7 @@ package com.oya.kr.popup.service;
 
 import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_PLAN;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.PLAN_HAS_POPUP;
+import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP;
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
 import org.springframework.stereotype.Service;
@@ -12,11 +13,13 @@ import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.S3Connector;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
+import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.mapper.PlanMapper;
 import com.oya.kr.popup.mapper.PopupMapper;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
+import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 
@@ -36,6 +39,22 @@ public class PopupService {
     private final PlanMapper planMapper;
     private final PopupMapper popupMapper;
     private final S3Connector s3Connector;
+
+    /**
+     * 팝업스토어 게시글 상세정보 조회 기능 구현
+     *
+     * @parameter String, Long
+     * @return PopupResponse
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @Transactional(readOnly = true)
+    public PopupResponse findById(String email, Long popupId) {
+        PopupMapperResponse popupMapperResponse = popupMapper.findById(popupId)
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
+        Plan savedPlan = findPlanById(popupMapperResponse.getPlanId());
+        return PopupResponse.from(popupMapperResponse.toDomain(savedPlan));
+    }
 
     /**
      * 팝업스토어 게시글 작성 기능 구현
@@ -74,6 +93,12 @@ public class PopupService {
     private User findUserByEmail(String email) {
         return userMapper.findByEmail(email)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))
+            .toDomain();
+    }
+
+    private Plan findPlanById(Long id) {
+        return planMapper.findById(id)
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
             .toDomain();
     }
 

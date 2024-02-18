@@ -27,7 +27,15 @@ public class PlanMapperResponse {
     private final String contactInformation;
     private final String category;
 
+    public Plan toDomain() {
+        return createPlan(null);
+    }
+
     public Plan toDomain(User user) {
+        return createPlan(user);
+    }
+
+    private Plan createPlan(User user) {
         return new Plan(
             id, user, DepartmentBranch.from(office), DepartmentFloor.from(floor), location, openDate, closeDate,
             businessPlanUrl, EntranceStatus.from(entranceStatus), contactInformation, Category.from(category)

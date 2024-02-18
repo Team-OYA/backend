@@ -3,6 +3,8 @@ package com.oya.kr.popup.controller;
 import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.oya.kr.global.dto.ApplicationResponse;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
+import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.service.PopupService;
 
 import lombok.AccessLevel;
@@ -28,6 +31,20 @@ import lombok.RequiredArgsConstructor;
 public class PopupController {
 
     private final PopupService popupService;
+
+    /**
+     * 팝업스토어 게시글 상세정보 조회 기능 구현
+     *
+     * @parameter Principal, Long
+     * @return ResponseEntity<ApplicationResponse<PopupResponse>>
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @GetMapping("/{popupId}")
+    public ResponseEntity<ApplicationResponse<PopupResponse>> findById(Principal principal, @PathVariable Long popupId) {
+        PopupResponse response = popupService.findById(principal.getName(), popupId);
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
 
     /**
      * 팝업스토어 게시글 작성 기능 구현
