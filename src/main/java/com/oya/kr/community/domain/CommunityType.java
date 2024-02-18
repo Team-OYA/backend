@@ -1,4 +1,4 @@
-package com.oya.kr.commutiny.domain;
+package com.oya.kr.community.domain;
 
 public enum CommunityType {
 

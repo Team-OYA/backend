@@ -1,4 +1,4 @@
-package com.oya.kr.commutiny.domain;
+package com.oya.kr.community.domain;
 
 import org.springframework.stereotype.Component;
 
@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @Component
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class VoteCheck extends Base {
+public class CommunityReport extends Base {
 
 	private Long id;
-	private Vote vote;
+	private Community community;
 	private User user;
 }
