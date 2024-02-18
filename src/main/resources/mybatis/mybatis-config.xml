@@ -23,10 +23,15 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest" alias="planSaveMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest" alias="planUpdateEntranceStatusMapperRequest"/>
 
+        <typeAlias type="com.oya.kr.commutiny.mapper.dto.request.SaveBasicMapperRequest" alias="saveBasicMapperRequest"/>
+        <typeAlias type="com.oya.kr.commutiny.mapper.dto.request.SaveVoteMapperRequest" alias="saveVoteMapperRequest"/>
+        <typeAlias type="com.oya.kr.commutiny.mapper.dto.request.VoteCheckMapperRequest" alias="voteCheckMapperRequest"/>
+
         <!-- mapper response -->
         <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanResponse" alias="planResponse"/>
+        <typeAlias type="com.oya.kr.commutiny.mapper.dto.response.CommunityBasicMapperResponse" alias="communityBasicMapperResponse"/>
 
         <typeAlias alias="LocalDate" type="java.time.LocalDate"/>
 

@@ -20,4 +20,6 @@ public interface UserMapper {
 	int insertAdminAndKakaoUser(SignupBasicMapperRequest signupBasicMapperRequest);
 
 	void deleteAll();
+
+	Optional<UserMapperResponse> findById(long userId);
 }
