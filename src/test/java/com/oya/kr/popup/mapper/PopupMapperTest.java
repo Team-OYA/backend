@@ -23,7 +23,7 @@ import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.WithdrawalStatus;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
-import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
@@ -40,6 +40,9 @@ public class PopupMapperTest extends SpringApplicationTest {
 
     @Autowired
     private PopupMapper popupMapper;
+
+    @Autowired
+    private PopupImageMapper popupImageMapper;
 
     @Autowired
     private PlanMapper planMapper;
@@ -61,6 +64,7 @@ public class PopupMapperTest extends SpringApplicationTest {
      */
     @BeforeEach
     void setUp() {
+        popupImageMapper.deleteAll();
         popupMapper.deleteAll();
         businessMapper.deleteAll();
         planMapper.deleteAll();
@@ -75,6 +79,7 @@ public class PopupMapperTest extends SpringApplicationTest {
      */
     @AfterEach
     void init() {
+        popupImageMapper.deleteAll();
         popupMapper.deleteAll();
         businessMapper.deleteAll();
         planMapper.deleteAll();
@@ -99,6 +104,29 @@ public class PopupMapperTest extends SpringApplicationTest {
 
         // when
         Optional<PopupMapperResponse> mapperResponse = popupMapper.findById(request.getPopupId());
+
+        // then
+        assertThat(mapperResponse).isPresent();
+    }
+
+    /**
+     * findByIdWithDate 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("아이디를 이용하여 오픈 일정이 포함된 팝업스토어 게시글을 조회한다")
+    @Test
+    void findByIdWithDate() {
+        // given
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlan(savedUser);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest request = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(request);
+
+        // when
+        Optional<PopupDetailMapperResponse> mapperResponse = popupMapper.findByIdWithDate(request.getPopupId());
 
         // then
         assertThat(mapperResponse).isPresent();
@@ -143,10 +171,66 @@ public class PopupMapperTest extends SpringApplicationTest {
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
-        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findAll(request);
+
+        // then
+        assertThat(mapperResponses).hasSize(1);
+    }
+
+    /**
+     * findInProgress 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("진행중인 팝업스토어 게시글 목록을 조회한다")
+    @Test
+    void findInProgress() {
+        // given
+        LocalDate openDate = LocalDate.now();
+        LocalDate closeDate = openDate.plusDays(1);
+
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlanWithOpenAndCloseDate(savedUser, openDate, closeDate);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(popupSaveMapperRequest);
+
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
+
+        // when
+        List<PopupDetailMapperResponse> mapperResponses = popupMapper.findInProgress(request);
+
+        // then
+        assertThat(mapperResponses).hasSize(1);
+    }
+
+    /**
+     * findScheduled 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("예정인 팝업스토어 게시글 목록을 조회한다")
+    @Test
+    void findScheduled() {
+        // given
+        LocalDate openDate = LocalDate.now().plusDays(1);
+        LocalDate closeDate = openDate.plusDays(1);
+
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlanWithOpenAndCloseDate(savedUser, openDate, closeDate);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(popupSaveMapperRequest);
+
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
+
+        // when
+        List<PopupDetailMapperResponse> mapperResponses = popupMapper.findScheduled(request);
 
         // then
         assertThat(mapperResponses).hasSize(1);
@@ -204,6 +288,21 @@ public class PopupMapperTest extends SpringApplicationTest {
             DepartmentFloor.B1.getCode(),
             LocalDate.now(),
             LocalDate.now().plusDays(1),
+            "businessPlanUrl",
+            "010-1234-5678",
+            Category.CLOTHING.getCode());
+        PlanSaveMapperRequest request = PlanSaveMapperRequest.from(plan);
+        planMapper.save(request);
+        return planMapper.findById(request.getPlanId()).get().toDomain(savedUser);
+    }
+
+    private Plan savedPlanWithOpenAndCloseDate(User savedUser, LocalDate openDate, LocalDate closeDate) {
+        Plan plan = Plan.saved(
+            savedUser,
+            DepartmentBranch.THE_HYUNDAI_SEOUL.getCode(),
+            DepartmentFloor.B1.getCode(),
+            openDate,
+            closeDate,
             "businessPlanUrl",
             "010-1234-5678",
             Category.CLOTHING.getCode());
