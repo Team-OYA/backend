@@ -41,7 +41,7 @@ public class UserMapperResponse {
 			.birthDate(this.birthDate)
 			.gender(this.gender != null ? Gender.findByName(this.gender) : null)
 			.registrationType(this.registrationType != null ? RegistrationType.findByName(this.registrationType) : null)
-			.userType(this.userType != null ? UserType.findByName(this.userType) : null)
+			.userType(this.userType != null ? UserType.from(this.userType) : null)
 			.businessRegistrationNumber(this.businessRegistrationNumber)
 			.profileUrl(this.profileUrl)
 			.build();

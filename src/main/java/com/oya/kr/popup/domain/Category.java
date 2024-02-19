@@ -1,8 +1,10 @@
 package com.oya.kr.popup.domain;
 
-import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_DEPARTMENT_FLOOR;
+import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
+import static com.oya.kr.popup.exception.PlanErrorCodeList.*;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import com.oya.kr.global.exception.ApplicationException;
 

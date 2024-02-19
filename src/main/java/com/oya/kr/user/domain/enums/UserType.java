@@ -33,7 +33,13 @@ public enum UserType {
 		}
 	}
 
-	public static UserType findByName(String name) {
+	/**
+	 * name으로 UserType 변환
+	 *
+	 * @author 이상민
+	 * @since 2024.02.18
+	 */
+	public static UserType from(String name) {
 		return Arrays.stream(UserType.values())
 			.filter(enumValue -> enumValue.name.equals(name))
 			.findFirst()
