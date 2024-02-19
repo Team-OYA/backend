@@ -5,6 +5,8 @@ import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 import java.security.Principal;
 import java.util.List;
 
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oya.kr.community.controller.dto.request.CommunityRequest;
+import com.oya.kr.community.controller.dto.response.CommunityDetailResponse;
 import com.oya.kr.community.controller.dto.response.CommunityResponse;
 import com.oya.kr.community.service.CommunityService;
 import com.oya.kr.global.dto.ApplicationResponse;
@@ -39,25 +44,28 @@ public class CommunityController {
 	private final UserService userService;
 
 	/**
-	 * 커뮤니티 게시글 등록 (type : basic, vote)
+	 * 커뮤니티 게시글 등록 (type : basic, vote) - 사진 추가
 	 *
 	 * @param communityRequest, type
 	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	@PostMapping("/communities")
-	public ResponseEntity<ApplicationResponse<String>> save(Principal principal,
-		@RequestBody CommunityRequest communityRequest, @RequestParam("type") String type) {
+	@PostMapping( "/communities")
+	public ResponseEntity<ApplicationResponse<String>> save(
+		Principal principal,
+		@RequestPart("data") CommunityRequest communityRequest,
+		@RequestPart("images") List<MultipartFile> images,
+		@RequestParam("type") String type) {
 		User user = userService.findByEmail(principal.getName());
 		if (type.equals("basic")) {
-			communityService.saveBasic(user, communityRequest);
+			communityService.saveBasic(user, communityRequest, images);
 		} else if (type.equals("vote")) {
-			communityService.saveVote(user, communityRequest);
+			communityService.saveVote(user, communityRequest, images);
 		} else {
 			throw new ApplicationException(NOT_EXIST_COMMUNITY_TYPE);
 		}
-		return ResponseEntity.ok(ApplicationResponse.success("게시글 등록 성공"));
+		return ResponseEntity.ok(ApplicationResponse.success("게시글이 등록되었습니다."));
 	}
 
 	/**
@@ -68,7 +76,7 @@ public class CommunityController {
 	 * @since 2024.02.18
 	 */
 	@GetMapping("/communities/{communityId}")
-	public ResponseEntity<ApplicationResponse<CommunityResponse>> read(Principal principal,
+	public ResponseEntity<ApplicationResponse<CommunityDetailResponse>> read(Principal principal,
 		@PathVariable long communityId) {
 		User user = userService.findByEmail(principal.getName());
 		return ResponseEntity.ok(ApplicationResponse.success(communityService.read(user, communityId)));
@@ -96,10 +104,10 @@ public class CommunityController {
 	 * @since 2024.02.18
 	 */
 	@GetMapping("/communities")
-	public ResponseEntity<ApplicationResponse<List<CommunityResponse>>> reads(Principal principal,
+	public ResponseEntity<ApplicationResponse<CommunityResponse>> reads(Principal principal,
 		@RequestParam("type") String type, Pagination pagination) {
 		User user = userService.findByEmail(principal.getName());
-		List<CommunityResponse> responses;
+		CommunityResponse responses;
 		switch (type) {
 			case "all":
 				responses = communityService.readAll(user, pagination);

@@ -9,6 +9,6 @@ import lombok.ToString;
 @ToString
 public class Pagination {
 
-	private int pageNo; /** 페이지 번호 */
-	private int amount; /** 한 페이지당 데이터 수 */
+	private int pageNo;
+	private int amount;
 }

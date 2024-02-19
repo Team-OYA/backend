@@ -9,8 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.oya.kr.community.controller.dto.request.CommunityRequest;
+import com.oya.kr.community.controller.dto.response.CommunityDetailResponse;
 import com.oya.kr.community.controller.dto.response.CommunityResponse;
 import com.oya.kr.community.controller.dto.response.VoteResponse;
 import com.oya.kr.community.exception.CommunityErrorCodeList;
@@ -23,6 +25,7 @@ import com.oya.kr.community.domain.CommunityType;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.global.support.StorageConnector;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.domain.enums.UserType;
 import com.oya.kr.user.mapper.UserMapper;
@@ -42,35 +45,54 @@ public class CommunityService {
 
 	private final CommunityMapper communityMapper;
 	private final UserMapper userMapper;
+	private final StorageConnector s3Connector;
 
 	/**
 	 * 커뮤니티 게시글(일반, basic) 등록
 	 *
-	 * @param user, communityRequest
+	 * @param user,  communityRequest
+	 * @param images
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public void saveBasic(User user, CommunityRequest communityRequest) {
+	public void saveBasic(User user, CommunityRequest communityRequest, List<MultipartFile> images) {
 		SaveBasicMapperRequest saveBasicMapperRequest = new SaveBasicMapperRequest(CommunityType.BASIC.getName(),
 			user.getId(), communityRequest);
 		communityMapper.saveBasic(saveBasicMapperRequest);
+		saveImage(saveBasicMapperRequest.getPostId(), images);
+	}
+
+	/**
+	 * 이미지 저장
+	 *
+	 * @param communityId,  images
+	 * @author 이상민
+	 * @since 2024.02.19
+	 */
+	private void saveImage(long communityId, List<MultipartFile> images){
+		for (MultipartFile image : images) {
+			String imageUrl = s3Connector.save(image);
+			communityMapper.saveCommunityImage(imageUrl, communityId);
+		}
 	}
 
 	/**
 	 * 커뮤니티 게시글(투표, vote) 등록
 	 *
-	 * @param user, communityRequest
+	 * @param user,  communityRequest
+	 * @param images
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public void saveVote(User user, CommunityRequest communityRequest) {
+	public void saveVote(User user, CommunityRequest communityRequest, List<MultipartFile> images) {
 		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType.VOTE.getName(), user.getId(),
 			communityRequest);
 		communityMapper.saveBasic(request);
-		long postId = request.getPostId();
+		long communityId = request.getPostId();
 		communityRequest.getVotes().forEach(content ->
-			communityMapper.saveVote(new SaveVoteMapperRequest(content, postId))
+			communityMapper.saveVote(new SaveVoteMapperRequest(content, communityId))
 		);
+		saveImage(communityId, images);
 	}
 
 	/**
@@ -81,7 +103,7 @@ public class CommunityService {
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public CommunityResponse read(User loginUser, long communityId) {
+	public CommunityDetailResponse read(User loginUser, long communityId) {
 		communityMapper.createOrUpdateCommunityView(communityId, loginUser.getId());
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
 		if (response.isDeleted()) {
@@ -111,14 +133,15 @@ public class CommunityService {
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	private CommunityResponse getVoteList(CommunityBasicMapperResponse response, User loginUser) {
+	private CommunityDetailResponse getVoteList(CommunityBasicMapperResponse response, User loginUser) {
 		User user = getWriteId(response);
 		Community community = response.toDomain(user);
+		List<String> imageList = communityMapper.findByCommunityId(response.getId());
 		List<VoteResponse> voteResponseList = new ArrayList<>();
 		if (community.getCommunityType().equals(CommunityType.VOTE)) {
 			voteResponseList = addVoteResponse(loginUser, response.getId());
 		}
-		return CommunityResponse.from(community, response.getCountView(), voteResponseList);
+		return CommunityDetailResponse.from(imageList, community, response.getCountView(), voteResponseList);
 	}
 
 	/**
@@ -178,13 +201,13 @@ public class CommunityService {
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public List<CommunityResponse> readAll(User loginUser, Pagination pagination) {
+	public CommunityResponse readAll(User loginUser, Pagination pagination) {
 		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(
 			new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 
-	public List<CommunityResponse> readBusinessList(User loginUser, Pagination pagination) {
+	public CommunityResponse readBusinessList(User loginUser, Pagination pagination) {
 		List<CommunityBasicMapperResponse> responseList =
 			communityMapper.findByType(
 				new ReadCommunityMapperRequest(false, UserType.BUSINESS.getName(), pagination.getPageNo(),
@@ -192,7 +215,7 @@ public class CommunityService {
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 
-	public List<CommunityResponse> readUserList(User loginUser, Pagination pagination) {
+	public CommunityResponse readUserList(User loginUser, Pagination pagination) {
 		List<CommunityBasicMapperResponse> responseList =
 			communityMapper.findByType(
 				new ReadCommunityMapperRequest(false, UserType.USER.getName(), pagination.getPageNo(),
@@ -200,13 +223,14 @@ public class CommunityService {
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 
-	private List<CommunityResponse> mapToCommunityResponses(User loginUser,
+	private CommunityResponse mapToCommunityResponses(User loginUser,
 		List<CommunityBasicMapperResponse> responseList) {
-		List<CommunityResponse> communityResponses = new ArrayList<>();
+		List<CommunityDetailResponse> communityDetailRespons = new ArrayList<>();
 		responseList.forEach(response -> {
-			CommunityResponse communityResponse = getVoteList(response, loginUser);
-			communityResponses.add(communityResponse);
+			CommunityDetailResponse communityDetailResponse = getVoteList(response, loginUser);
+			communityDetailRespons.add(communityDetailResponse);
 		});
-		return communityResponses;
+
+		return new CommunityResponse(communityDetailRespons);
 	}
 }

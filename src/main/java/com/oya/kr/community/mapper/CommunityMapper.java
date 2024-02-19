@@ -30,4 +30,8 @@ public interface CommunityMapper {
 	List<CommunityBasicMapperResponse> findByType(ReadCommunityMapperRequest readCommunityMapperRequest);
 
 	void createOrUpdateCommunityView(@Param("communityId") Long communityId, @Param("userId") Long userId);
+
+	void saveCommunityImage(@Param("imageUrl") String imageUrl, @Param("communityId") long communityId);
+
+	List<String> findByCommunityId(long communityId);
 }

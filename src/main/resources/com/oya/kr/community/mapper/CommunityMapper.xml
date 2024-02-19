@@ -86,7 +86,7 @@
             c.DELETED = #{deleted}
         GROUP BY
             c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, POPUP_Id, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
-        ORDER BY MODIFIED_DATE
+        ORDER BY MODIFIED_DATE DESC
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
             ]]>
     </select>
@@ -113,7 +113,7 @@
           AND u.USER_TYPE = #{userType}
         GROUP BY
             c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, POPUP_Id, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
-        ORDER BY c.MODIFIED_DATE
+        ORDER BY c.MODIFIED_DATE DESC
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
         ]]>
     </select>
@@ -134,5 +134,16 @@
         END;
         ]]>
     </update>
+
+    <insert id="saveCommunityImage">
+        INSERT INTO COMMUNITY_IMAGE (URL, COMMUNITY_ID)
+        VALUES (#{imageUrl}, #{communityId})
+    </insert>
+
+    <select id="findByCommunityId">
+        SELECT URL
+        FROM COMMUNITY_IMAGE
+        WHERE COMMUNITY_ID = #{communityId}
+    </select>
 
 </mapper>
