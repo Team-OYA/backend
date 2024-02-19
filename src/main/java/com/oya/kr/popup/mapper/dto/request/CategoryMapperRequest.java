@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CategoryRequest {
+public class CategoryMapperRequest {
 
 	private final String name;
 }

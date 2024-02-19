@@ -30,7 +30,7 @@ import com.oya.kr.popup.mapper.PopupImageMapper;
 import com.oya.kr.popup.mapper.PopupMapper;
 import com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
-import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
@@ -72,14 +72,14 @@ public class PopupService {
      * 팝업스토어 게시글 리스트 조회 기능 구현
      *
      * @parameter String, PaginationRequest, String
-     * @return PopupSearchRequest
+     * @return PopupsListResponse
      * @author 김유빈
      * @since 2024.02.19
      */
     @Transactional(readOnly = true)
     public PopupsListResponse findAll(String email, PaginationRequest paginationRequest, String sort) {
         PopupSort popupSort = PopupSort.from(sort);
-        PopupSearchRequest request = new PopupSearchRequest(
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(
             WithdrawalStatus.APPROVAL.getName(), paginationRequest.getPageNo(), paginationRequest.getAmount());
         List<PopupDetailMapperResponse> mapperResponses = popupSort.selectForSorting(popupMapper, request).get();
         return new PopupsListResponse(

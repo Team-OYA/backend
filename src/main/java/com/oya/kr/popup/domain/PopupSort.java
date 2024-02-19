@@ -9,7 +9,7 @@ import java.util.function.Supplier;
 
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.popup.mapper.PopupMapper;
-import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 
 import lombok.Getter;
@@ -53,7 +53,7 @@ public enum PopupSort {
      * @author 김유빈
      * @since 2024.02.19
      */
-    public Supplier<List<PopupDetailMapperResponse>> selectForSorting(PopupMapper popupMapper, PopupSearchRequest request) {
+    public Supplier<List<PopupDetailMapperResponse>> selectForSorting(PopupMapper popupMapper, PopupSearchMapperRequest request) {
         if (isAll()) {
             return () -> popupMapper.findAll(request);
         }

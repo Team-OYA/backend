@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.popup.domain.Category;
-import com.oya.kr.popup.mapper.dto.request.CategoryRequest;
+import com.oya.kr.popup.mapper.dto.request.CategoryMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse;
 
 /**
@@ -57,7 +57,7 @@ class CategoryMapperTest extends SpringApplicationTest {
 	void findByName() {
 		// given
 		Category category = Category.FOOD;
-		CategoryRequest request = new CategoryRequest(category.getName());
+		CategoryMapperRequest request = new CategoryMapperRequest(category.getName());
 		categoryMapper.save(request);
 
 		// when
@@ -78,7 +78,7 @@ class CategoryMapperTest extends SpringApplicationTest {
 	void save() {
 		// given
 		Category category = Category.FOOD;
-		CategoryRequest request = new CategoryRequest(category.getName());
+		CategoryMapperRequest request = new CategoryMapperRequest(category.getName());
 
 		// when & then
 		assertThatCode(() -> categoryMapper.save(request))

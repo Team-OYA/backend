@@ -23,7 +23,7 @@ import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.WithdrawalStatus;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
-import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
@@ -171,7 +171,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
-        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findAll(request);
@@ -199,7 +199,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
-        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findInProgress(request);
@@ -227,7 +227,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
-        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findScheduled(request);

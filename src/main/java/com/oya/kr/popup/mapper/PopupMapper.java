@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
-import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 
@@ -20,11 +20,11 @@ public interface PopupMapper {
 
     List<PopupMapperResponse> findAllByPlanId(Long planId);
 
-    List<PopupDetailMapperResponse> findAll(PopupSearchRequest request);
+    List<PopupDetailMapperResponse> findAll(PopupSearchMapperRequest request);
 
-    List<PopupDetailMapperResponse> findInProgress(PopupSearchRequest request);
+    List<PopupDetailMapperResponse> findInProgress(PopupSearchMapperRequest request);
 
-    List<PopupDetailMapperResponse> findScheduled(PopupSearchRequest request);
+    List<PopupDetailMapperResponse> findScheduled(PopupSearchMapperRequest request);
 
     void save(PopupSaveMapperRequest request);
 

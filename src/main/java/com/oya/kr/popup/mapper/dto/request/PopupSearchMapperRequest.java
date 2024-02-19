@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class PopupSearchRequest {
+public class PopupSearchMapperRequest {
 
     private final String withdrawalStatus;
     private final int pageNo;
