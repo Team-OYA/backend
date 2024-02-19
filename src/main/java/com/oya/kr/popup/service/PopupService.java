@@ -75,6 +75,7 @@ public class PopupService {
      * @author 김유빈
      * @since 2024.02.19
      */
+    // todo: 페이징 처리 추가
     @Transactional(readOnly = true)
     public PopupsListResponse findAll(String email, String sort) {
         PopupSort popupSort = PopupSort.from(sort);
@@ -131,12 +132,6 @@ public class PopupService {
     private User findUserByEmail(String email) {
         return userMapper.findByEmail(email)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))
-            .toDomain();
-    }
-
-    private Plan findPlanById(Long id) {
-        return planMapper.findById(id)
-            .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
             .toDomain();
     }
 
