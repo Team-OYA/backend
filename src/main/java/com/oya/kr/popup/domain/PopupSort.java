@@ -2,9 +2,15 @@ package com.oya.kr.popup.domain;
 
 import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP_SORT;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Supplier;
 
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.popup.mapper.PopupMapper;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
+import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 
 import lombok.Getter;
 
@@ -37,6 +43,19 @@ public enum PopupSort {
             .filter(popupSort -> popupSort.name.equals(name))
             .findFirst()
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP_SORT));
+    }
+
+    public Supplier<List<PopupDetailMapperResponse>> selectForSorting(PopupMapper popupMapper, PopupSearchRequest request) {
+        if (isAll()) {
+            return () -> popupMapper.findAll(request);
+        }
+        if (isProgress()) {
+            return () -> popupMapper.findInProgress(request);
+        }
+        if (isScheduled()) {
+            return () -> popupMapper.findScheduled(request);
+        }
+        return ArrayList::new;
     }
 
     /**

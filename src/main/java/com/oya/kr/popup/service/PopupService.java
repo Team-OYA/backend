@@ -5,7 +5,6 @@ import static com.oya.kr.popup.exception.PlanErrorCodeList.PLAN_HAS_POPUP;
 import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP;
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -81,16 +80,8 @@ public class PopupService {
     @Transactional(readOnly = true)
     public PopupsListResponse findAll(String email, String sort) {
         PopupSort popupSort = PopupSort.from(sort);
-
-        List<PopupDetailMapperResponse> mapperResponses = new ArrayList<>();
         PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
-        if (popupSort.isAll()) {
-            mapperResponses = popupMapper.findAll(request);
-        } else if (popupSort.isProgress()) {
-            mapperResponses = popupMapper.findInProgress(request);
-        } else if (popupSort.isScheduled()) {
-            mapperResponses = popupMapper.findScheduled(request);
-        }
+        List<PopupDetailMapperResponse> mapperResponses = popupSort.selectForSorting(popupMapper, request).get();
         return new PopupsListResponse(
             mapperResponses.stream()
                 .map(PopupListResponse::from)
