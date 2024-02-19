@@ -42,6 +42,9 @@ public class PopupMapperTest extends SpringApplicationTest {
     private PopupMapper popupMapper;
 
     @Autowired
+    private PopupImageMapper popupImageMapper;
+
+    @Autowired
     private PlanMapper planMapper;
 
     @Autowired
@@ -61,6 +64,7 @@ public class PopupMapperTest extends SpringApplicationTest {
      */
     @BeforeEach
     void setUp() {
+        popupImageMapper.deleteAll();
         popupMapper.deleteAll();
         businessMapper.deleteAll();
         planMapper.deleteAll();
@@ -75,6 +79,7 @@ public class PopupMapperTest extends SpringApplicationTest {
      */
     @AfterEach
     void init() {
+        popupImageMapper.deleteAll();
         popupMapper.deleteAll();
         businessMapper.deleteAll();
         planMapper.deleteAll();
@@ -153,6 +158,31 @@ public class PopupMapperTest extends SpringApplicationTest {
     }
 
     /**
+     * findInProgress 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("진행중인 팝업스토어 게시글 목록을 조회한다")
+    @Test
+    void findInProgress() {
+        // given
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlanWithOpenAndCloseDate(savedUser, LocalDate.now(), LocalDate.now().plusDays(1));
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(popupSaveMapperRequest);
+
+        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+
+        // when
+        List<PopupDetailMapperResponse> mapperResponses = popupMapper.findInProgress(request);
+
+        // then
+        assertThat(mapperResponses).hasSize(1);
+    }
+
+    /**
      * save 메서드 테스트 작성
      *
      * @author 김유빈
@@ -204,6 +234,21 @@ public class PopupMapperTest extends SpringApplicationTest {
             DepartmentFloor.B1.getCode(),
             LocalDate.now(),
             LocalDate.now().plusDays(1),
+            "businessPlanUrl",
+            "010-1234-5678",
+            Category.CLOTHING.getCode());
+        PlanSaveMapperRequest request = PlanSaveMapperRequest.from(plan);
+        planMapper.save(request);
+        return planMapper.findById(request.getPlanId()).get().toDomain(savedUser);
+    }
+
+    private Plan savedPlanWithOpenAndCloseDate(User savedUser, LocalDate openDate, LocalDate closeDate) {
+        Plan plan = Plan.saved(
+            savedUser,
+            DepartmentBranch.THE_HYUNDAI_SEOUL.getCode(),
+            DepartmentFloor.B1.getCode(),
+            openDate,
+            closeDate,
             "businessPlanUrl",
             "010-1234-5678",
             Category.CLOTHING.getCode());

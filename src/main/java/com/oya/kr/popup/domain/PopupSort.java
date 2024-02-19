@@ -49,4 +49,15 @@ public enum PopupSort {
     public boolean isAll() {
         return this == ALL;
     }
+
+    /**
+     * 진행중 조회 여부 반환
+     *
+     * @return boolean
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    public boolean isProgress() {
+        return this == PROGRESS;
+    }
 }

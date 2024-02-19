@@ -19,11 +19,27 @@
             PI.URL AS thumbnail, PN.CATEGORY,
             P.CREATED_DATE, P.MODIFIED_DATE, P.DELETED
         FROM POPUP P
-        JOIN POPUP_IMAGE PI
+        LEFT JOIN POPUP_IMAGE PI
             ON P.ID = PI.POPUP_ID
         JOIN PLAN PN
             ON P.PLAN_ID = PN.ID
-        WHERE WITHDRAWAL_STATUS != #{withdrawalStatus} AND P.DELETED = 0
+        WHERE WITHDRAWAL_STATUS != #{withdrawalStatus}
+            AND P.DELETED = 0
+        ORDER BY PULLED_DATE DESC
+    </select>
+
+    <select id="findInProgress" resultType="popupDetailMapperResponse">
+        SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
+            PI.URL, PN.CATEGORY,
+            P.CREATED_DATE, P.MODIFIED_DATE, P.DELETED
+        FROM POPUP P
+        LEFT JOIN POPUP_IMAGE PI
+            ON P.ID = PI.POPUP_ID
+        JOIN PLAN PN
+            ON P.PLAN_ID = PN.ID
+        WHERE WITHDRAWAL_STATUS != #{withdrawalStatus}
+            AND sysdate BETWEEN OPEN_DATE AND CLOSE_DATE
+            AND P.DELETED = 0
         ORDER BY PULLED_DATE DESC
     </select>
 

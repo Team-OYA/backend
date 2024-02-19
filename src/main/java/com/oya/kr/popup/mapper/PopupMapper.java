@@ -20,6 +20,8 @@ public interface PopupMapper {
 
     List<PopupDetailMapperResponse> findAll(PopupSearchRequest request);
 
+    List<PopupDetailMapperResponse> findInProgress(PopupSearchRequest request);
+
     void save(PopupSaveMapperRequest request);
 
     void deleteAll();
