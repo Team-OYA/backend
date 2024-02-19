@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.oya.kr.global.dto.ApplicationResponse;
+import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;

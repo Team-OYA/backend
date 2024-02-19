@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oya.kr.global.dto.ApplicationResponse;
+import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.user.controller.dto.request.AccessTokenRequest;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.service.KaKaoLoginService;

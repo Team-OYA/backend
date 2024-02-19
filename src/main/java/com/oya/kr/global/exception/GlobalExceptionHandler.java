@@ -6,7 +6,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.oya.kr.global.dto.ApplicationResponse;
+import com.oya.kr.global.dto.response.ApplicationResponse;
 
 import lombok.extern.java.Log;
 

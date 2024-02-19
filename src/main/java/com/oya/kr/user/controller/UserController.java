@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.oya.kr.global.dto.ApplicationResponse;
+import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.user.controller.dto.request.DuplicatedEmailRequest;
 import com.oya.kr.user.controller.dto.request.DuplicatedNicknameRequest;
 import com.oya.kr.user.controller.dto.request.JoinRequest;

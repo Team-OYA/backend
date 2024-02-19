@@ -1,4 +1,4 @@
-package com.oya.kr.global.dto;
+package com.oya.kr.global.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Getter;
