@@ -8,4 +8,6 @@ import lombok.RequiredArgsConstructor;
 public class PopupSearchRequest {
 
     private final String withdrawalStatus;
+    private final int pageNo;
+    private final int amount;
 }

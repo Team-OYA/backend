@@ -30,6 +30,7 @@
         WHERE WITHDRAWAL_STATUS != #{withdrawalStatus}
             AND P.DELETED = 0
         ORDER BY PULLED_DATE DESC
+        <include refid="offsetForPaging" />
     </select>
 
     <select id="findInProgress" resultType="popupDetailMapperResponse">
@@ -38,6 +39,7 @@
             AND sysdate BETWEEN OPEN_DATE AND CLOSE_DATE
             AND P.DELETED = 0
         ORDER BY PULLED_DATE DESC
+        <include refid="offsetForPaging" />
     </select>
 
     <select id="findScheduled" resultType="popupDetailMapperResponse">
@@ -48,6 +50,7 @@
             AND P.DELETED = 0
         ORDER BY PULLED_DATE DESC
         ]]>
+        <include refid="offsetForPaging" />
     </select>
 
     <insert id="save" parameterType="popupSaveMapperRequest">
@@ -73,6 +76,10 @@
                 ON P.ID = PI.POPUP_ID
             JOIN PLAN PN
                 ON P.PLAN_ID = PN.ID
+    </sql>
+
+    <sql id="offsetForPaging">
+        OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
     </sql>
 
 </mapper>

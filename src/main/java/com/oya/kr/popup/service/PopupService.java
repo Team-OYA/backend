@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.S3Connector;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
@@ -70,16 +71,16 @@ public class PopupService {
     /**
      * 팝업스토어 게시글 리스트 조회 기능 구현
      *
-     * @parameter String, String
+     * @parameter String, PaginationRequest, String
      * @return PopupSearchRequest
      * @author 김유빈
      * @since 2024.02.19
      */
-    // todo: 페이징 처리 추가
     @Transactional(readOnly = true)
-    public PopupsListResponse findAll(String email, String sort) {
+    public PopupsListResponse findAll(String email, PaginationRequest paginationRequest, String sort) {
         PopupSort popupSort = PopupSort.from(sort);
-        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+        PopupSearchRequest request = new PopupSearchRequest(
+            WithdrawalStatus.APPROVAL.getName(), paginationRequest.getPageNo(), paginationRequest.getAmount());
         List<PopupDetailMapperResponse> mapperResponses = popupSort.selectForSorting(popupMapper, request).get();
         return new PopupsListResponse(
             mapperResponses.stream()

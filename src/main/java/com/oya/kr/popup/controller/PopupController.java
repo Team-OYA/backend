@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
@@ -50,14 +51,17 @@ public class PopupController {
     /**
      * 팝업스토어 게시글 리스트 조회 기능 구현
      *
-     * @parameter Principal, String
+     * @parameter Principal, PaginationRequest, String
      * @return ResponseEntity<ApplicationResponse<PopupsListResponse>>
      * @author 김유빈
      * @since 2024.02.19
      */
     @GetMapping
-    public ResponseEntity<ApplicationResponse<PopupsListResponse>> findAll(Principal principal, @RequestParam String sort) {
-        PopupsListResponse response = popupService.findAll(principal.getName(), sort);
+    public ResponseEntity<ApplicationResponse<PopupsListResponse>> findAll(
+        Principal principal,
+        PaginationRequest paginationRequest,
+        @RequestParam String sort) {
+        PopupsListResponse response = popupService.findAll(principal.getName(), paginationRequest, sort);
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 

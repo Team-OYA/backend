@@ -171,7 +171,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
-        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findAll(request);
@@ -199,7 +199,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
-        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findInProgress(request);
@@ -227,7 +227,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
-        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findScheduled(request);
