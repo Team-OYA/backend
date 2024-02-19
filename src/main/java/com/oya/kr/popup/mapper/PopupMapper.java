@@ -22,6 +22,8 @@ public interface PopupMapper {
 
     List<PopupDetailMapperResponse> findInProgress(PopupSearchRequest request);
 
+    List<PopupDetailMapperResponse> findScheduled(PopupSearchRequest request);
+
     void save(PopupSaveMapperRequest request);
 
     void deleteAll();

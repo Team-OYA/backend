@@ -88,6 +88,8 @@ public class PopupService {
             mapperResponses = popupMapper.findAll(request);
         } else if (popupSort.isProgress()) {
             mapperResponses = popupMapper.findInProgress(request);
+        } else if (popupSort.isScheduled()) {
+            mapperResponses = popupMapper.findScheduled(request);
         }
         return new PopupsListResponse(
             mapperResponses.stream()

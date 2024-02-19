@@ -60,4 +60,15 @@ public enum PopupSort {
     public boolean isProgress() {
         return this == PROGRESS;
     }
+
+    /**
+     * 예정 조회 여부 반환
+     *
+     * @return boolean
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    public boolean isScheduled() {
+        return this == SCHEDULED;
+    }
 }

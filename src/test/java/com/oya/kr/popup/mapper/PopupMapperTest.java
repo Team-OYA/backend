@@ -167,8 +167,11 @@ public class PopupMapperTest extends SpringApplicationTest {
     @Test
     void findInProgress() {
         // given
+        LocalDate openDate = LocalDate.now();
+        LocalDate closeDate = openDate.plusDays(1);
+
         User savedUser = savedUser();
-        Plan savedPlan = savedPlanWithOpenAndCloseDate(savedUser, LocalDate.now(), LocalDate.now().plusDays(1));
+        Plan savedPlan = savedPlanWithOpenAndCloseDate(savedUser, openDate, closeDate);
         Popup popup = Popup.saved(savedPlan, "title", "description");
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
@@ -177,6 +180,34 @@ public class PopupMapperTest extends SpringApplicationTest {
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findInProgress(request);
+
+        // then
+        assertThat(mapperResponses).hasSize(1);
+    }
+
+    /**
+     * findScheduled 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("예정인 팝업스토어 게시글 목록을 조회한다")
+    @Test
+    void findScheduled() {
+        // given
+        LocalDate openDate = LocalDate.now().plusDays(1);
+        LocalDate closeDate = openDate.plusDays(1);
+
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlanWithOpenAndCloseDate(savedUser, openDate, closeDate);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(popupSaveMapperRequest);
+
+        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+
+        // when
+        List<PopupDetailMapperResponse> mapperResponses = popupMapper.findScheduled(request);
 
         // then
         assertThat(mapperResponses).hasSize(1);
