@@ -45,6 +45,14 @@ public enum PopupSort {
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP_SORT));
     }
 
+    /**
+     * sort 방식에 따라 적절한 mapper 메서드 호출
+     *
+     * @parameter PopupMapper, PopupSearchRequest
+     * @return Supplier<List<PopupDetailMapperResponse>>
+     * @author 김유빈
+     * @since 2024.02.19
+     */
     public Supplier<List<PopupDetailMapperResponse>> selectForSorting(PopupMapper popupMapper, PopupSearchRequest request) {
         if (isAll()) {
             return () -> popupMapper.findAll(request);
