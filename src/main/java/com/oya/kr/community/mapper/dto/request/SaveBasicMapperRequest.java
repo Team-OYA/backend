@@ -15,13 +15,13 @@ public class SaveBasicMapperRequest {
 	private final String description;
 	private final String communityType;
 	private final long writeId;
-	private final long popupid;
+	private final String categoryCode;
 
 	public SaveBasicMapperRequest(String CommunityType, long userId, CommunityRequest communityRequest) {
 		this.title = communityRequest.getTitle();
 		this.description = communityRequest.getDescription();
 		this.communityType = CommunityType;
 		this.writeId = userId;
-		this.popupid = Category.findByCode(communityRequest.getCategoryCode()).ordinal() + 1;
+		this.categoryCode = communityRequest.getCategoryCode();
 	}
 }

@@ -22,11 +22,10 @@ import lombok.RequiredArgsConstructor;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/votes")
+@RequestMapping("/api/v1/votes/{voteId}/check")
 public class VoteController {
 
 	private final VoteService voteService;
-	private final UserService userService;
 
 	/**
 	 * 투표 체크
@@ -36,12 +35,10 @@ public class VoteController {
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	@PostMapping("/{voteId}/check")
+	@PostMapping
 	public ResponseEntity<ApplicationResponse<String>> check(Principal principal,
 		@PathVariable long voteId) {
-		User user = userService.findByEmail(principal.getName());
-		voteService.check(user, voteId);
-		return ResponseEntity.ok(ApplicationResponse.success("투표를 체크했습니다."));
+		return ResponseEntity.ok(ApplicationResponse.success(voteService.check(principal.getName(), voteId)));
 	}
 
 	/**
@@ -52,11 +49,9 @@ public class VoteController {
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	@DeleteMapping("/{votedId}/check")
+	@DeleteMapping
 	public ResponseEntity<ApplicationResponse<String>> checkDelete(Principal principal,
 		@PathVariable long votedId) {
-		User user = userService.findByEmail(principal.getName());
-		voteService.checkDelete(user, votedId);
-		return ResponseEntity.ok(ApplicationResponse.success("투표를 취소했습니다."));
+		return ResponseEntity.ok(ApplicationResponse.success(voteService.checkDelete(principal.getName(), votedId)));
 	}
 }

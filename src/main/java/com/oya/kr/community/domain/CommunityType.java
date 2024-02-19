@@ -1,6 +1,6 @@
 package com.oya.kr.community.domain;
 
-import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
+import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 
 import java.util.Arrays;
 
@@ -29,10 +29,10 @@ public enum CommunityType {
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public static CommunityType findByName(String name) {
+	public static CommunityType from(String name) {
 		return Arrays.stream(CommunityType.values())
 			.filter(enumValue -> enumValue.name.equals(name))
 			.findFirst()
-			.orElseThrow(() -> new ApplicationException(WRONG_ENUM));
+			.orElseThrow(() -> new ApplicationException(NOT_EXIST_COMMUNITY_TYPE));
 	}
 }

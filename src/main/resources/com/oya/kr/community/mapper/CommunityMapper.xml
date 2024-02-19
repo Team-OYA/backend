@@ -3,12 +3,12 @@
 <mapper namespace="com.oya.kr.community.mapper.CommunityMapper">
 
     <insert id="saveBasic" parameterType="saveBasicMapperRequest">
-        INSERT INTO COMMUNITY(TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, POPUP_Id)
+        INSERT INTO COMMUNITY(TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE)
         VALUES (#{title},
                 #{description},
                 #{communityType},
                 #{writeId},
-                #{popupid})
+                #{categoryCode})
         <selectKey keyProperty="postId" resultType="long" order="AFTER">
             SELECT NVL(MAX(ID), 0)
             FROM COMMUNITY
@@ -27,7 +27,7 @@
             DESCRIPTION,
             COMMUNITY_TYPE,
             WRITE_ID,
-            POPUP_Id,
+            CATEGORY_CODE,
             c.CREATED_DATE,
             c.MODIFIED_DATE,
             c.DELETED,
@@ -38,7 +38,7 @@
         WHERE
             c.ID = #{communityId}
         GROUP BY
-            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, POPUP_Id, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
+            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
     </select>
 
     <select id="getVoteInfo" resultType="voteResponse">
@@ -74,7 +74,7 @@
             DESCRIPTION,
             COMMUNITY_TYPE,
             WRITE_ID,
-            POPUP_Id,
+            CATEGORY_CODE,
             c.CREATED_DATE,
             c.MODIFIED_DATE,
             c.DELETED,
@@ -85,7 +85,7 @@
         WHERE
             c.DELETED = #{deleted}
         GROUP BY
-            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, POPUP_Id, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
+            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
         ORDER BY MODIFIED_DATE DESC
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
             ]]>
@@ -99,7 +99,7 @@
             DESCRIPTION,
             COMMUNITY_TYPE,
             WRITE_ID,
-            POPUP_Id,
+            CATEGORY_CODE,
             c.CREATED_DATE,
             c.MODIFIED_DATE,
             c.DELETED,
@@ -112,7 +112,7 @@
             c.DELETED = #{deleted}
           AND u.USER_TYPE = #{userType}
         GROUP BY
-            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, POPUP_Id, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
+            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
         ORDER BY c.MODIFIED_DATE DESC
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
         ]]>

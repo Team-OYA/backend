@@ -27,8 +27,8 @@ import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.StorageConnector;
 import com.oya.kr.user.domain.User;
-import com.oya.kr.user.domain.enums.UserType;
 import com.oya.kr.user.mapper.UserMapper;
+import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -45,21 +45,30 @@ public class CommunityService {
 
 	private final CommunityMapper communityMapper;
 	private final UserMapper userMapper;
+
 	private final StorageConnector s3Connector;
 
 	/**
-	 * 커뮤니티 게시글(일반, basic) 등록
+	 * 커뮤니티 게시글(일반, 투표) 등록
 	 *
-	 * @param user,  communityRequest
+	 * @param email,  communityRequest
 	 * @param images
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public void saveBasic(User user, CommunityRequest communityRequest, List<MultipartFile> images) {
-		SaveBasicMapperRequest saveBasicMapperRequest = new SaveBasicMapperRequest(CommunityType.BASIC.getName(),
-			user.getId(), communityRequest);
-		communityMapper.saveBasic(saveBasicMapperRequest);
-		saveImage(saveBasicMapperRequest.getPostId(), images);
+	public String save(String communityType, String email, CommunityRequest communityRequest, List<MultipartFile> images) {
+		User loginUser = findByEmail(email);
+		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType.from(communityType).getName(), loginUser.getId(), communityRequest);
+		communityMapper.saveBasic(request);
+		saveCommunityImages(request.getPostId(), images);
+
+		if(communityType.equals("vote")) {
+			long communityId = request.getPostId();
+			communityRequest.getVotes().forEach(content ->
+				communityMapper.saveVote(new SaveVoteMapperRequest(content, communityId))
+			);
+		}
+		return "게시글이 등록되었습니다.";
 	}
 
 	/**
@@ -69,7 +78,7 @@ public class CommunityService {
 	 * @author 이상민
 	 * @since 2024.02.19
 	 */
-	private void saveImage(long communityId, List<MultipartFile> images){
+	private void saveCommunityImages(long communityId, List<MultipartFile> images){
 		for (MultipartFile image : images) {
 			String imageUrl = s3Connector.save(image);
 			communityMapper.saveCommunityImage(imageUrl, communityId);
@@ -77,43 +86,29 @@ public class CommunityService {
 	}
 
 	/**
-	 * 커뮤니티 게시글(투표, vote) 등록
-	 *
-	 * @param user,  communityRequest
-	 * @param images
-	 * @author 이상민
-	 * @since 2024.02.18
-	 */
-	public void saveVote(User user, CommunityRequest communityRequest, List<MultipartFile> images) {
-		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType.VOTE.getName(), user.getId(),
-			communityRequest);
-		communityMapper.saveBasic(request);
-		long communityId = request.getPostId();
-		communityRequest.getVotes().forEach(content ->
-			communityMapper.saveVote(new SaveVoteMapperRequest(content, communityId))
-		);
-		saveImage(communityId, images);
-	}
-
-	/**
 	 * 커뮤니티 게시글 상세 조회
 	 *
-	 * @param loginUser, communityId
+	 * @param email, communityId
 	 * @return CommunityResponse
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public CommunityDetailResponse read(User loginUser, long communityId) {
-		communityMapper.createOrUpdateCommunityView(communityId, loginUser.getId());
+	public CommunityDetailResponse read(String email, long communityId) {
+		User loginUser = findByEmail(email);
+		communityMapper.createOrUpdateCommunityView(communityId, loginUser.getId()); // 조회수 증가
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
-		if (response.isDeleted()) {
-			throw new ApplicationException(CommunityErrorCodeList.DELETED_COMMUNITY);
-		}
-		return getVoteList(response, loginUser);
+
+		User writeUser = findByUserId(response.getWriteId());
+		List<String> imageList = communityMapper.findByCommunityId(response.getId());
+		Community community = response.toDomain(writeUser);
+		int countView = response.getCountView();
+
+		List<VoteResponse> voteResponseList = getVoteList(community.getCommunityType().getName(), loginUser, community.getId());
+		return CommunityDetailResponse.from(imageList, community, countView, voteResponseList);
 	}
 
 	/**
-	 * 커뮤니티 id로 CommunityBasicMapperResponse 조회
+	 * 게시글 기본 정보 조회
 	 *
 	 * @param communityId
 	 * @return CommunityBasicMapperResponse
@@ -121,116 +116,91 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	private CommunityBasicMapperResponse getCommunityResponseOrThrow(long communityId) {
-		return communityMapper.getCommunityById(communityId)
+		CommunityBasicMapperResponse response = communityMapper.getCommunityById(communityId)
 			.orElseThrow(() -> new ApplicationException(CommunityErrorCodeList.NOT_EXIST_COMMUNITY));
+		if (response.isDeleted()) {
+			throw new ApplicationException(CommunityErrorCodeList.DELETED_COMMUNITY);
+		}
+		return response;
 	}
 
 	/**
-	 * CommunityBasicMapperResponse로 CommunityResponse 조회
+	 * 투표 정보 조회
 	 *
-	 * @param response, loginUser
+	 * @param type, loginUser, communityId
 	 * @return CommunityResponse
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	private CommunityDetailResponse getVoteList(CommunityBasicMapperResponse response, User loginUser) {
-		User user = getWriteId(response);
-		Community community = response.toDomain(user);
-		List<String> imageList = communityMapper.findByCommunityId(response.getId());
-		List<VoteResponse> voteResponseList = new ArrayList<>();
-		if (community.getCommunityType().equals(CommunityType.VOTE)) {
-			voteResponseList = addVoteResponse(loginUser, response.getId());
+	private List<VoteResponse> getVoteList(String type, User loginUser, long communityId) {
+		if (type.equals(CommunityType.VOTE.getName())) {
+			List<VoteResponse> voteResponseList = communityMapper.getVoteInfo(communityId);
+			voteResponseList.forEach(VoteResponse -> {
+				boolean check = Boolean.parseBoolean(communityMapper.checkUserVote(VoteResponse.getVote_id(), loginUser.getId()));
+				VoteResponse.setChecked(check);
+			});
+			return voteResponseList;
 		}
-		return CommunityDetailResponse.from(imageList, community, response.getCountView(), voteResponseList);
-	}
-
-	/**
-	 * 게시글 작성자 조회
-	 *
-	 * @param response
-	 * @return User
-	 * @author 이상민
-	 * @since 2024.02.18
-	 */
-	private User getWriteId(CommunityBasicMapperResponse response) {
-		return userMapper.findById(response.getWriteId())
-			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))
-			.toDomain();
-	}
-
-	/**
-	 * 투표 상세 리스트 조회
-	 *
-	 * @param loginUser, communityId
-	 * @return List<VoteResponse>
-	 * @author 이상민
-	 * @since 2024.02.18
-	 */
-	private List<VoteResponse> addVoteResponse(User loginUser, long communityId) {
-		List<VoteResponse> voteResponseList = communityMapper.getVoteInfo(communityId);
-		voteResponseList.forEach(VoteResponse -> {
-			boolean check = Boolean.parseBoolean(
-				communityMapper.checkUserVote(VoteResponse.getVote_id(), loginUser.getId()));
-			VoteResponse.setChecked(check);
-		});
-		return voteResponseList;
+		return null;
 	}
 
 	/**
 	 * 커뮤니티 게시글 조회
 	 *
-	 * @param user, communityId
+	 * @param email, communityId
 	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public void delete(User user, long communityId) {
+	public String delete(String email, long communityId) {
+		User loginUser = findByEmail(email);
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
-		if (user.getId() != response.getWriteId()) {
+		if (loginUser.getId() != response.getWriteId()) {
 			throw new ApplicationException(CommunityErrorCodeList.INVALID_COMMUNITY);
 		}
 		communityMapper.delete(communityId);
+		return "게시글이 삭제되었습니다.";
 	}
 
 	/**
 	 * 커뮤니티 게시글 리스트 조회
 	 *
-	 * @param loginUser
+	 * @param email
 	 * @param pagination
 	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	public CommunityResponse readAll(User loginUser, Pagination pagination) {
-		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(
-			new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
+	public CommunityResponse reads(String type,String email, Pagination pagination) {
+		User loginUser = findByEmail(email);
+		List<CommunityBasicMapperResponse> responseList;
+		if(type.equals("all")){
+			responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
+		}else{
+			String communityType = CommunityType.from(type).getName();
+			responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, communityType, pagination.getPageNo(), pagination.getAmount()));
+		}
 		return mapToCommunityResponses(loginUser, responseList);
 	}
 
-	public CommunityResponse readBusinessList(User loginUser, Pagination pagination) {
-		List<CommunityBasicMapperResponse> responseList =
-			communityMapper.findByType(
-				new ReadCommunityMapperRequest(false, UserType.BUSINESS.getName(), pagination.getPageNo(),
-					pagination.getAmount()));
-		return mapToCommunityResponses(loginUser, responseList);
-	}
-
-	public CommunityResponse readUserList(User loginUser, Pagination pagination) {
-		List<CommunityBasicMapperResponse> responseList =
-			communityMapper.findByType(
-				new ReadCommunityMapperRequest(false, UserType.USER.getName(), pagination.getPageNo(),
-					pagination.getAmount()));
-		return mapToCommunityResponses(loginUser, responseList);
-	}
-
-	private CommunityResponse mapToCommunityResponses(User loginUser,
-		List<CommunityBasicMapperResponse> responseList) {
+	private CommunityResponse mapToCommunityResponses(User loginUser, List<CommunityBasicMapperResponse> responseList) {
 		List<CommunityDetailResponse> communityDetailRespons = new ArrayList<>();
 		responseList.forEach(response -> {
-			CommunityDetailResponse communityDetailResponse = getVoteList(response, loginUser);
+			CommunityDetailResponse communityDetailResponse = read(loginUser.getEmail(), response.getId());
 			communityDetailRespons.add(communityDetailResponse);
 		});
-
 		return new CommunityResponse(communityDetailRespons);
+	}
+
+	private User findByUserId(long userId) {
+		return userMapper.findById(userId)
+			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))
+			.toDomain();
+	}
+
+	private User findByEmail(String email) {
+		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
+			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
+		return userMapperResponse.toDomain();
 	}
 }

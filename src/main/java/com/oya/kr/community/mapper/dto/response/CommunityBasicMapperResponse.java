@@ -19,21 +19,19 @@ public class CommunityBasicMapperResponse {
 	private final String description;
 	private final String communityType;
 	private final long writeId;
-	private final int popupId;
+	private final String categoryCode;
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifiedDate;
 	private final boolean deleted;
 	private final int countView;
 
 	public Community toDomain(User user) {
-		Category categoryEnum = Category.findByIndex(this.popupId - 1);
-		CommunityType communityTypeEnum = CommunityType.findByName(this.communityType);
 		return new Community(
 			user,
 			this.title,
 			this.description,
-			categoryEnum,
-			communityTypeEnum,
+			Category.from(this.categoryCode),
+			CommunityType.from(this.communityType),
 			this.id,
 			this.createdDate,
 			this.modifiedDate,
