@@ -16,6 +16,8 @@ public interface PopupMapper {
 
     Optional<PopupMapperResponse> findById(Long popupId);
 
+    Optional<PopupDetailMapperResponse> findByIdWithDate(Long popupId);
+
     List<PopupMapperResponse> findAllByPlanId(Long planId);
 
     List<PopupDetailMapperResponse> findAll(PopupSearchRequest request);

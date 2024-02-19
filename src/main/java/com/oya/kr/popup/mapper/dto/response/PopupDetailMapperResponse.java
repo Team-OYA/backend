@@ -1,5 +1,6 @@
 package com.oya.kr.popup.mapper.dto.response;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import lombok.Getter;
@@ -17,7 +18,6 @@ public class PopupDetailMapperResponse {
     private final long planId;
     private final String thumbnail;
     private final String category;
-    private final LocalDateTime createdDate;
-    private final LocalDateTime modifiedDate;
-    private final boolean deleted;
+    private final LocalDate openDate;
+    private final LocalDate closeDate;
 }

@@ -5,7 +5,18 @@
     <select id="findById" parameterType="Long" resultType="popupMapperResponse">
         SELECT ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, CREATED_DATE, MODIFIED_DATE, DELETED
         FROM POPUP
-        WHERE ID = #{popupId} AND DELETED = 0
+        WHERE ID = #{popupId}
+            AND DELETED = 0
+    </select>
+
+    <select id="findByIdWithDate" parameterType="Long" resultType="popupDetailMapperResponse">
+        SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, null,
+            PN.CATEGORY, OPEN_DATE, CLOSE_DATE
+        FROM POPUP P
+        JOIN PLAN PN
+            ON P.PLAN_ID = PN.ID
+        WHERE P.ID = #{popupId}
+            AND P.DELETED = 0
     </select>
 
     <select id="findAllByPlanId" parameterType="Long" resultType="popupMapperResponse">
@@ -17,7 +28,7 @@
     <select id="findAll" resultType="popupDetailMapperResponse">
         SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
             PI.URL AS thumbnail, PN.CATEGORY,
-            P.CREATED_DATE, P.MODIFIED_DATE, P.DELETED
+            OPEN_DATE, CLOSE_DATE
         FROM POPUP P
         LEFT JOIN POPUP_IMAGE PI
             ON P.ID = PI.POPUP_ID
@@ -31,7 +42,7 @@
     <select id="findInProgress" resultType="popupDetailMapperResponse">
         SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
             PI.URL, PN.CATEGORY,
-            P.CREATED_DATE, P.MODIFIED_DATE, P.DELETED
+            OPEN_DATE, CLOSE_DATE
         FROM POPUP P
         LEFT JOIN POPUP_IMAGE PI
             ON P.ID = PI.POPUP_ID
@@ -47,7 +58,7 @@
         <![CDATA[
         SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
             PI.URL, PN.CATEGORY,
-            P.CREATED_DATE, P.MODIFIED_DATE, P.DELETED
+            OPEN_DATE, CLOSE_DATE
         FROM POPUP P
         LEFT JOIN POPUP_IMAGE PI
             ON P.ID = PI.POPUP_ID

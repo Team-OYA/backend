@@ -31,7 +31,6 @@ import com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
-import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 
@@ -63,10 +62,9 @@ public class PopupService {
      */
     @Transactional(readOnly = true)
     public PopupResponse findById(String email, Long popupId) {
-        PopupMapperResponse popupMapperResponse = popupMapper.findById(popupId)
+        PopupDetailMapperResponse popupMapperResponse = popupMapper.findByIdWithDate(popupId)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
-        Plan savedPlan = findPlanById(popupMapperResponse.getPlanId());
-        return PopupResponse.from(popupMapperResponse.toDomain(savedPlan));
+        return PopupResponse.from(popupMapperResponse);
     }
 
     /**

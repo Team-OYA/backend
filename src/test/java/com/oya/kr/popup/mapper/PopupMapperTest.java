@@ -110,6 +110,29 @@ public class PopupMapperTest extends SpringApplicationTest {
     }
 
     /**
+     * findByIdWithDate 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("아이디를 이용하여 오픈 일정이 포함된 팝업스토어 게시글을 조회한다")
+    @Test
+    void findByIdWithDate() {
+        // given
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlan(savedUser);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest request = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(request);
+
+        // when
+        Optional<PopupDetailMapperResponse> mapperResponse = popupMapper.findByIdWithDate(request.getPopupId());
+
+        // then
+        assertThat(mapperResponse).isPresent();
+    }
+
+    /**
      * findAllByPlanId 메서드 테스트 작성
      *
      * @author 김유빈
