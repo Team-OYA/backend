@@ -44,14 +44,14 @@ public class VoteController {
 	/**
 	 * 투표 체크 취소
 	 *
-	 * @param votedId
+	 * @param voteId
 	 * @return CommunityResponse
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
 	@DeleteMapping
 	public ResponseEntity<ApplicationResponse<String>> checkDelete(Principal principal,
-		@PathVariable long votedId) {
-		return ResponseEntity.ok(ApplicationResponse.success(voteService.checkDelete(principal.getName(), votedId)));
+		@PathVariable long voteId) {
+		return ResponseEntity.ok(ApplicationResponse.success(voteService.checkDelete(principal.getName(), voteId)));
 	}
 }
