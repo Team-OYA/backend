@@ -20,8 +20,11 @@ import com.oya.kr.popup.domain.DepartmentBranch;
 import com.oya.kr.popup.domain.DepartmentFloor;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
+import com.oya.kr.popup.domain.WithdrawalStatus;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
+import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.domain.User;
@@ -119,6 +122,31 @@ public class PopupMapperTest extends SpringApplicationTest {
 
         // when
         List<PopupMapperResponse> mapperResponses = popupMapper.findAllByPlanId(request.getPlanId());
+
+        // then
+        assertThat(mapperResponses).hasSize(1);
+    }
+
+    /**
+     * findAll 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("모든 팝업스토어 게시글 목록을 조회한다")
+    @Test
+    void findAll() {
+        // given
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlan(savedUser);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(popupSaveMapperRequest);
+
+        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+
+        // when
+        List<PopupDetailMapperResponse> mapperResponses = popupMapper.findAll(request);
 
         // then
         assertThat(mapperResponses).hasSize(1);

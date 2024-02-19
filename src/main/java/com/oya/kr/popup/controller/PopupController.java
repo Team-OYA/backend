@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.oya.kr.global.dto.ApplicationResponse;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
+import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.service.PopupService;
 
@@ -43,6 +44,20 @@ public class PopupController {
     @GetMapping("/{popupId}")
     public ResponseEntity<ApplicationResponse<PopupResponse>> findById(Principal principal, @PathVariable Long popupId) {
         PopupResponse response = popupService.findById(principal.getName(), popupId);
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 팝업스토어 게시글 리스트 조회 기능 구현
+     *
+     * @parameter Principal, String
+     * @return ResponseEntity<ApplicationResponse<PopupsListResponse>>
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @GetMapping
+    public ResponseEntity<ApplicationResponse<PopupsListResponse>> findAll(Principal principal, @RequestParam String sort) {
+        PopupsListResponse response = popupService.findAll(principal.getName(), sort);
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 

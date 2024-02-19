@@ -5,6 +5,9 @@ import static com.oya.kr.popup.exception.PlanErrorCodeList.PLAN_HAS_POPUP;
 import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP;
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,15 +16,21 @@ import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.S3Connector;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
+import com.oya.kr.popup.controller.dto.response.PopupListResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
+import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.PopupImage;
+import com.oya.kr.popup.domain.PopupSort;
+import com.oya.kr.popup.domain.WithdrawalStatus;
 import com.oya.kr.popup.mapper.PlanMapper;
 import com.oya.kr.popup.mapper.PopupImageMapper;
 import com.oya.kr.popup.mapper.PopupMapper;
 import com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
+import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
@@ -58,6 +67,30 @@ public class PopupService {
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
         Plan savedPlan = findPlanById(popupMapperResponse.getPlanId());
         return PopupResponse.from(popupMapperResponse.toDomain(savedPlan));
+    }
+
+    /**
+     * 팝업스토어 게시글 리스트 조회 기능 구현
+     *
+     * @parameter String, String
+     * @return PopupSearchRequest
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @Transactional(readOnly = true)
+    public PopupsListResponse findAll(String email, String sort) {
+        PopupSort popupSort = PopupSort.from(sort);
+
+        List<PopupDetailMapperResponse> mapperResponses = null;
+        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+        if (popupSort.isAll()) {
+            mapperResponses = popupMapper.findAll(request);
+        }
+        return new PopupsListResponse(
+            mapperResponses.stream()
+                .map(PopupListResponse::from)
+                .collect(Collectors.toUnmodifiableList())
+        );
     }
 
     /**
