@@ -1,6 +1,5 @@
 package com.oya.kr.popup.controller.dto.response;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import com.oya.kr.popup.domain.Category;
@@ -17,8 +16,7 @@ public class PopupListResponse {
     private final String title;
     private final String description;
     private final LocalDateTime pulledDate;
-    private final LocalDate openDate;
-    private final LocalDate closeDate;
+    private final LocalDateTime createdDate;
     private final String thumbnail;
     private final CategoryResponse category;
 
@@ -28,8 +26,7 @@ public class PopupListResponse {
             response.getTitle(),
             response.getDescription(),
             response.getPulledDate(),
-            response.getOpenDate(),
-            response.getCloseDate(),
+            response.getCreatedDate(),
             response.getThumbnail(),
             CategoryResponse.from(Category.from(response.getCategory()))
         );
@@ -46,21 +43,14 @@ public class PopupListResponse {
             pulledDate.getSecond());
     }
 
-    public String getOpenDate() {
+    public String getCreatedDate() {
         return String.format(
-            "%d-%02d-%d",
-            openDate.getYear(),
-            openDate.getMonthValue(),
-            openDate.getDayOfMonth()
-        );
-    }
-
-    public String getCloseDate() {
-        return String.format(
-            "%d-%02d-%d",
-            closeDate.getYear(),
-            closeDate.getMonthValue(),
-            closeDate.getDayOfMonth()
-        );
+            "%d-%02d-%dT%02d:%02d:%02d",
+            createdDate.getYear(),
+            createdDate.getMonthValue(),
+            createdDate.getDayOfMonth(),
+            createdDate.getHour(),
+            createdDate.getMinute(),
+            createdDate.getSecond());
     }
 }

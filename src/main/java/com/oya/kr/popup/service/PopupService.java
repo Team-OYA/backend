@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.S3Connector;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
@@ -30,8 +29,9 @@ import com.oya.kr.popup.mapper.PopupImageMapper;
 import com.oya.kr.popup.mapper.PopupMapper;
 import com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
-import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 
@@ -63,25 +63,29 @@ public class PopupService {
      */
     @Transactional(readOnly = true)
     public PopupResponse findById(String email, Long popupId) {
-        PopupDetailMapperResponse popupMapperResponse = popupMapper.findByIdWithDate(popupId)
+        PopupMapperResponse popupMapperResponse = popupMapper.findById(popupId)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
-        return PopupResponse.from(popupMapperResponse);
+        Plan savedPlan = findPlanById(popupMapperResponse.getPlanId());
+        return PopupResponse.from(popupMapperResponse.toDomain(savedPlan));
     }
 
     /**
      * 팝업스토어 게시글 리스트 조회 기능 구현
      *
-     * @parameter String, PaginationRequest, String
-     * @return PopupsListResponse
+     * @parameter String, String
+     * @return PopupSearchRequest
      * @author 김유빈
      * @since 2024.02.19
      */
     @Transactional(readOnly = true)
-    public PopupsListResponse findAll(String email, PaginationRequest paginationRequest, String sort) {
+    public PopupsListResponse findAll(String email, String sort) {
         PopupSort popupSort = PopupSort.from(sort);
-        PopupSearchMapperRequest request = new PopupSearchMapperRequest(
-            WithdrawalStatus.APPROVAL.getName(), paginationRequest.getPageNo(), paginationRequest.getAmount());
-        List<PopupDetailMapperResponse> mapperResponses = popupSort.selectForSorting(popupMapper, request).get();
+
+        List<PopupDetailMapperResponse> mapperResponses = null;
+        PopupSearchRequest request = new PopupSearchRequest(WithdrawalStatus.APPROVAL.getName());
+        if (popupSort.isAll()) {
+            mapperResponses = popupMapper.findAll(request);
+        }
         return new PopupsListResponse(
             mapperResponses.stream()
                 .map(PopupListResponse::from)
@@ -133,6 +137,12 @@ public class PopupService {
     private User findUserByEmail(String email) {
         return userMapper.findByEmail(email)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))
+            .toDomain();
+    }
+
+    private Plan findPlanById(Long id) {
+        return planMapper.findById(id)
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
             .toDomain();
     }
 
