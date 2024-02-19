@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.popup.mapper.PopupImageMapper">
+
+    <insert id="save" parameterType="popupImageSaveMapperRequest">
+        INSERT INTO POPUP_IMAGE(URL, POPUP_ID)
+        VALUES (#{url}, #{popupId})
+        <selectKey keyProperty="popupImageId" resultType="long" order="AFTER">
+            SELECT NVL(MAX(ID), 0)
+            FROM POPUP_IMAGE
+        </selectKey>
+    </insert>
+
+    <delete id="deleteAll">
+        DELETE
+        FROM POPUP_IMAGE
+    </delete>
+
+</mapper>

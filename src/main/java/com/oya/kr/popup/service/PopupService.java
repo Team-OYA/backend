@@ -16,8 +16,11 @@ import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
+import com.oya.kr.popup.domain.PopupImage;
 import com.oya.kr.popup.mapper.PlanMapper;
+import com.oya.kr.popup.mapper.PopupImageMapper;
 import com.oya.kr.popup.mapper.PopupMapper;
+import com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.user.domain.User;
@@ -38,6 +41,7 @@ public class PopupService {
     private final UserMapper userMapper;
     private final PlanMapper planMapper;
     private final PopupMapper popupMapper;
+    private final PopupImageMapper popupImageMapper;
     private final S3Connector s3Connector;
 
     /**
@@ -63,7 +67,7 @@ public class PopupService {
      * @author 김유빈
      * @since 2024.02.19
      */
-    public void save(String email, PopupSaveRequest request) {
+    public void save(String email, PopupSaveRequest request, MultipartFile thumbnail) {
         User savedUser = findUserByEmail(email);
         savedUser.validateUserIsBusiness();
 
@@ -72,8 +76,15 @@ public class PopupService {
         validatePlanDoesNotHavePopup(savedPlan);
 
         Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription());
-        PopupSaveMapperRequest mapperRequest = PopupSaveMapperRequest.from(popup);
-        popupMapper.save(mapperRequest);
+        PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(popupSaveMapperRequest);
+
+        Popup savedPopup = findPopupById(popupSaveMapperRequest.getPopupId(), savedPlan);
+        String thumbnailUrl = s3Connector.save(thumbnail);
+        PopupImage popupImage = PopupImage.saved(thumbnailUrl, savedPopup);
+
+        PopupImageSaveMapperRequest popupImageSaveMapperRequest = PopupImageSaveMapperRequest.from(popupImage);
+        popupImageMapper.save(popupImageSaveMapperRequest);
     }
 
     /**
@@ -106,6 +117,12 @@ public class PopupService {
         return planMapper.findById(id)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
             .toDomain(user);
+    }
+
+    private Popup findPopupById(Long popupId, Plan plan) {
+        return popupMapper.findById(popupId)
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP))
+            .toDomain(plan);
     }
 
     private void validatePlanDoesNotHavePopup(Plan plan) {
