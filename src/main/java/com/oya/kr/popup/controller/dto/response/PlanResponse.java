@@ -2,6 +2,7 @@ package com.oya.kr.popup.controller.dto.response;
 
 import java.time.LocalDate;
 
+import com.oya.kr.global.domain.DateConvertor;
 import com.oya.kr.popup.domain.Plan;
 
 import lombok.Getter;
@@ -27,18 +28,10 @@ public class PlanResponse {
     }
 
     public String getOpenDate() {
-        return String.format(
-            "%d-%02d-%d",
-            openDate.getYear(),
-            openDate.getMonthValue(),
-            openDate.getDayOfMonth());
+        return DateConvertor.convertDateFormatForResponse(openDate);
     }
 
     public String getCloseDate() {
-        return String.format(
-            "%d-%02d-%d",
-            closeDate.getYear(),
-            closeDate.getMonthValue(),
-            closeDate.getDayOfMonth());
+        return DateConvertor.convertDateFormatForResponse(closeDate);
     }
 }

@@ -3,6 +3,7 @@ package com.oya.kr.popup.controller.dto.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import com.oya.kr.global.domain.DateConvertor;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 
@@ -36,31 +37,14 @@ public class PopupResponse {
     }
 
     public String getPulledDate() {
-        return String.format(
-            "%d-%02d-%dT%02d:%02d:%02d",
-            pulledDate.getYear(),
-            pulledDate.getMonthValue(),
-            pulledDate.getDayOfMonth(),
-            pulledDate.getHour(),
-            pulledDate.getMinute(),
-            pulledDate.getSecond());
+        return DateConvertor.convertDateFormatForResponse(pulledDate);
     }
 
     public String getOpenDate() {
-        return String.format(
-            "%d-%02d-%d",
-            openDate.getYear(),
-            openDate.getMonthValue(),
-            openDate.getDayOfMonth()
-        );
+        return DateConvertor.convertDateFormatForResponse(openDate);
     }
 
     public String getCloseDate() {
-        return String.format(
-            "%d-%02d-%d",
-            closeDate.getYear(),
-            closeDate.getMonthValue(),
-            closeDate.getDayOfMonth()
-        );
+        return DateConvertor.convertDateFormatForResponse(closeDate);
     }
 }
