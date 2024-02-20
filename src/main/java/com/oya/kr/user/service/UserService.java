@@ -16,10 +16,7 @@ import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.request.LoginRequest;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.domain.User;
-import com.oya.kr.user.mapper.UserMapper;
-import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
-import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
-import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
+import com.oya.kr.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +27,7 @@ public class UserService {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private final UserMapper userMapper;
+	private final UserRepository userRepository;
 
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final TokenProvider tokenProvider;
@@ -48,9 +45,7 @@ public class UserService {
 		if(joinRequest.getUserType() !=0 && joinRequest.getUserType() != 1){
 			administratorSignup(joinRequest);
 		}else{
-			SignupAdministratorMapperRequest signupAdministratorMapperRequest = new SignupAdministratorMapperRequest(bCryptPasswordEncoder,
-				joinRequest);
-			int data = userMapper.insertUser(signupAdministratorMapperRequest);
+			int data = userRepository.insertUser(joinRequest);
 			if (data != -1) {
 				throw new ApplicationException(NOT_RESISTER_USER);
 			}
@@ -58,8 +53,7 @@ public class UserService {
 	}
 
 	private void administratorSignup(JoinRequest joinRequest) {
-		SignupBasicMapperRequest signupBasicMapperRequest = new SignupBasicMapperRequest(bCryptPasswordEncoder, joinRequest);
-		int result = userMapper.insertAdminAndKakaoUser(signupBasicMapperRequest);
+		int result = userRepository.insertAdminAndKakaoUser(joinRequest);
 		if (result == 0) {
 			throw new ApplicationException(NOT_RESISTER_USER);
 		}
@@ -72,7 +66,7 @@ public class UserService {
 	 * @since 2024.02.13
 	 */
 	public void duplicatedEmail(String email) {
-		Integer count = userMapper.duplicatedEmail(email);
+		Integer count = userRepository.duplicatedEmail(email);
 		if (count != null && count > 0) {
 			throw new ApplicationException(EXISTENT_EMAIL);
 		}
@@ -85,7 +79,7 @@ public class UserService {
 	 * @since 2024.02.13
 	 */
 	public void duplicationNickname(String nickname) {
-		Integer count = userMapper.duplicatedNickname(nickname);
+		Integer count = userRepository.duplicatedNickname(nickname);
 		if (count != null && count > 0) {
 			throw new ApplicationException(EXISTENT_NICKNAME);
 		}
@@ -100,11 +94,11 @@ public class UserService {
 	 */
 	@Transactional(readOnly = true)
 	public JwtTokenResponse login(LoginRequest loginRequest) {
-		Integer count = userMapper.duplicatedEmail(loginRequest.getEmail());
+		Integer count = userRepository.duplicatedEmail(loginRequest.getEmail());
 		if (count == 0) {
 			throw new ApplicationException(NOT_EXISTENT_EMAIL);
 		}
-		User user = findByEmail(loginRequest.getEmail());
+		User user = userRepository.findByEmail(loginRequest.getEmail());
 		if (!user.checkPassword(bCryptPasswordEncoder, loginRequest.getPassword())) {
 			throw new ApplicationException(NOT_CORRECTED_PASSWORD);
 		}
@@ -121,9 +115,7 @@ public class UserService {
 	 * @since 2024.02.13
 	 */
 	public User findByEmail(String email) {
-		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
-			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
-		return userMapperResponse.toDomain();
+		return userRepository.findByEmail(email);
 	}
 
 	/**

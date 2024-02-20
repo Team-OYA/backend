@@ -3,7 +3,6 @@ package com.oya.kr.popup.service;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_PLAN;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.PLAN_HAS_POPUP;
 import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP;
-import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
 import java.util.List;
 
@@ -33,7 +32,7 @@ import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.user.domain.User;
-import com.oya.kr.user.mapper.UserMapper;
+import com.oya.kr.user.repository.UserRepository;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PopupService {
 
-    private final UserMapper userMapper;
+    private final UserRepository userRepository;
     private final PlanMapper planMapper;
     private final PopupMapper popupMapper;
     private final PopupImageMapper popupImageMapper;
@@ -64,7 +63,7 @@ public class PopupService {
      */
     @Transactional(readOnly = true)
     public PopupResponse findById(String email, Long popupId) {
-        User savedUser = findUserByEmail(email);
+        User savedUser = userRepository.findByEmail(email);
         PopupDetailMapperResponse popupMapperResponse = popupMapper.findByIdWithDate(popupId)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
         PopupViewCreateOrUpdateMapperRequest request = new PopupViewCreateOrUpdateMapperRequest(savedUser.getId(), popupMapperResponse.getId());
@@ -113,7 +112,7 @@ public class PopupService {
      * @since 2024.02.19
      */
     public void save(String email, PopupSaveRequest request, MultipartFile thumbnail) {
-        User savedUser = findUserByEmail(email);
+        User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
 
         Plan savedPlan = findPlanById(request.getPlanId(), savedUser);
@@ -141,15 +140,9 @@ public class PopupService {
      * @since 2024.02.19
      */
     public PopupImageResponse saveImage(String email, MultipartFile image) {
-        User savedUser = findUserByEmail(email);
+        User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
         return new PopupImageResponse(s3Connector.save(image));
-    }
-
-    private User findUserByEmail(String email) {
-        return userMapper.findByEmail(email)
-            .orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))
-            .toDomain();
     }
 
     private Plan findPlanById(Long id, User user) {

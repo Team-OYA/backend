@@ -1,7 +1,6 @@
 package com.oya.kr.community.service;
 
 import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
-import static com.oya.kr.user.exception.UserErrorCodeList.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,8 +39,7 @@ import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.StorageConnector;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.user.domain.User;
-import com.oya.kr.user.mapper.UserMapper;
-import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
+import com.oya.kr.user.repository.UserRepository;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -58,7 +56,7 @@ public class CommunityService {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	private final CommunityMapper communityMapper;
-	private final UserMapper userMapper;
+	private final UserRepository userRepository;
 	private final VoteMapper voteMapper;
 	private final CommunityViewMapper communityViewMapper;
 	private final CollectionMapper collectionMapper;
@@ -74,7 +72,7 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	public String save(String communityType, String email, CommunityRequest communityRequest, List<MultipartFile> images) {
-		User loginUser = findByEmail(email);
+		User loginUser = userRepository.findByEmail(email);
 		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType.from(communityType).getName(), loginUser.getId(), communityRequest);
 		communityMapper.saveBasic(request);
 		saveCommunityImages(request.getPostId(), images);
@@ -117,11 +115,11 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	public CommunityDetailResponse read(String email, long communityId) {
-		User loginUser = findByEmail(email);
+		User loginUser = userRepository.findByEmail(email);
 		communityViewMapper.createOrUpdateCommunityView(communityId, loginUser.getId()); // 조회수 증가
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
 
-		User writeUser = findByUserId(response.getWriteId());
+		User writeUser = userRepository.findByUserId(response.getWriteId());
 		List<String> imageList = communityMapper.findByImage(response.getId());
 		Community community = response.toDomain(writeUser);
 		int countView = response.getCountView();
@@ -176,7 +174,7 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	public String delete(String email, long communityId) {
-		User loginUser = findByEmail(email);
+		User loginUser = userRepository.findByEmail(email);
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
 
 		if (loginUser.getId() != response.getWriteId()) {
@@ -196,7 +194,7 @@ public class CommunityService {
 	 */
 	@Transactional(readOnly = true)
 	public CommunityResponse reads(String type,String email, Pagination pagination) {
-		User loginUser = findByEmail(email);
+		User loginUser = userRepository.findByEmail(email);
 		List<CommunityBasicMapperResponse> responseList;
 		if(type.equals("all")){
 			responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
@@ -218,18 +216,6 @@ public class CommunityService {
 		return new CommunityResponse(communityDetailRespons);
 	}
 
-	private User findByUserId(long userId) {
-		return userMapper.findById(userId)
-			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))
-			.toDomain();
-	}
-
-	private User findByEmail(String email) {
-		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
-			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
-		return userMapperResponse.toDomain();
-	}
-
 	/**
 	 * 커뮤니티 게시글 스크랩
 	 *
@@ -239,7 +225,7 @@ public class CommunityService {
 	 * @since 2024.02.20
 	 */
 	public String saveCollection(String email, long communityId) {
-		User loginUser = findByEmail(email);
+		User loginUser = userRepository.findByEmail(email);
 		CollectionMapperRequest request = new CollectionMapperRequest(communityId, loginUser.getId());
 		int checkCollection = collectionMapper.check(request);
 		if(checkCollection == 0){
