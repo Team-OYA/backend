@@ -9,6 +9,7 @@ import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
+import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 
 public interface CommunityMapper {
 
@@ -20,4 +21,5 @@ public interface CommunityMapper {
 	void deleteByUserId(Long userId);
 	void saveImage(@Param("imageUrl") String imageUrl, @Param("communityId") long communityId);
 	List<String> findByImage(long communityId);
+	List<StatisticsResponseMapper> statistics();
 }

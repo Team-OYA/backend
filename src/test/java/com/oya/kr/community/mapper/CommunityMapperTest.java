@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +23,7 @@ import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.domain.User;
@@ -46,6 +49,7 @@ class CommunityMapperTest extends SpringApplicationTest {
 
 	private User user;
 	private long communityId;
+	private final String CATEGORY_CODE = "CG000001";
 
 	@BeforeEach
 	public void beforeEach(){
@@ -75,7 +79,7 @@ class CommunityMapperTest extends SpringApplicationTest {
 
 	private SaveBasicMapperRequest saveCommunity(String CommunityType, List<String> votes){
 		// given
-		CommunityRequest communityRequest = new CommunityRequest("test","test", "CG000001",votes);
+		CommunityRequest communityRequest = new CommunityRequest("test","test", CATEGORY_CODE, votes);
 		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType, user.getId(), communityRequest);
 
 		// when
@@ -187,5 +191,28 @@ class CommunityMapperTest extends SpringApplicationTest {
 			.doesNotThrowAnyException();
 		// test after
 		communityViewMapper.deleteByUserId(user.getId());
+	}
+
+	/**
+	 * @author 이상민
+	 * @since 2024.02.20
+	 */
+	@DisplayName("statistics() : 팝업 통계를 확인할 수 있다.")
+	@Test
+	void statistics(){
+		// given & when
+		int count1 = staticCount();
+		saveBasicCommunity();
+		int count2 = staticCount();
+
+		// then
+		assertEquals(count1+1, count2);
+	}
+
+	private int staticCount(){
+		List<StatisticsResponseMapper> response = communityMapper.statistics();
+		Map<String, Integer> categoryCounts = response.stream()
+			.collect(Collectors.toMap(StatisticsResponseMapper::getCategoryCode, StatisticsResponseMapper::getCount));
+		return categoryCounts.getOrDefault(CATEGORY_CODE, 0);
 	}
 }

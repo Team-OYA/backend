@@ -68,6 +68,12 @@
         WHERE COMMUNITY_ID = #{communityId}
     </select>
 
+    <select id="statistics" resultType="statisticsResponseMapper">
+        SELECT CATEGORY_CODE, COUNT(CATEGORY_CODE)
+        FROM COMMUNITY
+        GROUP BY CATEGORY_CODE
+    </select>
+
     <sql id="selecCommunity">
         SELECT
             c.ID,

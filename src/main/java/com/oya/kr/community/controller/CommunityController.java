@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.oya.kr.community.controller.dto.request.CommunityRequest;
 import com.oya.kr.community.controller.dto.response.CommunityDetailResponse;
 import com.oya.kr.community.controller.dto.response.CommunityResponse;
+import com.oya.kr.community.controller.dto.response.StatisticsResponse;
 import com.oya.kr.community.service.CommunityService;
 import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.dto.response.ApplicationResponse;
@@ -99,5 +100,17 @@ public class CommunityController {
 	@GetMapping("/{communityId}/collections")
 	public ResponseEntity<ApplicationResponse<String>> saveCollection(Principal principal, @PathVariable long communityId) {
 		return ResponseEntity.ok(ApplicationResponse.success(communityService.saveCollection(principal.getName(), communityId)));
+	}
+
+	/**
+	 * 카테고리 별 커뮤니티 게시글 분석 정보 조회
+	 *
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.20
+	 */
+	@GetMapping("/statistics")
+	public ResponseEntity<ApplicationResponse<StatisticsResponse>> statistics(Principal principal) {
+		return ResponseEntity.ok(ApplicationResponse.success(communityService.statistics()));
 	}
 }

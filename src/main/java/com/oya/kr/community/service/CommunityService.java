@@ -5,6 +5,8 @@ import static com.oya.kr.user.exception.UserErrorCodeList.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.oya.kr.community.controller.dto.request.CommunityRequest;
 import com.oya.kr.community.controller.dto.response.CommunityDetailResponse;
 import com.oya.kr.community.controller.dto.response.CommunityResponse;
+import com.oya.kr.community.controller.dto.response.StatisticsDetailResponse;
+import com.oya.kr.community.controller.dto.response.StatisticsResponse;
 import com.oya.kr.community.controller.dto.response.VoteResponse;
 import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.community.exception.CommunityErrorCodeList;
@@ -29,9 +33,11 @@ import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.domain.Community;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
+import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.StorageConnector;
+import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
@@ -73,6 +79,12 @@ public class CommunityService {
 		saveCommunityImages(request.getPostId(), images);
 
 		if(communityType.equals("vote")) {
+			if(communityRequest.getVotes().isEmpty()){
+				throw new ApplicationException(DOES_NOT_EXIST_VOTES);
+			}
+			if(communityRequest.getVotes().size() == 1){
+				throw new ApplicationException(ONLY_ONE_VOTES);
+			}
 			long communityId = request.getPostId();
 			communityRequest.getVotes().forEach(content ->
 				communityMapper.saveVote(new SaveVoteMapperRequest(content, communityId))
@@ -245,5 +257,26 @@ public class CommunityService {
 		}else{
 			throw new ApplicationException(FAIL_COMMUNITY_COLLECTION);
 		}
+	}
+
+	/**
+	 * 카테고리 별 커뮤니티 게시글 분석 정보 조회
+	 *
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.20
+	 */
+	public StatisticsResponse statistics() {
+		List<StatisticsResponseMapper> response = communityMapper.statistics();
+
+		Map<String, Integer> categoryCounts = response.stream()
+			.collect(Collectors.toMap(StatisticsResponseMapper::getCategoryCode, StatisticsResponseMapper::getCount));
+
+		List<StatisticsDetailResponse> list = new ArrayList<>();
+		for(Category category : Category.values()){
+			String code = category.getCode();
+			list.add(new StatisticsDetailResponse(code, categoryCounts.getOrDefault(code, 0)));
+		}
+		return new StatisticsResponse(list);
 	}
 }
