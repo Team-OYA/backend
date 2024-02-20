@@ -52,6 +52,7 @@
 
 
         <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest" alias="readCollectionsMapperRequest"/>
 
         <!-- mapper response -->
 

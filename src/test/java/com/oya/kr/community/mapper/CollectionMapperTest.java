@@ -16,8 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.community.controller.dto.request.CommunityRequest;
 import com.oya.kr.community.domain.CommunityType;
+import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
@@ -139,5 +141,21 @@ class CollectionMapperTest extends SpringApplicationTest {
 
 		// then
 		assertTrue(isDeleted);
+	}
+
+	/**
+	 * @author 이상민
+	 * @since 2024.02.20
+	 */
+	@DisplayName("findByCollections() : 스크랩한 모든 커뮤니티 게시글을 확인할 수 있다.")
+	@Test
+	void findByCollections(){
+		// given
+		// when
+		collectionMapper.saveCollection(collectionMapperRequest);
+		ReadCollectionsMapperRequest request = new ReadCollectionsMapperRequest(user.getId(),false,false, null, 0, 5);
+		List<CommunityBasicMapperResponse> responses = collectionMapper.findByCollections(request);
+		// then
+		assertNotNull(responses);
 	}
 }
