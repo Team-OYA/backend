@@ -1,6 +1,5 @@
 package com.oya.kr.popup.service;
 
-import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_PLAN;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.PLAN_HAS_POPUP;
 import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP;
 
@@ -22,7 +21,6 @@ import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.PopupImage;
 import com.oya.kr.popup.domain.enums.PopupSort;
 import com.oya.kr.popup.domain.enums.WithdrawalStatus;
-import com.oya.kr.popup.mapper.PlanMapper;
 import com.oya.kr.popup.mapper.PopupImageMapper;
 import com.oya.kr.popup.mapper.PopupMapper;
 import com.oya.kr.popup.mapper.PopupViewMapper;
@@ -31,6 +29,7 @@ import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
+import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
 
@@ -47,7 +46,7 @@ import lombok.RequiredArgsConstructor;
 public class PopupService {
 
     private final UserRepository userRepository;
-    private final PlanMapper planMapper;
+    private final PlanRepository planRepository;
     private final PopupMapper popupMapper;
     private final PopupImageMapper popupImageMapper;
     private final PopupViewMapper popupViewMapper;
@@ -115,7 +114,7 @@ public class PopupService {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
 
-        Plan savedPlan = findPlanById(request.getPlanId(), savedUser);
+        Plan savedPlan = planRepository.findById(request.getPlanId(), savedUser);
         savedPlan.validateEntranceStatusIsApprove();
         validatePlanDoesNotHavePopup(savedPlan);
 
@@ -143,12 +142,6 @@ public class PopupService {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
         return new PopupImageResponse(s3Connector.save(image));
-    }
-
-    private Plan findPlanById(Long id, User user) {
-        return planMapper.findById(id)
-            .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
-            .toDomain(user);
     }
 
     private Popup findPopupById(Long popupId, Plan plan) {
