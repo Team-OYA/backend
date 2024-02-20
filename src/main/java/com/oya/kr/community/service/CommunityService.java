@@ -1,5 +1,6 @@
 package com.oya.kr.community.service;
 
+import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
 
 import java.util.ArrayList;
@@ -17,7 +18,9 @@ import com.oya.kr.community.controller.dto.response.CommunityResponse;
 import com.oya.kr.community.controller.dto.response.VoteResponse;
 import com.oya.kr.community.exception.CommunityErrorCodeList;
 import com.oya.kr.community.mapper.CommunityMapper;
+import com.oya.kr.community.mapper.CollectionMapper;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
+import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.domain.Community;
@@ -45,6 +48,7 @@ public class CommunityService {
 
 	private final CommunityMapper communityMapper;
 	private final UserMapper userMapper;
+	private final CollectionMapper collectionMapper;
 
 	private final StorageConnector s3Connector;
 
@@ -202,5 +206,34 @@ public class CommunityService {
 		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
 			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
 		return userMapperResponse.toDomain();
+	}
+
+	/**
+	 * 커뮤니티 게시글 스크랩
+	 *
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.20
+	 */
+	public String saveCollection(String email, long communityId) {
+		User loginUser = findByEmail(email);
+		CollectionMapperRequest request = new CollectionMapperRequest(communityId, loginUser.getId());
+		int checkCollection = collectionMapper.checkCollection(request);
+		if(checkCollection == 0){
+			collectionMapper.saveCollection(request);
+			return "스크랩 완료되었습니다.";
+		}else if(checkCollection == 1){
+			boolean isDeleted = collectionMapper.isDeleted(request);
+			request.updateIsDeleted(isDeleted);
+			if(!isDeleted){
+				collectionMapper.changeDelete(request);
+				return "스크랩 취소되었습니다.";
+			}else{
+				collectionMapper.changeDelete(request);
+				return "스크랩 완료되었습니다.";
+			}
+		}else{
+			throw new ApplicationException(FAIL_COMMUNITY_COLLECTION);
+		}
 	}
 }

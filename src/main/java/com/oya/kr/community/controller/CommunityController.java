@@ -20,7 +20,6 @@ import com.oya.kr.community.controller.dto.response.CommunityResponse;
 import com.oya.kr.community.service.CommunityService;
 import com.oya.kr.global.dto.ApplicationResponse;
 import com.oya.kr.global.dto.Pagination;
-import com.oya.kr.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -88,5 +87,17 @@ public class CommunityController {
 	public ResponseEntity<ApplicationResponse<CommunityResponse>> reads(Principal principal,
 		@RequestParam("type") String type, Pagination pagination) {
 		return ResponseEntity.ok(ApplicationResponse.success(communityService.reads(type, principal.getName(), pagination)));
+	}
+
+	/**
+	 * 커뮤니티 게시글 스크랩 & 스크랩 취소
+	 *
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.19
+	 */
+	@GetMapping("/{communityId}/collections")
+	public ResponseEntity<ApplicationResponse<String>> saveCollection(Principal principal, @PathVariable long communityId) {
+		return ResponseEntity.ok(ApplicationResponse.success(communityService.saveCollection(principal.getName(), communityId)));
 	}
 }

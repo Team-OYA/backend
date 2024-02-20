@@ -89,4 +89,8 @@
         WHERE ID = #{userId}
     </select>
 
+    <delete id="deleteFromUserId">
+        DELETE FROM USERS
+        WHERE ID = #{userId}
+    </delete>
 </mapper>

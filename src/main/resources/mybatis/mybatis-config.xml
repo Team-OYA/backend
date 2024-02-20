@@ -28,6 +28,8 @@
         <typeAlias type="com.oya.kr.community.mapper.dto.request.VoteCheckMapperRequest" alias="voteCheckMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest" alias="readCommunityMapperRequest"/>
 
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
+
         <!-- mapper response -->
         <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
