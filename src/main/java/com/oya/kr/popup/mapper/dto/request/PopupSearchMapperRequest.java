@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CategoryRequest {
+public class PopupSearchMapperRequest {
 
-	private final String name;
+    private final String withdrawalStatus;
+    private final int pageNo;
+    private final int amount;
 }

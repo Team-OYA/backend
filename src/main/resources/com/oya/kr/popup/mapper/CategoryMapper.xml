@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.popup.mapper.CategoryMapper">
 
-    <select id="findByName" parameterType="String" resultType="categoryResponse">
+    <select id="findByName" parameterType="String" resultType="categoryMapperResponse">
         SELECT ID, NAME
         FROM CATEGORY
         WHERE NAME = #{name}
     </select>
 
-    <select id="findAll" resultType="categoryResponse">
+    <select id="findAll" resultType="categoryMapperResponse">
         SELECT ID, NAME
         FROM CATEGORY
     </select>

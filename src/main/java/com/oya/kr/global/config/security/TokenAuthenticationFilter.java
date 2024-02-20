@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.oya.kr.global.dto.ApplicationResponse;
+import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
 

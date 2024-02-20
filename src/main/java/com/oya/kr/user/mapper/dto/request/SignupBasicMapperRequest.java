@@ -30,7 +30,7 @@ public class SignupBasicMapperRequest {
 	private String profileUrl;
 
 	public SignupBasicMapperRequest(BCryptPasswordEncoder bCryptPasswordEncoder, JoinRequest joinRequest){
-		this.birthDate = dateFormat(joinRequest.getBirthDate());
+		this.birthDate = convertDateFormatForRequest(joinRequest.getBirthDate());
 		this.nickname = joinRequest.getNickname();
 		this.email = joinRequest.getEmail();
 		this.registrationType = RegistrationType.BASIC.getName();

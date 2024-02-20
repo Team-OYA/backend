@@ -1,10 +1,8 @@
-package com.oya.kr.popup.domain;
+package com.oya.kr.popup.domain.enums;
 
-import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
 import static com.oya.kr.popup.exception.PlanErrorCodeList.*;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
 import com.oya.kr.global.exception.ApplicationException;
 

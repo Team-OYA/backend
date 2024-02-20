@@ -2,11 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.popup.mapper.PlanMapper">
 
-    <select id="findById" parameterType="long" resultType="planResponse">
+    <select id="findById" parameterType="long" resultType="planMapperResponse">
         SELECT ID, OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
                CONTACT_INFORMATION, CATEGORY, USER_ID
         FROM PLAN
         WHERE ID = #{id} AND DELETED = 0
+    </select>
+
+    <select id="findAllWithoutPopup" resultType="planMapperResponse">
+        SELECT ID, OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
+               CONTACT_INFORMATION, CATEGORY, USER_ID
+        FROM PLAN
+        WHERE ID NOT IN (
+            SELECT PLAN_ID
+            FROM POPUP
+        )
     </select>
 
     <insert id="save" parameterType="planSaveMapperRequest">
@@ -24,6 +34,7 @@
         UPDATE PLAN
         SET ENTRANCE_STATUS = #{entranceStatus}
         WHERE ID = #{id}
+            AND MODIFIED_DATE = sysdate
     </update>
 
     <delete id="deleteAll">

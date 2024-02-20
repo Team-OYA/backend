@@ -3,8 +3,8 @@ package com.oya.kr.popup.controller.dto.response;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.oya.kr.popup.domain.Department;
-import com.oya.kr.popup.domain.DepartmentBranch;
+import com.oya.kr.popup.domain.enums.Department;
+import com.oya.kr.popup.domain.enums.DepartmentBranch;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

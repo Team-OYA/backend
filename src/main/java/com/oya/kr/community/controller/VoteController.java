@@ -10,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oya.kr.community.service.VoteService;
-import com.oya.kr.global.dto.ApplicationResponse;
-import com.oya.kr.user.domain.User;
-import com.oya.kr.user.service.UserService;
+import com.oya.kr.global.dto.response.ApplicationResponse;
 
 import lombok.RequiredArgsConstructor;
 

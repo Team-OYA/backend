@@ -21,10 +21,10 @@ public class PlanSaveRequest {
     private String category;
 
     public LocalDate getOpenDate() {
-        return DateConvertor.dateFormat(openDate);
+        return DateConvertor.convertDateFormatForRequest(openDate);
     }
 
     public LocalDate getCloseDate() {
-        return DateConvertor.dateFormat(closeDate);
+        return DateConvertor.convertDateFormatForRequest(closeDate);
     }
 }

@@ -1,6 +1,6 @@
 package com.oya.kr.popup.controller.dto.response;
 
-import com.oya.kr.popup.domain.DepartmentBranch;
+import com.oya.kr.popup.domain.enums.DepartmentBranch;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

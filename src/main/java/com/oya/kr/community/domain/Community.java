@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 import com.oya.kr.global.domain.Base;
-import com.oya.kr.popup.domain.Category;
+import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.user.domain.User;
 
 import lombok.AccessLevel;

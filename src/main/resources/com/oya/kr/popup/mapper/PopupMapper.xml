@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.popup.mapper.PopupMapper">
+
+    <select id="findById" parameterType="Long" resultType="popupMapperResponse">
+        SELECT ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, CREATED_DATE, MODIFIED_DATE, DELETED
+        FROM POPUP
+        WHERE ID = #{popupId}
+          AND DELETED = 0
+    </select>
+
+    <select id="findByIdWithDate" parameterType="Long" resultType="popupDetailMapperResponse">
+        SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, null,
+            PN.CATEGORY, OPEN_DATE, CLOSE_DATE
+        FROM POPUP P
+            JOIN PLAN PN
+                ON P.PLAN_ID = PN.ID
+        WHERE P.ID = #{popupId}
+            AND P.DELETED = 0
+    </select>
+
+    <select id="findAllByPlanId" parameterType="Long" resultType="popupMapperResponse">
+        SELECT ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, CREATED_DATE, MODIFIED_DATE, DELETED
+        FROM POPUP
+        WHERE PLAN_ID = #{planId} AND DELETED = 0
+    </select>
+
+    <select id="findAll" parameterType="popupSearchRequest" resultType="popupDetailMapperResponse">
+        <include refid="selectPopupWithPlanAndPopupImage" />
+        WHERE WITHDRAWAL_STATUS != #{withdrawalStatus} AND P.DELETED = 0
+        ORDER BY PULLED_DATE DESC
+        <include refid="offsetForPaging" />
+    </select>
+
+    <select id="findInProgress" parameterType="popupSearchRequest" resultType="popupDetailMapperResponse">
+        <include refid="selectPopupWithPlanAndPopupImage" />
+        WHERE WITHDRAWAL_STATUS != #{withdrawalStatus}
+            AND sysdate BETWEEN OPEN_DATE AND CLOSE_DATE
+            AND P.DELETED = 0
+        ORDER BY PULLED_DATE DESC
+        <include refid="offsetForPaging" />
+    </select>
+
+    <select id="findScheduled" parameterType="popupSearchRequest" resultType="popupDetailMapperResponse">
+        <include refid="selectPopupWithPlanAndPopupImage" />
+        <![CDATA[
+        WHERE WITHDRAWAL_STATUS != #{withdrawalStatus}
+            AND sysdate < OPEN_DATE
+            AND P.DELETED = 0
+        ORDER BY PULLED_DATE DESC
+        ]]>
+        <include refid="offsetForPaging" />
+    </select>
+
+    <select id="findAllRecommended" parameterType="popupSearchRequest" resultType="popupDetailMapperResponse">
+        <include refid="selectPopupWithPlanAndPopupImage" />
+        LEFT JOIN (
+            SELECT POPUP_ID, COUNT(*) COUNT
+            FROM POPUP_VIEW
+            GROUP BY POPUP_ID
+            <include refid="offsetForPaging" />) PV
+        ON P.ID = PV.POPUP_ID
+        WHERE WITHDRAWAL_STATUS != #{withdrawalStatus}
+          AND P.DELETED = 0
+        ORDER BY COUNT DESC
+    </select>
+
+    <insert id="save" parameterType="popupSaveMapperRequest">
+        INSERT INTO POPUP(TITLE, DESCRIPTION, WITHDRAWAL_STATUS, PLAN_ID)
+        VALUES (#{title}, #{description}, #{withdrawalStatus}, #{planId})
+        <selectKey keyProperty="popupId" resultType="long" order="AFTER">
+            SELECT NVL(MAX(ID), 0)
+            FROM POPUP
+        </selectKey>
+    </insert>
+
+    <delete id="deleteAll">
+        DELETE
+        FROM POPUP
+    </delete>
+
+    <sql id="selectPopupWithPlanAndPopupImage">
+        SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
+            PI.URL AS thumbnail, PN.CATEGORY,
+            OPEN_DATE, CLOSE_DATE
+        FROM POPUP P
+            LEFT JOIN POPUP_IMAGE PI
+                ON P.ID = PI.POPUP_ID
+            JOIN PLAN PN
+                ON P.PLAN_ID = PN.ID
+    </sql>
+
+    <sql id="offsetForPaging">
+        OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
+    </sql>
+
+</mapper>

@@ -1,5 +1,6 @@
 package com.oya.kr.popup.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import java.time.LocalDate;
@@ -12,9 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.oya.kr.common.SpringApplicationTest;
-import com.oya.kr.popup.domain.Category;
-import com.oya.kr.popup.domain.DepartmentBranch;
-import com.oya.kr.popup.domain.DepartmentFloor;
+import com.oya.kr.popup.domain.enums.Category;
+import com.oya.kr.popup.domain.enums.DepartmentBranch;
+import com.oya.kr.popup.domain.enums.DepartmentFloor;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest;
@@ -66,6 +67,44 @@ public class PlanMapperTest extends SpringApplicationTest {
         businessMapper.deleteAll();
         planMapper.deleteAll();
         userMapper.deleteAll();
+    }
+
+    /**
+     * findById 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("아이디를 이용하여 사업계획서를 조회한다")
+    @Test
+    void findById() {
+        // given
+        User savedUser = savedUser();
+        Plan plan = createDomain(savedUser);
+        PlanSaveMapperRequest planSaveMapperRequest = PlanSaveMapperRequest.from(plan);
+        planMapper.save(planSaveMapperRequest);
+
+        // when & then
+        assertThat(planMapper.findById(planSaveMapperRequest.getPlanId())).isPresent();
+    }
+
+    /**
+     * findAllWithoutPopup 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.19
+     */
+    @DisplayName("팝업스토어 게시글이 없는 사업계획서 리스트를 조회한다")
+    @Test
+    void findAllWithoutPopup() {
+        // given
+        User savedUser = savedUser();
+        Plan plan = createDomain(savedUser);
+        PlanSaveMapperRequest planSaveMapperRequest = PlanSaveMapperRequest.from(plan);
+        planMapper.save(planSaveMapperRequest);
+
+        // when & then
+        assertThat(planMapper.findAllWithoutPopup()).hasSize(1);
     }
 
     /**
@@ -134,7 +173,7 @@ public class PlanMapperTest extends SpringApplicationTest {
         return userMapper.findByEmail(email).get().toDomain();
     }
 
-    private static Plan createDomain(User savedUser) {
+    private Plan createDomain(User savedUser) {
         return Plan.saved(
             savedUser,
             DepartmentBranch.THE_HYUNDAI_SEOUL.getCode(),

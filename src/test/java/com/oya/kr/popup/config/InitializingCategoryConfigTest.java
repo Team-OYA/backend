@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.oya.kr.common.SpringApplicationTest;
-import com.oya.kr.popup.domain.Category;
+import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.mapper.CategoryMapper;
-import com.oya.kr.popup.mapper.dto.response.CategoryResponse;
+import com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse;
 
 /**
  * @author 김유빈
@@ -44,7 +44,7 @@ class InitializingCategoryConfigTest extends SpringApplicationTest {
 	@Test
 	void initCategory() {
 		// given
-		List<CategoryResponse> categories = categoryMapper.findAll();
+		List<CategoryMapperResponse> categories = categoryMapper.findAll();
 
 		// when & then
 		assertThat(categories.size()).isEqualTo(Category.values().length);

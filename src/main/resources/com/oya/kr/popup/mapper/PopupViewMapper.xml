@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.popup.mapper.PopupViewMapper">
+
+    <update id="createOrUpdatePopupView" parameterType="popupViewCreateOrUpdateMapperRequest">
+        <![CDATA[
+        BEGIN
+            MERGE INTO POPUP_VIEW pv
+            USING (SELECT 1 FROM DUAL) dummy
+            ON (pv.POPUP_ID = #{popupId} AND pv.USER_ID = #{userId})
+            WHEN MATCHED THEN
+                UPDATE SET
+                    MODIFIED_DATE = SYSTIMESTAMP
+            WHEN NOT MATCHED THEN
+                INSERT (pv.POPUP_ID, USER_ID)
+                VALUES (#{popupId}, #{userId});
+            COMMIT;
+        END;
+        ]]>
+    </update>
+
+    <delete id="deleteAll">
+        DELETE
+        FROM POPUP_VIEW
+    </delete>
+
+</mapper>

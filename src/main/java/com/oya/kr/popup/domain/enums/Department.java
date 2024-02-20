@@ -1,4 +1,4 @@
-package com.oya.kr.popup.domain;
+package com.oya.kr.popup.domain.enums;
 
 import lombok.Getter;
 

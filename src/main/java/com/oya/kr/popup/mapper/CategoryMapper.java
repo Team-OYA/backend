@@ -3,8 +3,8 @@ package com.oya.kr.popup.mapper;
 import java.util.List;
 import java.util.Optional;
 
-import com.oya.kr.popup.mapper.dto.request.CategoryRequest;
-import com.oya.kr.popup.mapper.dto.response.CategoryResponse;
+import com.oya.kr.popup.mapper.dto.request.CategoryMapperRequest;
+import com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse;
 
 /**
  * @author 김유빈
@@ -12,11 +12,11 @@ import com.oya.kr.popup.mapper.dto.response.CategoryResponse;
  */
 public interface CategoryMapper {
 
-	Optional<CategoryResponse> findByName(String name);
+	Optional<CategoryMapperResponse> findByName(String name);
 
-	List<CategoryResponse> findAll();
+	List<CategoryMapperResponse> findAll();
 
-	void save(CategoryRequest category);
+	void save(CategoryMapperRequest category);
 
 	void deleteAll();
 }

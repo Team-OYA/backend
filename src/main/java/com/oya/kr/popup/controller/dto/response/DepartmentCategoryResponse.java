@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.oya.kr.popup.domain.Category;
-import com.oya.kr.popup.domain.DepartmentFloor;
+import com.oya.kr.popup.domain.enums.Category;
+import com.oya.kr.popup.domain.enums.DepartmentFloor;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

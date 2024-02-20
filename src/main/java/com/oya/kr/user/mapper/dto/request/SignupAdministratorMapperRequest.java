@@ -39,7 +39,7 @@ public class SignupAdministratorMapperRequest {
 	private String businessAddress; // 사업장 소재지
 
 	public SignupAdministratorMapperRequest(BCryptPasswordEncoder bCryptPasswordEncoder, JoinRequest joinRequest) {
-		this.birthDate = dateFormat(joinRequest.getBirthDate());
+		this.birthDate = convertDateFormatForRequest(joinRequest.getBirthDate());
 		this.nickname = joinRequest.getNickname();
 		this.email = joinRequest.getEmail();
 		this.businessRegistrationNumber = joinRequest.getBusinessRegistrationNumber();
@@ -50,7 +50,7 @@ public class SignupAdministratorMapperRequest {
 		this.userType = UserType.getUserTypeEnum(joinRequest.getUserType()).getName();
 		this.nameOfCompany = joinRequest.getNameOfCompany();
 		this.nameOfRepresentative = joinRequest.getNameOfRepresentative();
-		this.dateOfBusinessCommencement = dateFormat(joinRequest.getDateOfBusinessCommencement());
+		this.dateOfBusinessCommencement = convertDateFormatForRequest(joinRequest.getDateOfBusinessCommencement());
 		this.businessItem = joinRequest.getBusinessItem();
 		this.connectedNumber = joinRequest.getConnectedNumber();
 		this.faxNumber = joinRequest.getFaxNumber();
