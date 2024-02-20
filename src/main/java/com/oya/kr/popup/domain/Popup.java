@@ -23,7 +23,6 @@ public class Popup extends Base {
 	private WithdrawalStatus withdrawalStatus;
 
 	public Popup(Plan plan, String title, String description, LocalDateTime pulledDate, WithdrawalStatus withdrawalStatus) {
-		super();
 		this.plan = plan;
 		this.title = title;
 		this.description = description;

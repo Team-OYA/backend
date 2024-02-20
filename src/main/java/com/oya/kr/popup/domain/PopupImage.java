@@ -18,7 +18,6 @@ public class PopupImage extends Base {
     private Popup popup;
 
     public PopupImage(String url, Popup popup) {
-        super();
         this.url = url;
         this.popup = popup;
     }
