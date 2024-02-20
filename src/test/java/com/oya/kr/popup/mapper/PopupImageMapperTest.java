@@ -102,6 +102,7 @@ public class PopupImageMapperTest extends SpringApplicationTest {
         assertThatCode(() -> popupImageMapper.save(request))
             .doesNotThrowAnyException();
     }
+
     private User savedUser() {
         String email = "hansalchai0131@gmail.com";
         JoinRequest request = JoinRequest.builder()
