@@ -54,22 +54,17 @@
         <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest" alias="readCollectionsMapperRequest"/>
 
-        <!-- mapper response -->
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest" alias="readCollectionsMapperRequest"/>
 
-        <!-- community -->
+        <!-- mapper response -->
+        <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryResponse" alias="categoryResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanResponse" alias="planResponse"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse" alias="communityBasicMapperResponse"/>
         <typeAlias type="com.oya.kr.community.controller.dto.response.VoteResponse" alias="voteResponse"/>
 
-        <!-- global -->
-
-        <!-- popup -->
-        <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse" alias="categoryMapperResponse"/>
-        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanMapperResponse" alias="planMapperResponse"/>
-        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupMapperResponse" alias="popupMapperResponse"/>
-        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse" alias="popupDetailMapperResponse"/>
-
-        <!-- user -->
-        <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
+        <typeAlias alias="LocalDate" type="java.time.LocalDate"/>
 
     </typeAliases>
 </configuration>
