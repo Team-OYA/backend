@@ -8,9 +8,8 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.oya.kr.global.exception.ApplicationException;
-import com.oya.kr.popup.mapper.PopupMapper;
-import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
+import com.oya.kr.popup.repository.PopupRepository;
 
 import lombok.Getter;
 
@@ -53,15 +52,15 @@ public enum PopupSort {
      * @author 김유빈
      * @since 2024.02.19
      */
-    public Supplier<List<PopupDetailMapperResponse>> selectForSorting(PopupMapper popupMapper, PopupSearchMapperRequest request) {
+    public Supplier<List<PopupDetailMapperResponse>> selectForSorting(PopupRepository popupRepository, int pageNo, int amount) {
         if (isAll()) {
-            return () -> popupMapper.findAll(request);
+            return () -> popupRepository.findAll(pageNo, amount);
         }
         if (isProgress()) {
-            return () -> popupMapper.findInProgress(request);
+            return () -> popupRepository.findInProgress(pageNo, amount);
         }
         if (isScheduled()) {
-            return () -> popupMapper.findScheduled(request);
+            return () -> popupRepository.findScheduled(pageNo, amount);
         }
         return ArrayList::new;
     }

@@ -1,7 +1,6 @@
 package com.oya.kr.popup.service;
 
 import static com.oya.kr.popup.exception.PlanErrorCodeList.PLAN_HAS_POPUP;
-import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP;
 
 import java.util.List;
 
@@ -18,18 +17,10 @@ import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
-import com.oya.kr.popup.domain.PopupImage;
 import com.oya.kr.popup.domain.enums.PopupSort;
-import com.oya.kr.popup.domain.enums.WithdrawalStatus;
-import com.oya.kr.popup.mapper.PopupImageMapper;
-import com.oya.kr.popup.mapper.PopupMapper;
-import com.oya.kr.popup.mapper.PopupViewMapper;
-import com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest;
-import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
-import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
-import com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
+import com.oya.kr.popup.repository.PopupRepository;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
 
@@ -47,9 +38,7 @@ public class PopupService {
 
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
-    private final PopupMapper popupMapper;
-    private final PopupImageMapper popupImageMapper;
-    private final PopupViewMapper popupViewMapper;
+    private final PopupRepository popupRepository;
     private final S3Connector s3Connector;
 
     /**
@@ -63,10 +52,7 @@ public class PopupService {
     @Transactional(readOnly = true)
     public PopupResponse findById(String email, Long popupId) {
         User savedUser = userRepository.findByEmail(email);
-        PopupDetailMapperResponse popupMapperResponse = popupMapper.findByIdWithDate(popupId)
-            .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
-        PopupViewCreateOrUpdateMapperRequest request = new PopupViewCreateOrUpdateMapperRequest(savedUser.getId(), popupMapperResponse.getId());
-        popupViewMapper.createOrUpdatePopupView(request);
+        PopupDetailMapperResponse popupMapperResponse = popupRepository.findByIdWithDate(savedUser.getId(), popupId);
         return PopupResponse.from(popupMapperResponse);
     }
 
@@ -81,9 +67,8 @@ public class PopupService {
     @Transactional(readOnly = true)
     public PopupsListResponse findAll(String email, PaginationRequest paginationRequest, String sort) {
         PopupSort popupSort = PopupSort.from(sort);
-        PopupSearchMapperRequest request = new PopupSearchMapperRequest(
-            WithdrawalStatus.APPROVAL.getName(), paginationRequest.getPageNo(), paginationRequest.getAmount());
-        List<PopupDetailMapperResponse> mapperResponses = popupSort.selectForSorting(popupMapper, request).get();
+        List<PopupDetailMapperResponse> mapperResponses = popupSort.selectForSorting(
+            popupRepository, paginationRequest.getPageNo(), paginationRequest.getAmount()).get();
         return PopupsListResponse.from(mapperResponses);
     }
 
@@ -97,9 +82,9 @@ public class PopupService {
      */
     @Transactional(readOnly = true)
     public PopupsListResponse findAllRecommended(String email, PaginationRequest paginationRequest) {
-        PopupSearchMapperRequest request = new PopupSearchMapperRequest(
-            WithdrawalStatus.APPROVAL.getName(), paginationRequest.getPageNo(), paginationRequest.getAmount());
-        List<PopupDetailMapperResponse> mapperResponses = popupMapper.findAllRecommended(request);
+        List<PopupDetailMapperResponse> mapperResponses = popupRepository.findAllRecommended(
+            paginationRequest.getPageNo(), paginationRequest.getAmount()
+        );
         return PopupsListResponse.from(mapperResponses);
     }
 
@@ -118,16 +103,10 @@ public class PopupService {
         savedPlan.validateEntranceStatusIsApprove();
         validatePlanDoesNotHavePopup(savedPlan);
 
-        Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription());
-        PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
-        popupMapper.save(popupSaveMapperRequest);
-
-        Popup savedPopup = findPopupById(popupSaveMapperRequest.getPopupId(), savedPlan);
         String thumbnailUrl = s3Connector.save(thumbnail);
-        PopupImage popupImage = PopupImage.saved(thumbnailUrl, savedPopup);
 
-        PopupImageSaveMapperRequest popupImageSaveMapperRequest = PopupImageSaveMapperRequest.from(popupImage);
-        popupImageMapper.save(popupImageSaveMapperRequest);
+        Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription());
+        popupRepository.save(popup, savedPlan, thumbnailUrl);
     }
 
     /**
@@ -144,14 +123,8 @@ public class PopupService {
         return new PopupImageResponse(s3Connector.save(image));
     }
 
-    private Popup findPopupById(Long popupId, Plan plan) {
-        return popupMapper.findById(popupId)
-            .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP))
-            .toDomain(plan);
-    }
-
     private void validatePlanDoesNotHavePopup(Plan plan) {
-        if (!popupMapper.findAllByPlanId(plan.getId()).isEmpty()) {
+        if (!popupRepository.findAllByPlanId(plan.getId()).isEmpty()) {
             throw new ApplicationException(PLAN_HAS_POPUP);
         }
     }
