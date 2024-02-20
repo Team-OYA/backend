@@ -15,7 +15,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.community.controller.dto.request.CommunityRequest;
-import com.oya.kr.community.domain.CommunityType;
+import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;

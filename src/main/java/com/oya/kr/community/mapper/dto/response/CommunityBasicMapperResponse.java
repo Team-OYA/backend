@@ -3,7 +3,7 @@ package com.oya.kr.community.mapper.dto.response;
 import java.time.LocalDateTime;
 
 import com.oya.kr.community.domain.Community;
-import com.oya.kr.community.domain.CommunityType;
+import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.user.domain.User;
 
