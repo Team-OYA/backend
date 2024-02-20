@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.community.mapper.CollectionMapper">
+
+    <insert id="saveCollection" parameterType="collectionMapperRequest">
+        INSERT INTO COMMUNITY_COLLECTION(COMMUNITY_ID, USER_ID)
+        VALUES (#{communityId}, #{userId})
+    </insert>
+
+    <select id="checkCollection" parameterType="collectionMapperRequest" resultType="java.lang.Integer">
+        SELECT COUNT(ID)
+        FROM COMMUNITY_COLLECTION
+        WHERE COMMUNITY_ID = #{communityId} AND USER_ID = #{userId}
+    </select>
+
+    <select id="isDeleted" parameterType="collectionMapperRequest" resultType="java.lang.Boolean">
+        SELECT DELETED
+        FROM COMMUNITY_COLLECTION
+        WHERE COMMUNITY_ID = #{communityId} AND USER_ID = #{userId}
+    </select>
+
+    <update id="changeDelete" parameterType="collectionMapperRequest">
+        UPDATE COMMUNITY_COLLECTION
+        SET DELETED = #{isDeleted}
+        WHERE COMMUNITY_ID = #{communityId} AND USER_ID = #{userId}
+    </update>
+
+    <delete id="deleteFromUserId">
+        DELETE FROM COMMUNITY_COLLECTION
+        WHERE USER_ID = #{userId}
+    </delete>
+</mapper>

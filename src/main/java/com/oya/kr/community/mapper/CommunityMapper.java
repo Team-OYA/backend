@@ -34,4 +34,6 @@ public interface CommunityMapper {
 	void saveCommunityImage(@Param("imageUrl") String imageUrl, @Param("communityId") long communityId);
 
 	List<String> findByCommunityId(long communityId);
+
+	void deleteFromUserId(Long userId);
 }

@@ -49,7 +49,9 @@
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest" alias="signupBasicMapperRequest"/>
-      
+
+
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
 
         <!-- mapper response -->
 

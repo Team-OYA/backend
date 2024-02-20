@@ -146,4 +146,9 @@
         WHERE COMMUNITY_ID = #{communityId}
     </select>
 
+    <delete id="deleteFromUserId">
+        DELETE FROM COMMUNITY
+        WHERE WRITE_ID = #{userId}
+    </delete>
+
 </mapper>

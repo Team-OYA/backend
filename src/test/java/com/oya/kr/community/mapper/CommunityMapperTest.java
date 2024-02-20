@@ -1,4 +1,4 @@
-package com.oya.kr.commutiny.mapper;
+package com.oya.kr.community.mapper;
 
 import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 import static org.assertj.core.api.AssertionsForClassTypes.*;

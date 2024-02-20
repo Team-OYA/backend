@@ -22,4 +22,6 @@ public interface UserMapper {
 	void deleteAll();
 
 	Optional<UserMapperResponse> findById(long userId);
+
+	void deleteFromUserId(Long id);
 }

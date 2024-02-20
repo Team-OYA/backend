@@ -88,4 +88,16 @@ public class CommunityController {
 		@RequestParam("type") String type, Pagination pagination) {
 		return ResponseEntity.ok(ApplicationResponse.success(communityService.reads(type, principal.getName(), pagination)));
 	}
+
+	/**
+	 * 커뮤니티 게시글 스크랩 & 스크랩 취소
+	 *
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.19
+	 */
+	@GetMapping("/{communityId}/collections")
+	public ResponseEntity<ApplicationResponse<String>> saveCollection(Principal principal, @PathVariable long communityId) {
+		return ResponseEntity.ok(ApplicationResponse.success(communityService.saveCollection(principal.getName(), communityId)));
+	}
 }
