@@ -18,9 +18,8 @@ import com.oya.kr.community.controller.dto.request.CommunityRequest;
 import com.oya.kr.community.controller.dto.response.CommunityDetailResponse;
 import com.oya.kr.community.controller.dto.response.CommunityResponse;
 import com.oya.kr.community.service.CommunityService;
-import com.oya.kr.global.dto.ApplicationResponse;
 import com.oya.kr.global.dto.Pagination;
-import com.oya.kr.user.service.UserService;
+import com.oya.kr.global.dto.response.ApplicationResponse;
 
 import lombok.RequiredArgsConstructor;
 
