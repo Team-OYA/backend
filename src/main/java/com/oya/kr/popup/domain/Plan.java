@@ -13,6 +13,10 @@ import org.springframework.stereotype.Component;
 import com.oya.kr.global.domain.Base;
 import com.oya.kr.global.domain.RegexValidator;
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.popup.domain.enums.Category;
+import com.oya.kr.popup.domain.enums.DepartmentBranch;
+import com.oya.kr.popup.domain.enums.DepartmentFloor;
+import com.oya.kr.popup.domain.enums.EntranceStatus;
 import com.oya.kr.user.domain.User;
 
 import lombok.AccessLevel;

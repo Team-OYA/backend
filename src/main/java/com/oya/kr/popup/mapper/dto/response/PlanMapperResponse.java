@@ -2,10 +2,10 @@ package com.oya.kr.popup.mapper.dto.response;
 
 import java.time.LocalDate;
 
-import com.oya.kr.popup.domain.Category;
-import com.oya.kr.popup.domain.DepartmentBranch;
-import com.oya.kr.popup.domain.DepartmentFloor;
-import com.oya.kr.popup.domain.EntranceStatus;
+import com.oya.kr.popup.domain.enums.Category;
+import com.oya.kr.popup.domain.enums.DepartmentBranch;
+import com.oya.kr.popup.domain.enums.DepartmentFloor;
+import com.oya.kr.popup.domain.enums.EntranceStatus;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.user.domain.User;
 

@@ -22,7 +22,7 @@
         <!-- global -->
 
         <!-- popup -->
-        <typeAlias type="com.oya.kr.popup.domain.Category" alias="category"/>
+        <typeAlias type="com.oya.kr.popup.domain.enums.Category" alias="category"/>
 
         <!-- user -->
 

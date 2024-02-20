@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 
-import com.oya.kr.popup.domain.Category;
+import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.mapper.CategoryMapper;
 import com.oya.kr.popup.mapper.dto.request.CategoryMapperRequest;
 

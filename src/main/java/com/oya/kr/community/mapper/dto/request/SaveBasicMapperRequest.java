@@ -1,7 +1,6 @@
 package com.oya.kr.community.mapper.dto.request;
 
 import com.oya.kr.community.controller.dto.request.CommunityRequest;
-import com.oya.kr.popup.domain.Category;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

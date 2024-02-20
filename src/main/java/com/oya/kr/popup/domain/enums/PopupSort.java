@@ -1,4 +1,4 @@
-package com.oya.kr.popup.domain;
+package com.oya.kr.popup.domain.enums;
 
 import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP_SORT;
 

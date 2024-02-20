@@ -3,7 +3,7 @@ package com.oya.kr.popup.controller.dto.response;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import com.oya.kr.popup.domain.Category;
+import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 
 import lombok.Getter;

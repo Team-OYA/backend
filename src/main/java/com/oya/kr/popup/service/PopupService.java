@@ -6,7 +6,6 @@ import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP;
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,14 +16,13 @@ import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.S3Connector;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
-import com.oya.kr.popup.controller.dto.response.PopupListResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.PopupImage;
-import com.oya.kr.popup.domain.PopupSort;
-import com.oya.kr.popup.domain.WithdrawalStatus;
+import com.oya.kr.popup.domain.enums.PopupSort;
+import com.oya.kr.popup.domain.enums.WithdrawalStatus;
 import com.oya.kr.popup.mapper.PlanMapper;
 import com.oya.kr.popup.mapper.PopupImageMapper;
 import com.oya.kr.popup.mapper.PopupMapper;

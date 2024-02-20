@@ -1,4 +1,4 @@
-package com.oya.kr.popup.domain;
+package com.oya.kr.popup.domain.enums;
 
 import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_DEPARTMENT_FLOOR;
 

@@ -1,6 +1,6 @@
 package com.oya.kr.popup.controller.dto.response;
 
-import com.oya.kr.popup.domain.Category;
+import com.oya.kr.popup.domain.enums.Category;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

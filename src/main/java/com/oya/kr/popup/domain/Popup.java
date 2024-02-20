@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Component;
 
 import com.oya.kr.global.domain.Base;
+import com.oya.kr.popup.domain.enums.WithdrawalStatus;
 
 import lombok.AccessLevel;
 import lombok.Getter;

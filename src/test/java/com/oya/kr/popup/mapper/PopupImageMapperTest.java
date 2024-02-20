@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.oya.kr.common.SpringApplicationTest;
-import com.oya.kr.popup.domain.Category;
-import com.oya.kr.popup.domain.DepartmentBranch;
-import com.oya.kr.popup.domain.DepartmentFloor;
+import com.oya.kr.popup.domain.enums.Category;
+import com.oya.kr.popup.domain.enums.DepartmentBranch;
+import com.oya.kr.popup.domain.enums.DepartmentFloor;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.PopupImage;

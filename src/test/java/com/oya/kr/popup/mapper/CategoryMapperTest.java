@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.oya.kr.common.SpringApplicationTest;
-import com.oya.kr.popup.domain.Category;
+import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.mapper.dto.request.CategoryMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse;
 

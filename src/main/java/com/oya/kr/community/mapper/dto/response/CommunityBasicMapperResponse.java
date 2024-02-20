@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.oya.kr.community.domain.Community;
 import com.oya.kr.community.domain.CommunityType;
-import com.oya.kr.popup.domain.Category;
+import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.user.domain.User;
 
 import lombok.Getter;

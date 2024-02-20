@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
-import com.oya.kr.popup.domain.WithdrawalStatus;
+import com.oya.kr.popup.domain.enums.WithdrawalStatus;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
