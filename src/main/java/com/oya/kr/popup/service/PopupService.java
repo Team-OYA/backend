@@ -28,9 +28,11 @@ import com.oya.kr.popup.domain.WithdrawalStatus;
 import com.oya.kr.popup.mapper.PlanMapper;
 import com.oya.kr.popup.mapper.PopupImageMapper;
 import com.oya.kr.popup.mapper.PopupMapper;
+import com.oya.kr.popup.mapper.PopupViewMapper;
 import com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
@@ -51,6 +53,7 @@ public class PopupService {
     private final PlanMapper planMapper;
     private final PopupMapper popupMapper;
     private final PopupImageMapper popupImageMapper;
+    private final PopupViewMapper popupViewMapper;
     private final S3Connector s3Connector;
 
     /**
@@ -63,8 +66,11 @@ public class PopupService {
      */
     @Transactional(readOnly = true)
     public PopupResponse findById(String email, Long popupId) {
+        User savedUser = findUserByEmail(email);
         PopupDetailMapperResponse popupMapperResponse = popupMapper.findByIdWithDate(popupId)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
+        PopupViewCreateOrUpdateMapperRequest request = new PopupViewCreateOrUpdateMapperRequest(savedUser.getId(), popupMapperResponse.getId());
+        popupViewMapper.createOrUpdatePopupView(request);
         return PopupResponse.from(popupMapperResponse);
     }
 
