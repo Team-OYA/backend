@@ -51,8 +51,8 @@ class CollectionMapperTest extends SpringApplicationTest {
 
 	@AfterEach
 	public void afterEach(){
-		collectionMapper.deleteFromUserId(collectionMapperRequest);
-		communityMapper.deleteFromUserId(collectionMapperRequest.getUserId());
+		collectionMapper.deleteByUserId(collectionMapperRequest);
+		communityMapper.deleteByUserId(collectionMapperRequest.getUserId());
 		userMapper.deleteFromUserId(collectionMapperRequest.getUserId());
 	}
 
@@ -89,7 +89,7 @@ class CollectionMapperTest extends SpringApplicationTest {
 	void saveCollection(){
 		// given
 		// when & then
-		assertThatCode(() -> collectionMapper.saveCollection(collectionMapperRequest))
+		assertThatCode(() -> collectionMapper.save(collectionMapperRequest))
 			.doesNotThrowAnyException();
 	}
 
@@ -102,8 +102,8 @@ class CollectionMapperTest extends SpringApplicationTest {
 	public void checkCollection(){
 		// given
 		// when
-		collectionMapper.saveCollection(collectionMapperRequest);
-		int result = collectionMapper.checkCollection(collectionMapperRequest);
+		collectionMapper.save(collectionMapperRequest);
+		int result = collectionMapper.check(collectionMapperRequest);
 
 		// then
 		assertEquals(1, result);
@@ -118,7 +118,7 @@ class CollectionMapperTest extends SpringApplicationTest {
 	void isDeleted(){
 		// given
 		// when
-		collectionMapper.saveCollection(collectionMapperRequest);
+		collectionMapper.save(collectionMapperRequest);
 		boolean isDeleted = collectionMapper.isDeleted(collectionMapperRequest);
 
 		// then
@@ -134,9 +134,9 @@ class CollectionMapperTest extends SpringApplicationTest {
 	void changeDelete(){
 		// given
 		// when
-		collectionMapper.saveCollection(collectionMapperRequest);
+		collectionMapper.save(collectionMapperRequest);
 		collectionMapperRequest.updateIsDeleted(collectionMapper.isDeleted(collectionMapperRequest));
-		collectionMapper.changeDelete(collectionMapperRequest);
+		collectionMapper.delete(collectionMapperRequest);
 		boolean isDeleted = collectionMapper.isDeleted(collectionMapperRequest);
 
 		// then
@@ -152,9 +152,9 @@ class CollectionMapperTest extends SpringApplicationTest {
 	void findByCollections(){
 		// given
 		// when
-		collectionMapper.saveCollection(collectionMapperRequest);
+		collectionMapper.save(collectionMapperRequest);
 		ReadCollectionsMapperRequest request = new ReadCollectionsMapperRequest(user.getId(),false,false, null, 0, 5);
-		List<CommunityBasicMapperResponse> responses = collectionMapper.findByCollections(request);
+		List<CommunityBasicMapperResponse> responses = collectionMapper.findByAll(request);
 		// then
 		assertNotNull(responses);
 	}

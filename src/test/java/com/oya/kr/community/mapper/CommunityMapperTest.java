@@ -1,26 +1,31 @@
 package com.oya.kr.community.mapper;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
-import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.community.controller.dto.request.CommunityRequest;
-import com.oya.kr.community.controller.dto.response.VoteResponse;
-import com.oya.kr.community.mapper.CommunityMapper;
 import com.oya.kr.community.domain.CommunityType;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.user.controller.dto.request.JoinRequest;
+import com.oya.kr.user.domain.User;
+import com.oya.kr.user.mapper.UserMapper;
+import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
 
 /**
  * @author 이상민
@@ -30,23 +35,78 @@ class CommunityMapperTest extends SpringApplicationTest {
 
 	@Autowired
 	private CommunityMapper communityMapper;
+	@Autowired
+	private VoteMapper voteMapper;
+	@Autowired
+	private UserMapper userMapper;
+	@Autowired
+	private CommunityViewMapper communityViewMapper;
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	private User user;
+	private long communityId;
+
+	@BeforeEach
+	public void beforeEach(){
+		user = saveUser();
+	}
+
+	@AfterEach
+	public void afterEach(){
+		communityMapper.deleteByUserId(user.getId());
+		userMapper.deleteFromUserId(user.getId());
+	}
+
+	private User saveUser(){
+		String email = "communityTest@gmail.com";
+		JoinRequest joinRequest = JoinRequest.builder()
+			.email(email)
+			.nickname("communityTest")
+			.password("password123")
+			.birthDate("19900101")
+			.gender(1)
+			.userType(0)
+			.build();
+		SignupBasicMapperRequest request = new SignupBasicMapperRequest(bCryptPasswordEncoder, joinRequest);
+		userMapper.insertAdminAndKakaoUser(request);
+		return userMapper.findByEmail(email).orElseThrow().toDomain();
+	}
+
+	private SaveBasicMapperRequest saveCommunity(String CommunityType, List<String> votes){
+		// given
+		CommunityRequest communityRequest = new CommunityRequest("test","test", "CG000001",votes);
+		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType, user.getId(), communityRequest);
+
+		// when
+		communityMapper.saveBasic(request);
+		return request;
+	}
+
+	private void saveBasicCommunity(){
+		List<String> votes = new ArrayList<>();
+		CommunityRequest communityRequest = new CommunityRequest("test","test", "CG000001",votes);
+		SaveBasicMapperRequest saveBasicMapperRequest = new SaveBasicMapperRequest(CommunityType.BASIC.getName(), user.getId(), communityRequest);
+		communityMapper.saveBasic(saveBasicMapperRequest);
+		communityId = saveBasicMapperRequest.getPostId();
+	}
 
 	/**
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	@DisplayName("커뮤니티 게시글 등록하기")
+	@DisplayName("saveBasic() : 커뮤니티 게시글 등록할 수 있다.")
 	@Test
 	void saveBasic() {
 		// given
 		List<String> votes = new ArrayList<>();
 
 		// when
-		SaveBasicMapperRequest request = save(CommunityType.BASIC.getName(), votes);
+		SaveBasicMapperRequest request = saveCommunity(CommunityType.BASIC.getName(), votes);
+		CommunityBasicMapperResponse response = communityMapper.findById(request.getPostId())
+			.orElseThrow(()-> new ApplicationException(NOT_EXIST_COMMUNITY));
 
 		// then
-		CommunityBasicMapperResponse response = communityMapper.getCommunityById(request.getPostId())
-			.orElseThrow(()-> new ApplicationException(NOT_EXIST_COMMUNITY));
 		assertAll(
 			() -> assertNotNull(response),
 			() -> assertEquals(request.getPostId(), response.getId()),
@@ -60,7 +120,7 @@ class CommunityMapperTest extends SpringApplicationTest {
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	@DisplayName("투표 등록하기")
+	@DisplayName("saveVote() : 투표 게시글 등록할 수 있다.")
 	@Test
 	void saveVote() {
 		// given
@@ -69,75 +129,48 @@ class CommunityMapperTest extends SpringApplicationTest {
 		votes.add("없다");
 
 		// when
-		SaveBasicMapperRequest request = save(CommunityType.VOTE.getName(), votes);
-		long postId = request.getPostId();
+		SaveBasicMapperRequest request = saveCommunity(CommunityType.VOTE.getName(), votes);
+		long communityId = request.getPostId();
 
 		// then
 		votes.forEach(content->
-			communityMapper.saveVote(new SaveVoteMapperRequest(content, postId))
+			assertThatCode(() -> communityMapper.saveVote(new SaveVoteMapperRequest(content, communityId)))
+				.doesNotThrowAnyException()
 		);
-	}
 
-	public SaveBasicMapperRequest save(String CommunityType, List<String> votes){
-		// given
-		long userId = 1;
-		CommunityRequest communityRequest = new CommunityRequest("test","test", "CG000001",votes);
-		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType, userId, communityRequest);
-
-		// when
-		communityMapper.saveBasic(request);
-		return request;
+		// test after
+		voteMapper.deleteByCommunityId(communityId);
 	}
 
 	/**
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	@DisplayName("투표정보를 불러올 수 있다.")
-	@Test
-	void getVoteResponse(){
-		// given
-		List<String> votes = new ArrayList<>();
-		votes.add("있다");
-		votes.add("없다");
-		SaveBasicMapperRequest request = save(CommunityType.BASIC.getName(), votes);
-
-		// when
-		List<VoteResponse> list = communityMapper.getVoteInfo(request.getPostId());
-		list.forEach(vote->{
-			boolean check = Boolean.parseBoolean(communityMapper.checkUserVote(vote.getVote_id(), request.getWriteId()));
-			vote.setChecked(check);
-		});
-	}
-
-	/**
-	 * @author 이상민
-	 * @since 2024.02.18
-	 */
-	@DisplayName("게시글을 삭제할 수 있다.")
+	@DisplayName("delete() : 커뮤니티 게시글을 삭제할 수 있다. (상태값 변경)")
 	@Test
 	void delete(){
 		// given
-		List<String> votes = new ArrayList<>();
-		SaveBasicMapperRequest request = save(CommunityType.BASIC.getName(), votes);
+		// when
+		saveBasicCommunity();
+		communityMapper.delete(communityId);
+		boolean isDeleted = communityMapper.findById(communityId).get().isDeleted();
 
-		// when & then
-		communityMapper.delete(request.getWriteId());
+		// then
+		assertTrue(isDeleted);
 	}
 
 	/**
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
-	@DisplayName("게시글 전체를 불러올 수 있다.")
+	@DisplayName("findByAll() : 게시글 전체를 불러올 수 있다.")
 	@Test
 	void findByAll(){
 		// given & when
-		List<CommunityBasicMapperResponse> responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, 1, 1));
-
+		List<CommunityBasicMapperResponse> responseList =
+			communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, 1, 1));
 		// then
 		assertNotNull(responseList);
-
 	}
 
 	/**
@@ -148,12 +181,11 @@ class CommunityMapperTest extends SpringApplicationTest {
 	@Test
 	void createOrUpdateCommunityView(){
 		// given & when
-		long userId = 1;
-		List<String> votes = new ArrayList<>();
-		SaveBasicMapperRequest request = save(CommunityType.BASIC.getName(), votes);
-
+		saveBasicCommunity();
 		// then
-		assertThatCode(() -> communityMapper.createOrUpdateCommunityView(request.getPostId(), userId))
+		assertThatCode(() -> communityViewMapper.createOrUpdateCommunityView(communityId, user.getId()))
 			.doesNotThrowAnyException();
+		// test after
+		communityViewMapper.deleteByUserId(user.getId());
 	}
 }

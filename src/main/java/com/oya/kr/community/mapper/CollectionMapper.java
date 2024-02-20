@@ -8,10 +8,10 @@ import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 
 public interface CollectionMapper {
 
-	int checkCollection(CollectionMapperRequest collectionMapperRequest);
-	void saveCollection(CollectionMapperRequest collectionMapperRequest);
+	void save(CollectionMapperRequest collectionMapperRequest);
+	int check(CollectionMapperRequest collectionMapperRequest);
 	boolean isDeleted(CollectionMapperRequest collectionMapperRequest);
-	void changeDelete(CollectionMapperRequest collectionMapperRequest);
-	List<CommunityBasicMapperResponse> findByCollections(ReadCollectionsMapperRequest readCollectionsMapperRequest);
-	void deleteFromUserId(CollectionMapperRequest collectionMapperRequest);
+	void delete(CollectionMapperRequest collectionMapperRequest);
+	List<CommunityBasicMapperResponse> findByAll(ReadCollectionsMapperRequest readCollectionsMapperRequest);
+	void deleteByUserId(CollectionMapperRequest collectionMapperRequest);
 }

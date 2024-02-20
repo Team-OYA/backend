@@ -41,7 +41,7 @@ public class VoteService {
 		if (count >= 1) {
 			throw new ApplicationException(CommunityErrorCodeList.VALID_VOTE);
 		}
-		voteMapper.checkVote(request);
+		voteMapper.save(request);
 		return "투표를 체크했습니다.";
 	}
 
@@ -54,7 +54,7 @@ public class VoteService {
 	 */
 	public String checkDelete(String email, long votedId) {
 		User loginUser = findByEmail(email);
-		voteMapper.checkVoteDeleted(new VoteCheckMapperRequest(loginUser.getId(), votedId));
+		voteMapper.deleteByVoteCheck(new VoteCheckMapperRequest(loginUser.getId(), votedId));
 		return "투표를 취소했습니다.";
 	}
 

@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.community.mapper.CollectionMapper">
 
-    <insert id="saveCollection" parameterType="collectionMapperRequest">
+    <insert id="save" parameterType="collectionMapperRequest">
         INSERT INTO COMMUNITY_COLLECTION(COMMUNITY_ID, USER_ID)
         VALUES (#{communityId}, #{userId})
     </insert>
 
-    <select id="checkCollection" parameterType="collectionMapperRequest" resultType="java.lang.Integer">
+    <select id="check" parameterType="collectionMapperRequest" resultType="java.lang.Integer">
         SELECT COUNT(ID)
         FROM COMMUNITY_COLLECTION
         WHERE COMMUNITY_ID = #{communityId} AND USER_ID = #{userId}
@@ -19,13 +19,13 @@
         WHERE COMMUNITY_ID = #{communityId} AND USER_ID = #{userId}
     </select>
 
-    <update id="changeDelete" parameterType="collectionMapperRequest">
+    <update id="delete" parameterType="collectionMapperRequest">
         UPDATE COMMUNITY_COLLECTION
         SET DELETED = #{isDeleted}
         WHERE COMMUNITY_ID = #{communityId} AND USER_ID = #{userId}
     </update>
 
-    <select id="findByCollections" parameterType="readCollectionsMapperRequest" resultType="communityBasicMapperResponse">
+    <select id="findByAll" parameterType="readCollectionsMapperRequest" resultType="communityBasicMapperResponse">
     <![CDATA[
         SELECT
             c.ID,
@@ -53,7 +53,7 @@
         ]]>
     </select>
 
-    <delete id="deleteFromUserId">
+    <delete id="deleteByUserId">
         DELETE FROM COMMUNITY_COLLECTION
         WHERE USER_ID = #{userId}
     </delete>

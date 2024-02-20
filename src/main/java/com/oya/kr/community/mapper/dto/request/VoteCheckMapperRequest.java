@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class VoteCheckMapperRequest {
+
 	private final long userId;
 	private final long voteId;
 }

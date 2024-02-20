@@ -9,15 +9,39 @@
           AND VOTE_ID = #{voteId}
     </select>
 
-    <insert id="checkVote" parameterType="voteCheckMapperRequest">
+    <insert id="save" parameterType="voteCheckMapperRequest">
         INSERT INTO VOTE_CHECK(VOTE_ID, SELECTED_USER_ID)
         VALUES(#{voteId}, #{userId})
     </insert>
 
-    <delete id="checkVoteDeleted" parameterType="voteCheckMapperRequest">
+    <delete id="deleteByVoteCheck" parameterType="voteCheckMapperRequest">
         DELETE VOTE_CHECK
         WHERE SELECTED_USER_ID = #{userId}
           AND VOTE_ID = #{voteId}
     </delete>
+
+    <delete id="deleteByCommunityId">
+        DELETE FROM VOTE
+        WHERE POST_ID = #{communityId}
+    </delete>
+
+    <select id="findByPostId" resultType="voteResponse">
+        SELECT
+            VOTE.ID AS vote_id,
+            VOTE.CONTENT AS content,
+            VOTE.CREATED_DATE AS voteCreatedDate,
+            COUNT(VOTE_CHECK.VOTE_ID) AS voteSum
+        FROM VOTE
+                 LEFT JOIN VOTE_CHECK ON VOTE.ID = VOTE_CHECK.VOTE_ID
+        WHERE POST_ID = #{postId}
+        GROUP BY VOTE.ID, VOTE.CREATED_DATE, VOTE_CHECK.VOTE_ID, VOTE.CONTENT
+    </select>
+
+    <select id="findByVoteIdAndUserId" resultType="java.lang.String">
+        SELECT
+            CASE WHEN COUNT(*) > 0 THEN 'true' ELSE 'false' END AS Result
+        FROM VOTE_CHECK
+        WHERE VOTE_ID = #{voteId} AND SELECTED_USER_ID = #{userId}
+    </select>
 
 </mapper>
