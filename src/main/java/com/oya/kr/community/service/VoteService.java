@@ -1,6 +1,9 @@
 package com.oya.kr.community.service;
 
+import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
+
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,8 +39,9 @@ public class VoteService {
 	 */
 	public String check(String email, long votedId) {
 		User loginUser = findByEmail(email);
+		voteMapper.findById(votedId).orElseThrow(() -> new ApplicationException(NOT_EXIST_VOTE));
 		VoteCheckMapperRequest request = new VoteCheckMapperRequest(loginUser.getId(), votedId);
-		int count = voteMapper.findById(request);
+		int count = voteMapper.findByUserIdAndVoteId(request);
 		if (count >= 1) {
 			throw new ApplicationException(CommunityErrorCodeList.VALID_VOTE);
 		}
