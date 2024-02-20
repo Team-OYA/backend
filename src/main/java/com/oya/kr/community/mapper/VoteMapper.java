@@ -8,6 +8,10 @@ import org.apache.ibatis.annotations.Param;
 import com.oya.kr.community.controller.dto.response.VoteResponse;
 import com.oya.kr.community.mapper.dto.request.VoteCheckMapperRequest;
 
+/**
+ * @author 이상민
+ * @since 2024.02.17
+ */
 public interface VoteMapper {
 
 	int findByUserIdAndVoteId(VoteCheckMapperRequest request);

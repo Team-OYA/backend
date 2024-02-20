@@ -4,6 +4,7 @@ import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -67,8 +68,8 @@ public class CommunityService {
 	/**
 	 * 커뮤니티 게시글(일반, 투표) 등록
 	 *
-	 * @param email,  communityRequest
-	 * @param images
+	 * @param email,  communityRequest, images
+	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -111,7 +112,7 @@ public class CommunityService {
 	 * 커뮤니티 게시글 상세 조회
 	 *
 	 * @param email, communityId
-	 * @return CommunityResponse
+	 * @return CommunityDetailResponse
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -150,7 +151,7 @@ public class CommunityService {
 	 * 투표 정보 조회
 	 *
 	 * @param type, loginUser, communityId
-	 * @return CommunityResponse
+	 * @return List<VoteResponse>
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -188,9 +189,8 @@ public class CommunityService {
 	/**
 	 * 커뮤니티 게시글 리스트 조회
 	 *
-	 * @param email
-	 * @param pagination
-	 * @return String
+	 * @param type, email, pagination
+	 * @return CommunityResponse
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -233,6 +233,7 @@ public class CommunityService {
 	/**
 	 * 커뮤니티 게시글 스크랩
 	 *
+	 * @param email, communityId
 	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.20
@@ -262,21 +263,17 @@ public class CommunityService {
 	/**
 	 * 카테고리 별 커뮤니티 게시글 분석 정보 조회
 	 *
-	 * @return String
+	 * @return StatisticsResponse
 	 * @author 이상민
 	 * @since 2024.02.20
 	 */
 	public StatisticsResponse statistics() {
 		List<StatisticsResponseMapper> response = communityMapper.statistics();
-
 		Map<String, Integer> categoryCounts = response.stream()
 			.collect(Collectors.toMap(StatisticsResponseMapper::getCategoryCode, StatisticsResponseMapper::getCount));
-
-		List<StatisticsDetailResponse> list = new ArrayList<>();
-		for(Category category : Category.values()){
-			String code = category.getCode();
-			list.add(new StatisticsDetailResponse(code, categoryCounts.getOrDefault(code, 0)));
-		}
-		return new StatisticsResponse(list);
+		return new StatisticsResponse(
+			Arrays.stream(Category.values())
+				.map(category -> new StatisticsDetailResponse(category.getCode(), categoryCounts.getOrDefault(category.getCode(), 0)))
+				.collect(Collectors.toUnmodifiableList()));
 	}
 }

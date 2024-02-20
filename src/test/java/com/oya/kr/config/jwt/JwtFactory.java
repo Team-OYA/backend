@@ -13,6 +13,10 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * @author 이상민
+ * @since 2024.02.14
+ */
 @Getter
 public class JwtFactory {
 
@@ -33,6 +37,10 @@ public class JwtFactory {
 		return JwtFactory.builder().build();
 	}
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	public String createToken(JwtProperties jwtProperties) {
 		return Jwts.builder()
 			.setSubject(subject)

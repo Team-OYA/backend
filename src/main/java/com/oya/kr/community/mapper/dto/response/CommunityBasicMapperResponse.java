@@ -10,6 +10,10 @@ import com.oya.kr.user.domain.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.19
+ */
 @Getter
 @RequiredArgsConstructor
 public class CommunityBasicMapperResponse {

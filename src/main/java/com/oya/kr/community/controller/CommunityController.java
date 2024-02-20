@@ -39,7 +39,7 @@ public class CommunityController {
 	 * 커뮤니티 게시글 등록 (type : basic, vote) - 사진 추가
 	 *
 	 * @param communityRequest, type
-	 * @return String
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -55,7 +55,8 @@ public class CommunityController {
 	/**
 	 * 커뮤니티 게시글 상세 조회
 	 *
-	 * @return CommunityResponse
+	 * @param communityId
+	 * @return ResponseEntity<ApplicationResponse<CommunityDetailResponse>>
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -68,7 +69,8 @@ public class CommunityController {
 	/**
 	 * 커뮤니티 게시글 삭제
 	 *
-	 * @return String
+	 * @param communityId
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -80,7 +82,8 @@ public class CommunityController {
 	/**
 	 * 커뮤니티 게시글 리스트 조회 (sort : all, business, user, collections)
 	 *
-	 * @return String
+	 * @param type, pageNo, amount
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -93,7 +96,8 @@ public class CommunityController {
 	/**
 	 * 커뮤니티 게시글 스크랩 & 스크랩 취소
 	 *
-	 * @return String
+	 * @param communityId
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.19
 	 */
@@ -105,7 +109,7 @@ public class CommunityController {
 	/**
 	 * 카테고리 별 커뮤니티 게시글 분석 정보 조회
 	 *
-	 * @return String
+	 * @return ResponseEntity<ApplicationResponse<StatisticsResponse>>
 	 * @author 이상민
 	 * @since 2024.02.20
 	 */

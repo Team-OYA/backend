@@ -24,6 +24,10 @@ import com.oya.kr.global.jwt.TokenProvider;
 
 import lombok.extern.java.Log;
 
+/**
+ * @author 이상민
+ * @since 2024.02.14
+ */
 @Log
 @WebAppConfiguration
 @ExtendWith(SpringExtension.class)
@@ -36,6 +40,10 @@ public class TokenProviderTest {
 	@Autowired
 	private JwtProperties jwtProperties;
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	@DisplayName("generateToken() : 유저 정보와 만료 기간을 전달해 토큰을 만들 수 있다.")
 	@Test
 	void generateToken() {
@@ -57,6 +65,10 @@ public class TokenProviderTest {
 		// assertEquals(userId, user.getId());
 	}
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	@DisplayName("validToken_invalidToken() : 만료된 토큰일 때 유효성 검증에 실패한다.")
 	@Test
 	void validToken_invalidToken() {
@@ -71,6 +83,10 @@ public class TokenProviderTest {
 			.isInstanceOf(ApplicationException.class);
 	}
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	@DisplayName("getAuthentication() : 토큰 기반으로 인증 정보를 가져올 수 있다.")
 	@Test
 	void getAuthentication() {
@@ -88,6 +104,10 @@ public class TokenProviderTest {
 		assertEquals(((UserDetails)authentication.getPrincipal()).getUsername(), email);
 	}
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	@DisplayName("getUserId() : 토큰으로 유저 ID를 가져올 수 있다.")
 	@Test
 	void getUserId() {

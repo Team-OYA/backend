@@ -29,7 +29,7 @@ public class VoteController {
 	 * 투표 체크
 	 *
 	 * @param voteId
-	 * @return CommunityResponse
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -43,7 +43,7 @@ public class VoteController {
 	 * 투표 체크 취소
 	 *
 	 * @param voteId
-	 * @return CommunityResponse
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */

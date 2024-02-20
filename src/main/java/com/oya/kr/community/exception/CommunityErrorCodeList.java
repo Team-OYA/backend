@@ -6,6 +6,10 @@ import com.oya.kr.global.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.19
+ */
 @RequiredArgsConstructor
 public enum CommunityErrorCodeList implements ErrorCode {
 

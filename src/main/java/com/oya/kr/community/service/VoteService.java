@@ -34,6 +34,7 @@ public class VoteService {
 	 * 투표 체크
 	 *
 	 * @param email, votedId
+	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -53,6 +54,7 @@ public class VoteService {
 	 * 투표 체크 취소
 	 *
 	 * @param email, votedId
+	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */

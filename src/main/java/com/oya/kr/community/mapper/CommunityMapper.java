@@ -11,6 +11,10 @@ import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 
+/**
+ * @author 이상민
+ * @since 2024.02.17
+ */
 public interface CommunityMapper {
 
 	void saveBasic(SaveBasicMapperRequest saveBasicMapperRequest);

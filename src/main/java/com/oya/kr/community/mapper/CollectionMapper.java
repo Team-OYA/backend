@@ -6,6 +6,10 @@ import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 
+/**
+ * @author 이상민
+ * @since 2024.02.20
+ */
 public interface CollectionMapper {
 
 	void save(CollectionMapperRequest collectionMapperRequest);

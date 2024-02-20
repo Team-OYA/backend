@@ -15,6 +15,10 @@ import com.oya.kr.common.SpringApplicationTest;
 
 import lombok.extern.java.Log;
 
+/**
+ * @author 이상민
+ * @since 2024.02.14
+ */
 @Log
 public class RootConfigTests extends SpringApplicationTest {
 
@@ -33,6 +37,10 @@ public class RootConfigTests extends SpringApplicationTest {
 		});
 	}
 
+	/**
+	 * @author 이상민
+	 * @since 2024.02.12
+	 */
 	@Test
 	public void testMyBatis() {
 		assertDoesNotThrow(() -> {
