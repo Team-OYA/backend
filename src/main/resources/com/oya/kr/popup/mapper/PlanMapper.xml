@@ -34,6 +34,7 @@
         UPDATE PLAN
         SET ENTRANCE_STATUS = #{entranceStatus}
         WHERE ID = #{id}
+            AND MODIFIED_DATE = sysdate
     </update>
 
     <delete id="deleteAll">
