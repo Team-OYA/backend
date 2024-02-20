@@ -1,9 +1,13 @@
 package com.oya.kr.community.service;
 
+import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,29 +18,39 @@ import org.springframework.web.multipart.MultipartFile;
 import com.oya.kr.community.controller.dto.request.CommunityRequest;
 import com.oya.kr.community.controller.dto.response.CommunityDetailResponse;
 import com.oya.kr.community.controller.dto.response.CommunityResponse;
+import com.oya.kr.community.controller.dto.response.StatisticsDetailResponse;
+import com.oya.kr.community.controller.dto.response.StatisticsResponse;
 import com.oya.kr.community.controller.dto.response.VoteResponse;
+import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.community.exception.CommunityErrorCodeList;
 import com.oya.kr.community.mapper.CommunityMapper;
+import com.oya.kr.community.mapper.CollectionMapper;
+import com.oya.kr.community.mapper.CommunityViewMapper;
+import com.oya.kr.community.mapper.VoteMapper;
+import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
+import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.domain.Community;
-import com.oya.kr.community.domain.CommunityType;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
+import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.StorageConnector;
+import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
+import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
 /**
  * @author 이상민
  * @since 2024.02.17
  */
-@RequiredArgsConstructor
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Service
 @Transactional
 public class CommunityService {
@@ -45,14 +59,17 @@ public class CommunityService {
 
 	private final CommunityMapper communityMapper;
 	private final UserMapper userMapper;
+	private final VoteMapper voteMapper;
+	private final CommunityViewMapper communityViewMapper;
+	private final CollectionMapper collectionMapper;
 
 	private final StorageConnector s3Connector;
 
 	/**
 	 * 커뮤니티 게시글(일반, 투표) 등록
 	 *
-	 * @param email,  communityRequest
-	 * @param images
+	 * @param email,  communityRequest, images
+	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
@@ -63,6 +80,12 @@ public class CommunityService {
 		saveCommunityImages(request.getPostId(), images);
 
 		if(communityType.equals("vote")) {
+			if(communityRequest.getVotes().isEmpty()){
+				throw new ApplicationException(DOES_NOT_EXIST_VOTES);
+			}
+			if(communityRequest.getVotes().size() == 1){
+				throw new ApplicationException(ONLY_ONE_VOTES);
+			}
 			long communityId = request.getPostId();
 			communityRequest.getVotes().forEach(content ->
 				communityMapper.saveVote(new SaveVoteMapperRequest(content, communityId))
@@ -81,7 +104,7 @@ public class CommunityService {
 	private void saveCommunityImages(long communityId, List<MultipartFile> images){
 		for (MultipartFile image : images) {
 			String imageUrl = s3Connector.save(image);
-			communityMapper.saveCommunityImage(imageUrl, communityId);
+			communityMapper.saveImage(imageUrl, communityId);
 		}
 	}
 
@@ -89,17 +112,17 @@ public class CommunityService {
 	 * 커뮤니티 게시글 상세 조회
 	 *
 	 * @param email, communityId
-	 * @return CommunityResponse
+	 * @return CommunityDetailResponse
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
 	public CommunityDetailResponse read(String email, long communityId) {
 		User loginUser = findByEmail(email);
-		communityMapper.createOrUpdateCommunityView(communityId, loginUser.getId()); // 조회수 증가
+		communityViewMapper.createOrUpdateCommunityView(communityId, loginUser.getId()); // 조회수 증가
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
 
 		User writeUser = findByUserId(response.getWriteId());
-		List<String> imageList = communityMapper.findByCommunityId(response.getId());
+		List<String> imageList = communityMapper.findByImage(response.getId());
 		Community community = response.toDomain(writeUser);
 		int countView = response.getCountView();
 
@@ -116,7 +139,7 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	private CommunityBasicMapperResponse getCommunityResponseOrThrow(long communityId) {
-		CommunityBasicMapperResponse response = communityMapper.getCommunityById(communityId)
+		CommunityBasicMapperResponse response = communityMapper.findById(communityId)
 			.orElseThrow(() -> new ApplicationException(CommunityErrorCodeList.NOT_EXIST_COMMUNITY));
 		if (response.isDeleted()) {
 			throw new ApplicationException(CommunityErrorCodeList.DELETED_COMMUNITY);
@@ -128,15 +151,15 @@ public class CommunityService {
 	 * 투표 정보 조회
 	 *
 	 * @param type, loginUser, communityId
-	 * @return CommunityResponse
+	 * @return List<VoteResponse>
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
 	private List<VoteResponse> getVoteList(String type, User loginUser, long communityId) {
 		if (type.equals(CommunityType.VOTE.getName())) {
-			List<VoteResponse> voteResponseList = communityMapper.getVoteInfo(communityId);
+			List<VoteResponse> voteResponseList = voteMapper.findByPostId(communityId);
 			voteResponseList.forEach(VoteResponse -> {
-				boolean check = Boolean.parseBoolean(communityMapper.checkUserVote(VoteResponse.getVote_id(), loginUser.getId()));
+				boolean check = Boolean.parseBoolean(voteMapper.findByVoteIdAndUserId(VoteResponse.getVote_id(), loginUser.getId()));
 				VoteResponse.setChecked(check);
 			});
 			return voteResponseList;
@@ -145,7 +168,7 @@ public class CommunityService {
 	}
 
 	/**
-	 * 커뮤니티 게시글 조회
+	 * 커뮤니티 게시글 삭제
 	 *
 	 * @param email, communityId
 	 * @return String
@@ -155,6 +178,7 @@ public class CommunityService {
 	public String delete(String email, long communityId) {
 		User loginUser = findByEmail(email);
 		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
+
 		if (loginUser.getId() != response.getWriteId()) {
 			throw new ApplicationException(CommunityErrorCodeList.INVALID_COMMUNITY);
 		}
@@ -165,17 +189,19 @@ public class CommunityService {
 	/**
 	 * 커뮤니티 게시글 리스트 조회
 	 *
-	 * @param email
-	 * @param pagination
-	 * @return String
+	 * @param type, email, pagination
+	 * @return CommunityResponse
 	 * @author 이상민
 	 * @since 2024.02.18
 	 */
+	@Transactional(readOnly = true)
 	public CommunityResponse reads(String type,String email, Pagination pagination) {
 		User loginUser = findByEmail(email);
 		List<CommunityBasicMapperResponse> responseList;
 		if(type.equals("all")){
 			responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
+		}else if(type.equals("collections")){
+			responseList = collectionMapper.findByAll(new ReadCollectionsMapperRequest(loginUser.getId(),false,false, null, pagination.getPageNo(), pagination.getAmount()));
 		}else{
 			String communityType = CommunityType.from(type).getName();
 			responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, communityType, pagination.getPageNo(), pagination.getAmount()));
@@ -202,5 +228,52 @@ public class CommunityService {
 		UserMapperResponse userMapperResponse = userMapper.findByEmail(email)
 			.orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
 		return userMapperResponse.toDomain();
+	}
+
+	/**
+	 * 커뮤니티 게시글 스크랩
+	 *
+	 * @param email, communityId
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.20
+	 */
+	public String saveCollection(String email, long communityId) {
+		User loginUser = findByEmail(email);
+		CollectionMapperRequest request = new CollectionMapperRequest(communityId, loginUser.getId());
+		int checkCollection = collectionMapper.check(request);
+		if(checkCollection == 0){
+			collectionMapper.save(request);
+			return "스크랩 완료되었습니다.";
+		}else if(checkCollection == 1){
+			boolean isDeleted = collectionMapper.isDeleted(request);
+			request.updateIsDeleted(isDeleted);
+			if(!isDeleted){
+				collectionMapper.delete(request);
+				return "스크랩 취소되었습니다.";
+			}else{
+				collectionMapper.delete(request);
+				return "스크랩 완료되었습니다.";
+			}
+		}else{
+			throw new ApplicationException(FAIL_COMMUNITY_COLLECTION);
+		}
+	}
+
+	/**
+	 * 카테고리 별 커뮤니티 게시글 분석 정보 조회
+	 *
+	 * @return StatisticsResponse
+	 * @author 이상민
+	 * @since 2024.02.20
+	 */
+	public StatisticsResponse statistics() {
+		List<StatisticsResponseMapper> response = communityMapper.statistics();
+		Map<String, Integer> categoryCounts = response.stream()
+			.collect(Collectors.toMap(StatisticsResponseMapper::getCategoryCode, StatisticsResponseMapper::getCount));
+		return new StatisticsResponse(
+			Arrays.stream(Category.values())
+				.map(category -> new StatisticsDetailResponse(category.getCode(), categoryCounts.getOrDefault(category.getCode(), 0)))
+				.collect(Collectors.toUnmodifiableList()));
 	}
 }

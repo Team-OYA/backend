@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.community.mapper.CommunityViewMapper">
+
+    <!-- @author 이상민 -->
+    <!-- @since 2024.02.19-->
+
+    <update id="createOrUpdateCommunityView">
+        <![CDATA[
+        BEGIN
+        MERGE INTO COMMUNITY_VIEW cv
+            USING (SELECT 1 FROM DUAL) dummy
+            ON (cv.COMMUNITY_ID = #{communityId} AND cv.USER_ID = #{userId})
+            WHEN MATCHED THEN
+                UPDATE SET
+                    MODIFIED_DATE = SYSTIMESTAMP
+            WHEN NOT MATCHED THEN
+                INSERT (COMMUNITY_ID,USER_ID)
+                    VALUES (#{communityId},#{userId});
+        COMMIT;
+        END;
+        ]]>
+    </update>
+
+    <delete id="deleteByUserId">
+        DELETE FROM COMMUNITY_VIEW
+        WHERE USER_ID = #{userId}
+    </delete>
+</mapper>

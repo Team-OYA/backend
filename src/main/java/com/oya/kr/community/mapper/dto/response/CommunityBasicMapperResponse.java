@@ -3,13 +3,17 @@ package com.oya.kr.community.mapper.dto.response;
 import java.time.LocalDateTime;
 
 import com.oya.kr.community.domain.Community;
-import com.oya.kr.community.domain.CommunityType;
+import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.user.domain.User;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.19
+ */
 @Getter
 @RequiredArgsConstructor
 public class CommunityBasicMapperResponse {

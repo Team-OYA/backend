@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.community.mapper.CommunityMapper">
 
+    <!-- @author 이상민 -->
+    <!-- @since 2024.02.17-->
+
     <insert id="saveBasic" parameterType="saveBasicMapperRequest">
         INSERT INTO COMMUNITY(TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE)
         VALUES (#{title},
@@ -20,18 +23,8 @@
         VALUES (#{content},#{postId})
     </insert>
 
-    <select id="getCommunityById" resultType="communityBasicMapperResponse">
-        SELECT
-            c.ID,
-            TITLE,
-            DESCRIPTION,
-            COMMUNITY_TYPE,
-            WRITE_ID,
-            CATEGORY_CODE,
-            c.CREATED_DATE,
-            c.MODIFIED_DATE,
-            c.DELETED,
-            COUNT(cv.COMMUNITY_ID) as countView
+    <select id="findById" resultType="communityBasicMapperResponse">
+        <include refid="selecCommunity" />
         FROM
             COMMUNITY c
                 LEFT JOIN COMMUNITY_VIEW cv ON c.ID = cv.COMMUNITY_ID
@@ -41,44 +34,9 @@
             c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
     </select>
 
-    <select id="getVoteInfo" resultType="voteResponse">
-        SELECT
-            VOTE.ID AS vote_id,
-            VOTE.CONTENT AS content,
-            VOTE.CREATED_DATE AS voteCreatedDate,
-            COUNT(VOTE_CHECK.VOTE_ID) AS voteSum
-        FROM VOTE
-                 LEFT JOIN VOTE_CHECK ON VOTE.ID = VOTE_CHECK.VOTE_ID
-        WHERE POST_ID = #{postId}
-        GROUP BY VOTE.ID, VOTE.CREATED_DATE, VOTE_CHECK.VOTE_ID, VOTE.CONTENT
-    </select>
-
-    <select id="checkUserVote" resultType="java.lang.String">
-        SELECT
-            CASE WHEN COUNT(*) > 0 THEN 'true' ELSE 'false' END AS Result
-        FROM VOTE_CHECK
-        WHERE VOTE_ID = #{voteId} AND SELECTED_USER_ID = #{userId}
-    </select>
-
-    <update id="delete">
-        UPDATE COMMUNITY
-        SET DELETED = '1'
-        WHERE ID = #{communityId}
-    </update>
-
     <select id="findByAll" parameterType="readCommunityMapperRequest" resultType="communityBasicMapperResponse">
-    <![CDATA[
-        SELECT
-            c.ID,
-            TITLE,
-            DESCRIPTION,
-            COMMUNITY_TYPE,
-            WRITE_ID,
-            CATEGORY_CODE,
-            c.CREATED_DATE,
-            c.MODIFIED_DATE,
-            c.DELETED,
-            COUNT(cv.COMMUNITY_ID) as countView
+        <include refid="selecCommunity" />
+        <![CDATA[
         FROM
             COMMUNITY c
                 LEFT JOIN COMMUNITY_VIEW cv ON c.ID = cv.COMMUNITY_ID
@@ -87,12 +45,39 @@
         GROUP BY
             c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
         ORDER BY MODIFIED_DATE DESC
-        OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
             ]]>
+        <include refid="offsetForPaging" />
     </select>
 
-    <select id="findByType" parameterType="readCommunityMapperRequest" resultType="communityBasicMapperResponse">
-        <![CDATA[
+    <update id="delete">
+        UPDATE COMMUNITY
+        SET DELETED = '1'
+        WHERE ID = #{communityId}
+    </update>
+
+    <delete id="deleteByUserId">
+        DELETE FROM COMMUNITY
+        WHERE WRITE_ID = #{userId}
+    </delete>
+
+    <insert id="saveImage">
+        INSERT INTO COMMUNITY_IMAGE (URL, COMMUNITY_ID)
+        VALUES (#{imageUrl}, #{communityId})
+    </insert>
+
+    <select id="findByImage">
+        SELECT URL
+        FROM COMMUNITY_IMAGE
+        WHERE COMMUNITY_ID = #{communityId}
+    </select>
+
+    <select id="statistics" resultType="statisticsResponseMapper">
+        SELECT CATEGORY_CODE, COUNT(CATEGORY_CODE)
+        FROM COMMUNITY
+        GROUP BY CATEGORY_CODE
+    </select>
+
+    <sql id="selecCommunity">
         SELECT
             c.ID,
             TITLE,
@@ -104,46 +89,10 @@
             c.MODIFIED_DATE,
             c.DELETED,
             COUNT(cv.COMMUNITY_ID) as countView
-        FROM
-            COMMUNITY c
-                LEFT JOIN USERS u on c.WRITE_ID = u.ID
-                LEFT JOIN COMMUNITY_VIEW cv ON c.ID = cv.COMMUNITY_ID
-        WHERE
-            c.DELETED = #{deleted}
-          AND u.USER_TYPE = #{userType}
-        GROUP BY
-            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
-        ORDER BY c.MODIFIED_DATE DESC
+    </sql>
+
+    <sql id="offsetForPaging">
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
-        ]]>
-    </select>
-
-    <update id="createOrUpdateCommunityView">
-        <![CDATA[
-        BEGIN
-        MERGE INTO COMMUNITY_VIEW cv
-            USING (SELECT 1 FROM DUAL) dummy
-            ON (cv.COMMUNITY_ID = #{communityId} AND cv.USER_ID = #{userId})
-            WHEN MATCHED THEN
-                UPDATE SET
-                    MODIFIED_DATE = SYSTIMESTAMP
-            WHEN NOT MATCHED THEN
-                INSERT (COMMUNITY_ID,USER_ID)
-                    VALUES (#{communityId},#{userId});
-        COMMIT;
-        END;
-        ]]>
-    </update>
-
-    <insert id="saveCommunityImage">
-        INSERT INTO COMMUNITY_IMAGE (URL, COMMUNITY_ID)
-        VALUES (#{imageUrl}, #{communityId})
-    </insert>
-
-    <select id="findByCommunityId">
-        SELECT URL
-        FROM COMMUNITY_IMAGE
-        WHERE COMMUNITY_ID = #{communityId}
-    </select>
+    </sql>
 
 </mapper>

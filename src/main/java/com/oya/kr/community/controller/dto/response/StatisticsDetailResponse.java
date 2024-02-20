@@ -1,17 +1,16 @@
 package com.oya.kr.community.controller.dto.response;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
  * @author 이상민
- * @since 2024.02.17
+ * @since 2024.02.20
  */
 @Getter
 @RequiredArgsConstructor
-public class CommunityResponse {
+public class StatisticsDetailResponse {
 
-	private final List<CommunityDetailResponse> communityDetailResponseList;
+	private final String categoryCode;
+	private final int count;
 }

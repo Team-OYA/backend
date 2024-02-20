@@ -5,13 +5,15 @@ import lombok.RequiredArgsConstructor;
 
 /**
  * @author 이상민
- * @since 2024.02.19
+ * @since 2024.02.20
  */
 @Getter
 @RequiredArgsConstructor
-public class ReadCommunityMapperRequest {
+public class ReadCollectionsMapperRequest {
 
-	private final boolean deleted;
+	private final long userId;
+	private final boolean collectionDeleted;
+	private final boolean communityDeleted;
 	private final String userType;
 	private final int pageNo;
 	private final int amount;

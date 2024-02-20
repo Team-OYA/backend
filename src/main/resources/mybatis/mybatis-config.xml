@@ -34,6 +34,10 @@
         <typeAlias type="com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest" alias="saveVoteMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.VoteCheckMapperRequest" alias="voteCheckMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest" alias="readCommunityMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest" alias="readCollectionsMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest" alias="readCollectionsMapperRequest"/>
 
         <!-- global -->
 
@@ -49,15 +53,15 @@
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest" alias="signupBasicMapperRequest"/>
-      
+
 
         <!-- mapper response -->
+
 
         <!-- community -->
         <typeAlias type="com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse" alias="communityBasicMapperResponse"/>
         <typeAlias type="com.oya.kr.community.controller.dto.response.VoteResponse" alias="voteResponse"/>
-
-        <!-- global -->
+        <typeAlias type="com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper" alias="statisticsResponseMapper"/>
 
         <!-- popup -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse" alias="categoryMapperResponse"/>

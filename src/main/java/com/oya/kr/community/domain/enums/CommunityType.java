@@ -1,4 +1,4 @@
-package com.oya.kr.community.domain;
+package com.oya.kr.community.domain.enums;
 
 import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.springframework.stereotype.Component;
 
+import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.global.domain.Base;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.user.domain.User;

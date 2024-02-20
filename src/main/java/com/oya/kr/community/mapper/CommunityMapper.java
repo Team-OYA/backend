@@ -5,33 +5,25 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 
-import com.oya.kr.community.controller.dto.response.VoteResponse;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
+import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 
+/**
+ * @author 이상민
+ * @since 2024.02.17
+ */
 public interface CommunityMapper {
 
 	void saveBasic(SaveBasicMapperRequest saveBasicMapperRequest);
-
-	Optional<CommunityBasicMapperResponse> getCommunityById(long communityId);
-
 	void saveVote(SaveVoteMapperRequest saveVoteMapperRequest);
-
-	List<VoteResponse> getVoteInfo(@Param("postId") long postId);
-
-	String checkUserVote(@Param("voteId") Long voteId, @Param("userId") Long userId);
-
-	void delete(long communityId);
-
+	Optional<CommunityBasicMapperResponse> findById(long communityId);
 	List<CommunityBasicMapperResponse> findByAll(ReadCommunityMapperRequest readCommunityMapperRequest);
-
-	List<CommunityBasicMapperResponse> findByType(ReadCommunityMapperRequest readCommunityMapperRequest);
-
-	void createOrUpdateCommunityView(@Param("communityId") Long communityId, @Param("userId") Long userId);
-
-	void saveCommunityImage(@Param("imageUrl") String imageUrl, @Param("communityId") long communityId);
-
-	List<String> findByCommunityId(long communityId);
+	void delete(long communityId);
+	void deleteByUserId(Long userId);
+	void saveImage(@Param("imageUrl") String imageUrl, @Param("communityId") long communityId);
+	List<String> findByImage(long communityId);
+	List<StatisticsResponseMapper> statistics();
 }

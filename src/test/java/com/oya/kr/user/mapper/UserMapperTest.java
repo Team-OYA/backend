@@ -13,6 +13,10 @@ import com.oya.kr.user.controller.dto.response.KakaoInfo;
 import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 
+/**
+ * @author 이상민
+ * @since 2024.02.14
+ */
 class UserMapperTest extends SpringApplicationTest {
 
 	@Autowired
