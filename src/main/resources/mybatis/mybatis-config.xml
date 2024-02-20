@@ -14,11 +14,30 @@
     <typeAliases>
 
         <!-- domain -->
+        <typeAlias alias="LocalDate" type="java.time.LocalDate"/>
+
+
+        <!-- community -->
+
+        <!-- global -->
+
+        <!-- popup -->
         <typeAlias type="com.oya.kr.popup.domain.Category" alias="category"/>
 
+        <!-- user -->
+
+
         <!-- mapper request -->
-        <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
-        <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest" alias="signupBasicMapperRequest"/>
+
+        <!-- community -->
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest" alias="saveBasicMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest" alias="saveVoteMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.VoteCheckMapperRequest" alias="voteCheckMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest" alias="readCommunityMapperRequest"/>
+
+        <!-- global -->
+
+        <!-- popup -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.CategoryMapperRequest" alias="categoryRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest" alias="planSaveMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest" alias="planUpdateEntranceStatusMapperRequest"/>
@@ -26,21 +45,27 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest" alias="popupImageSaveMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest" alias="popupSearchRequest"/>
 
-        <typeAlias type="com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest" alias="saveBasicMapperRequest"/>
-        <typeAlias type="com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest" alias="saveVoteMapperRequest"/>
-        <typeAlias type="com.oya.kr.community.mapper.dto.request.VoteCheckMapperRequest" alias="voteCheckMapperRequest"/>
-        <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest" alias="readCommunityMapperRequest"/>
+        <!-- user -->
+        <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
+        <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest" alias="signupBasicMapperRequest"/>
+
 
         <!-- mapper response -->
-        <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
+
+        <!-- community -->
+        <typeAlias type="com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse" alias="communityBasicMapperResponse"/>
+        <typeAlias type="com.oya.kr.community.controller.dto.response.VoteResponse" alias="voteResponse"/>
+
+        <!-- global -->
+
+        <!-- popup -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse" alias="categoryMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanMapperResponse" alias="planMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupMapperResponse" alias="popupMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse" alias="popupDetailMapperResponse"/>
-        <typeAlias type="com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse" alias="communityBasicMapperResponse"/>
-        <typeAlias type="com.oya.kr.community.controller.dto.response.VoteResponse" alias="voteResponse"/>
 
-        <typeAlias alias="LocalDate" type="java.time.LocalDate"/>
+        <!-- user -->
+        <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
 
     </typeAliases>
 </configuration>
