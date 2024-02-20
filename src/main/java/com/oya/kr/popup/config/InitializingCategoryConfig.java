@@ -5,8 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 
 import com.oya.kr.popup.domain.enums.Category;
-import com.oya.kr.popup.mapper.CategoryMapper;
-import com.oya.kr.popup.mapper.dto.request.CategoryMapperRequest;
+import com.oya.kr.popup.repository.CategoryRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -18,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class InitializingCategoryConfig implements ApplicationListener<ContextRefreshedEvent> {
 
-	private final CategoryMapper categoryMapper;
+	private final CategoryRepository categoryRepository;
 
 	/**
 	 * 어플리케이션 실행 시 팝업스토어 카테고리 정보 초기화
@@ -30,10 +29,7 @@ public class InitializingCategoryConfig implements ApplicationListener<ContextRe
 	@Override
 	public void onApplicationEvent(ContextRefreshedEvent event) {
 		for (Category category : Category.values()) {
-			CategoryMapperRequest request = new CategoryMapperRequest(category.getName());
-			if (categoryMapper.findByName(request.getName()).isEmpty()) {
-				categoryMapper.save(request);
-			}
+			categoryRepository.save(category.getName());
 		}
 	}
 }
