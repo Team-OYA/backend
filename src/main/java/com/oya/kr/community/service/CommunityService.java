@@ -19,6 +19,7 @@ import com.oya.kr.community.controller.dto.response.VoteResponse;
 import com.oya.kr.community.exception.CommunityErrorCodeList;
 import com.oya.kr.community.mapper.CommunityMapper;
 import com.oya.kr.community.mapper.CollectionMapper;
+import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
@@ -180,6 +181,8 @@ public class CommunityService {
 		List<CommunityBasicMapperResponse> responseList;
 		if(type.equals("all")){
 			responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
+		}else if(type.equals("collections")){
+			responseList = collectionMapper.findByCollections(new ReadCollectionsMapperRequest(loginUser.getId(),false,false, null, pagination.getPageNo(), pagination.getAmount()));
 		}else{
 			String communityType = CommunityType.from(type).getName();
 			responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, communityType, pagination.getPageNo(), pagination.getAmount()));

@@ -77,7 +77,7 @@ public class CommunityController {
 	}
 
 	/**
-	 * 커뮤니티 게시글 리스트 조회 (sort : all, business, user)
+	 * 커뮤니티 게시글 리스트 조회 (sort : all, business, user, collections)
 	 *
 	 * @return String
 	 * @author 이상민
