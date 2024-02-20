@@ -49,7 +49,7 @@
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest" alias="signupBasicMapperRequest"/>
-
+      
 
         <!-- mapper response -->
 
