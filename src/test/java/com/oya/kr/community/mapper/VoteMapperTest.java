@@ -88,6 +88,16 @@ class VoteMapperTest extends SpringApplicationTest {
 		return new VoteCheckMapperRequest(user.getId(), list.get(0).getVote_id());
 	}
 
+	@DisplayName("findById() : 투표 id로 투표 찾기")
+	@Test
+	void findById(){
+		// given
+		// when
+		VoteCheckMapperRequest request = new VoteCheckMapperRequest(user.getId(), voteCheckMapperRequest.getVoteId());
+		int count = voteMapper.findByUserIdAndVoteId(request);
+		// then
+	}
+
 	@DisplayName("checkVote() : 투표할 수 있다.")
 	@Test
 	void checkVote(){
