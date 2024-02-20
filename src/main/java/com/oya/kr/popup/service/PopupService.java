@@ -88,11 +88,23 @@ public class PopupService {
         PopupSearchMapperRequest request = new PopupSearchMapperRequest(
             WithdrawalStatus.APPROVAL.getName(), paginationRequest.getPageNo(), paginationRequest.getAmount());
         List<PopupDetailMapperResponse> mapperResponses = popupSort.selectForSorting(popupMapper, request).get();
-        return new PopupsListResponse(
-            mapperResponses.stream()
-                .map(PopupListResponse::from)
-                .collect(Collectors.toUnmodifiableList())
-        );
+        return PopupsListResponse.from(mapperResponses);
+    }
+
+    /**
+     * 팝업스토어 게시글 추천 리스트 조회 기능 구현
+     *
+     * @parameter String, PaginationRequest
+     * @return PopupsListResponse
+     * @author 김유빈
+     * @since 2024.02.20
+     */
+    @Transactional(readOnly = true)
+    public PopupsListResponse findAllRecommended(String email, PaginationRequest paginationRequest) {
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(
+            WithdrawalStatus.APPROVAL.getName(), paginationRequest.getPageNo(), paginationRequest.getAmount());
+        List<PopupDetailMapperResponse> mapperResponses = popupMapper.findAllRecommended(request);
+        return PopupsListResponse.from(mapperResponses);
     }
 
     /**

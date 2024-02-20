@@ -66,6 +66,21 @@ public class PopupController {
     }
 
     /**
+     * 팝업스토어 게시글 추천 리스트 조회 기능 구현
+     *
+     * @parameter Principal, PaginationRequest
+     * @return ResponseEntity<ApplicationResponse<PopupsListResponse>>
+     * @author 김유빈
+     * @since 2024.02.20
+     */
+    @GetMapping("/recommended")
+    public ResponseEntity<ApplicationResponse<PopupsListResponse>> findAllRecommended(
+        Principal principal, PaginationRequest paginationRequest) {
+        PopupsListResponse response = popupService.findAllRecommended(principal.getName(), paginationRequest);
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
      * 팝업스토어 게시글 작성 기능 구현
      *
      * @parameter Principal, PopupSaveRequest

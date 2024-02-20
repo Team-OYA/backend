@@ -26,6 +26,8 @@ public interface PopupMapper {
 
     List<PopupDetailMapperResponse> findScheduled(PopupSearchMapperRequest request);
 
+    List<PopupDetailMapperResponse> findAllRecommended(PopupSearchMapperRequest request);
+
     void save(PopupSaveMapperRequest request);
 
     void deleteAll();

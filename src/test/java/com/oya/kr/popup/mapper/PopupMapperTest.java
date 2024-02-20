@@ -42,6 +42,9 @@ public class PopupMapperTest extends SpringApplicationTest {
     private PopupMapper popupMapper;
 
     @Autowired
+    private PopupViewMapper popupViewMapper;
+
+    @Autowired
     private PopupImageMapper popupImageMapper;
 
     @Autowired
@@ -64,6 +67,7 @@ public class PopupMapperTest extends SpringApplicationTest {
      */
     @BeforeEach
     void setUp() {
+        popupViewMapper.deleteAll();
         popupImageMapper.deleteAll();
         popupMapper.deleteAll();
         businessMapper.deleteAll();
@@ -79,6 +83,7 @@ public class PopupMapperTest extends SpringApplicationTest {
      */
     @AfterEach
     void init() {
+        popupViewMapper.deleteAll();
         popupImageMapper.deleteAll();
         popupMapper.deleteAll();
         businessMapper.deleteAll();
@@ -231,6 +236,31 @@ public class PopupMapperTest extends SpringApplicationTest {
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findScheduled(request);
+
+        // then
+        assertThat(mapperResponses).hasSize(1);
+    }
+
+    /**
+     * findAllRecommended 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.20
+     */
+    @DisplayName("팝업스토어 게시글 추천 목록을 조회한다")
+    @Test
+    void findAllRecommended() {
+        // given
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlan(savedUser);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(popupSaveMapperRequest);
+
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
+
+        // when
+        List<PopupDetailMapperResponse> mapperResponses = popupMapper.findAllRecommended(request);
 
         // then
         assertThat(mapperResponses).hasSize(1);
