@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
@@ -27,7 +26,7 @@ import lombok.extern.java.Log;
  */
 @Configuration
 @ComponentScan(basePackages = {"com.oya.kr"})
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-${spring.profiles.active}.properties")
 @MapperScan(basePackages = {"com.oya.kr"})
 @Log
 public class RootConfig {
