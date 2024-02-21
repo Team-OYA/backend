@@ -52,7 +52,7 @@ public class PopupService {
     @Transactional(readOnly = true)
     public PopupResponse findById(String email, Long popupId) {
         User savedUser = userRepository.findByEmail(email);
-        PopupDetailMapperResponse popupMapperResponse = popupRepository.findByIdWithDate(savedUser.getId(), popupId);
+        PopupDetailMapperResponse popupMapperResponse = popupRepository.findByIdWithView(savedUser.getId(), popupId);
         return PopupResponse.from(popupMapperResponse);
     }
 
@@ -121,6 +121,19 @@ public class PopupService {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
         return new PopupImageResponse(s3Connector.save(image));
+    }
+
+    /**
+     * 팝업스토어 게시글 스크랩 / 스크랩 취소 기능 구현
+     *
+     * @parameter String, Long
+     * @author 김유빈
+     * @since 2024.02.21
+     */
+    public void collect(String email, Long popupId) {
+        User savedUser = userRepository.findByEmail(email);
+        Popup savedPopup = popupRepository.findById(popupId, null);
+        popupRepository.collect(savedPopup, savedUser);
     }
 
     private void validatePlanDoesNotHavePopup(Plan plan) {
