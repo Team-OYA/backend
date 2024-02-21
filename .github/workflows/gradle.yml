@@ -2,7 +2,7 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [feat/OYA-115-setting-profile]
+    branches: [ develop ]
 
 jobs:
   build-and-deploy:
