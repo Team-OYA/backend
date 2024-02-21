@@ -29,9 +29,9 @@ jobs:
 
       - name: Docker build and push
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }} .
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
+          sudo docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }} .
+          sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          sudo docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
 
       - name: Deploy
         uses: appleboy/ssh-action@master
@@ -41,15 +41,15 @@ jobs:
           key: ${{ secrets.PRIVATE_KEY }}
           script: |
             # Stop and remove the existing container
-            docker stop ${{ secrets.DOCKER_CONTAINER_NAME }}
-            docker rm ${{ secrets.DOCKER_CONTAINER_NAME }}
+            sudo docker stop ${{ secrets.DOCKER_CONTAINER_NAME }}
+            sudo docker rm ${{ secrets.DOCKER_CONTAINER_NAME }}
             
             # Remove the existing image
-            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
+            sudo docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
             
             # Login
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             
             # Pull and run the application container
-            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_CONTAINER_NAME }}
-            docker run -d -p 8080:8080 --name ${{ secrets.DOCKER_CONTAINER_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
+            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_CONTAINER_NAME }}
+            sudo docker run -d -p 8080:8080 --name ${{ secrets.DOCKER_CONTAINER_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
