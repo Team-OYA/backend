@@ -21,19 +21,12 @@ import com.oya.kr.community.controller.dto.response.StatisticsDetailResponse;
 import com.oya.kr.community.controller.dto.response.StatisticsResponse;
 import com.oya.kr.community.controller.dto.response.VoteResponse;
 import com.oya.kr.community.domain.enums.CommunityType;
-import com.oya.kr.community.exception.CommunityErrorCodeList;
-import com.oya.kr.community.mapper.CommunityMapper;
-import com.oya.kr.community.mapper.CollectionMapper;
-import com.oya.kr.community.mapper.CommunityViewMapper;
-import com.oya.kr.community.mapper.VoteMapper;
-import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
-import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
-import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.domain.Community;
-import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
+import com.oya.kr.community.repository.CommunityRepository;
+import com.oya.kr.community.repository.VoteRepository;
 import com.oya.kr.global.dto.Pagination;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.StorageConnector;
@@ -55,11 +48,9 @@ public class CommunityService {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	private final CommunityMapper communityMapper;
+	private final CommunityRepository communityRepository;
 	private final UserRepository userRepository;
-	private final VoteMapper voteMapper;
-	private final CommunityViewMapper communityViewMapper;
-	private final CollectionMapper collectionMapper;
+	private final VoteRepository voteRepository;
 
 	private final StorageConnector s3Connector;
 
@@ -73,37 +64,20 @@ public class CommunityService {
 	 */
 	public String save(String communityType, String email, CommunityRequest communityRequest, List<MultipartFile> images) {
 		User loginUser = userRepository.findByEmail(email);
-		SaveBasicMapperRequest request = new SaveBasicMapperRequest(CommunityType.from(communityType).getName(), loginUser.getId(), communityRequest);
-		communityMapper.saveBasic(request);
-		saveCommunityImages(request.getPostId(), images);
+		List<String> imageUrls = s3Connector.saveAll(images);
+		long communityId = communityRepository.saveForBasic(CommunityType.from(communityType), loginUser, communityRequest, imageUrls);
 
 		if(communityType.equals("vote")) {
-			if(communityRequest.getVotes().isEmpty()){
+			List<String> votes = communityRequest.getVotes();
+			if(votes.isEmpty()){
 				throw new ApplicationException(DOES_NOT_EXIST_VOTES);
 			}
-			if(communityRequest.getVotes().size() == 1){
+			if(votes.size() == 1){
 				throw new ApplicationException(ONLY_ONE_VOTES);
 			}
-			long communityId = request.getPostId();
-			communityRequest.getVotes().forEach(content ->
-				communityMapper.saveVote(new SaveVoteMapperRequest(content, communityId))
-			);
+			communityRepository.saveAllForVote(communityId, votes);
 		}
 		return "게시글이 등록되었습니다.";
-	}
-
-	/**
-	 * 이미지 저장
-	 *
-	 * @param communityId,  images
-	 * @author 이상민
-	 * @since 2024.02.19
-	 */
-	private void saveCommunityImages(long communityId, List<MultipartFile> images){
-		for (MultipartFile image : images) {
-			String imageUrl = s3Connector.save(image);
-			communityMapper.saveImage(imageUrl, communityId);
-		}
 	}
 
 	/**
@@ -116,33 +90,15 @@ public class CommunityService {
 	 */
 	public CommunityDetailResponse read(String email, long communityId) {
 		User loginUser = userRepository.findByEmail(email);
-		communityViewMapper.createOrUpdateCommunityView(communityId, loginUser.getId()); // 조회수 증가
-		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
+		CommunityBasicMapperResponse response = communityRepository.findByIdWithView(communityId, loginUser.getId());
 
 		User writeUser = userRepository.findByUserId(response.getWriteId());
-		List<String> imageList = communityMapper.findByImage(response.getId());
+		List<String> imageList = communityRepository.findImageById(response.getId());
 		Community community = response.toDomain(writeUser);
 		int countView = response.getCountView();
 
 		List<VoteResponse> voteResponseList = getVoteList(community.getCommunityType().getName(), loginUser, community.getId());
 		return CommunityDetailResponse.from(imageList, community, countView, voteResponseList);
-	}
-
-	/**
-	 * 게시글 기본 정보 조회
-	 *
-	 * @param communityId
-	 * @return CommunityBasicMapperResponse
-	 * @author 이상민
-	 * @since 2024.02.18
-	 */
-	private CommunityBasicMapperResponse getCommunityResponseOrThrow(long communityId) {
-		CommunityBasicMapperResponse response = communityMapper.findById(communityId)
-			.orElseThrow(() -> new ApplicationException(CommunityErrorCodeList.NOT_EXIST_COMMUNITY));
-		if (response.isDeleted()) {
-			throw new ApplicationException(CommunityErrorCodeList.DELETED_COMMUNITY);
-		}
-		return response;
 	}
 
 	/**
@@ -155,12 +111,7 @@ public class CommunityService {
 	 */
 	private List<VoteResponse> getVoteList(String type, User loginUser, long communityId) {
 		if (type.equals(CommunityType.VOTE.getName())) {
-			List<VoteResponse> voteResponseList = voteMapper.findByPostId(communityId);
-			voteResponseList.forEach(VoteResponse -> {
-				boolean check = Boolean.parseBoolean(voteMapper.findByVoteIdAndUserId(VoteResponse.getVote_id(), loginUser.getId()));
-				VoteResponse.setChecked(check);
-			});
-			return voteResponseList;
+			return voteRepository.getVoteList(communityId, loginUser.getId());
 		}
 		return null;
 	}
@@ -175,12 +126,7 @@ public class CommunityService {
 	 */
 	public String delete(String email, long communityId) {
 		User loginUser = userRepository.findByEmail(email);
-		CommunityBasicMapperResponse response = getCommunityResponseOrThrow(communityId);
-
-		if (loginUser.getId() != response.getWriteId()) {
-			throw new ApplicationException(CommunityErrorCodeList.INVALID_COMMUNITY);
-		}
-		communityMapper.delete(communityId);
+		communityRepository.delete(communityId, loginUser.getId());
 		return "게시글이 삭제되었습니다.";
 	}
 
@@ -197,12 +143,12 @@ public class CommunityService {
 		User loginUser = userRepository.findByEmail(email);
 		List<CommunityBasicMapperResponse> responseList;
 		if(type.equals("all")){
-			responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, pagination.getPageNo(), pagination.getAmount()));
+			responseList = communityRepository.findAll(null, pagination.getPageNo(), pagination.getAmount());
 		}else if(type.equals("collections")){
-			responseList = collectionMapper.findByAll(new ReadCollectionsMapperRequest(loginUser.getId(),false,false, null, pagination.getPageNo(), pagination.getAmount()));
+			responseList = communityRepository.findAllCollections(loginUser.getId(), pagination.getPageNo(), pagination.getAmount());
 		}else{
 			String communityType = CommunityType.from(type).getName();
-			responseList = communityMapper.findByAll(new ReadCommunityMapperRequest(false, communityType, pagination.getPageNo(), pagination.getAmount()));
+			responseList = communityRepository.findAll(communityType, pagination.getPageNo(), pagination.getAmount());
 		}
 		return mapToCommunityResponses(loginUser, responseList);
 	}
@@ -227,23 +173,11 @@ public class CommunityService {
 	public String saveCollection(String email, long communityId) {
 		User loginUser = userRepository.findByEmail(email);
 		CollectionMapperRequest request = new CollectionMapperRequest(communityId, loginUser.getId());
-		int checkCollection = collectionMapper.check(request);
-		if(checkCollection == 0){
-			collectionMapper.save(request);
+		boolean success = communityRepository.saveCollections(request);
+		if (success) {
 			return "스크랩 완료되었습니다.";
-		}else if(checkCollection == 1){
-			boolean isDeleted = collectionMapper.isDeleted(request);
-			request.updateIsDeleted(isDeleted);
-			if(!isDeleted){
-				collectionMapper.delete(request);
-				return "스크랩 취소되었습니다.";
-			}else{
-				collectionMapper.delete(request);
-				return "스크랩 완료되었습니다.";
-			}
-		}else{
-			throw new ApplicationException(FAIL_COMMUNITY_COLLECTION);
 		}
+		return "스크랩 취소되었습니다.";
 	}
 
 	/**
@@ -254,7 +188,7 @@ public class CommunityService {
 	 * @since 2024.02.20
 	 */
 	public StatisticsResponse statistics() {
-		List<StatisticsResponseMapper> response = communityMapper.statistics();
+		List<StatisticsResponseMapper> response = communityRepository.statistics();
 		Map<String, Integer> categoryCounts = response.stream()
 			.collect(Collectors.toMap(StatisticsResponseMapper::getCategoryCode, StatisticsResponseMapper::getCount));
 		return new StatisticsResponse(
