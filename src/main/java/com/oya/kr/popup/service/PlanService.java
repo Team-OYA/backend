@@ -1,17 +1,12 @@
 package com.oya.kr.popup.service;
 
-import static com.oya.kr.popup.exception.PlanErrorCodeList.NOT_EXIST_PLAN;
-import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
-
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.StorageConnector;
 import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
 import com.oya.kr.popup.controller.dto.response.DepartmentCategoryResponse;
@@ -23,12 +18,9 @@ import com.oya.kr.popup.controller.dto.response.PlansResponse;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.domain.enums.Department;
 import com.oya.kr.popup.domain.Plan;
-import com.oya.kr.popup.mapper.PlanMapper;
-import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
-import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest;
-import com.oya.kr.popup.mapper.dto.response.PlanMapperResponse;
+import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.user.domain.User;
-import com.oya.kr.user.mapper.UserMapper;
+import com.oya.kr.user.repository.UserRepository;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -42,8 +34,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlanService {
 
-    private final UserMapper userMapper;
-    private final PlanMapper planMapper;
+    private final UserRepository userRepository;
+    private final PlanRepository planRepository;
     private final StorageConnector s3Connector;
 
     /**
@@ -89,14 +81,10 @@ public class PlanService {
      */
     @Transactional(readOnly = true)
     public PlansResponse findAll(String email) {
-        User savedUser = findUserByEmail(email);
+        User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
-
-        List<PlanMapperResponse> planMapperResponses = planMapper.findAllWithoutPopup();
-
         return new PlansResponse(
-            planMapperResponses.stream()
-                .map(planMapper -> planMapper.toDomain(savedUser))
+            planRepository.findAllWithoutPopup(savedUser).stream()
                 .map(PlanResponse::from)
                 .collect(Collectors.toUnmodifiableList())
         );
@@ -110,15 +98,14 @@ public class PlanService {
      * @since 2024.02.16
      */
     public void save(String email, PlanSaveRequest request, MultipartFile businessPlan) {
-        User savedUser = findUserByEmail(email);
+        User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
 
         String businessPlanUrl = s3Connector.save(businessPlan);
 
         Plan plan = Plan.saved(savedUser, request.getOffice(), request.getFloor(), request.getOpenDate(), request.getCloseDate(),
             businessPlanUrl, request.getContactInformation(), request.getCategory());
-        PlanSaveMapperRequest mapperRequest = PlanSaveMapperRequest.from(plan);
-        planMapper.save(mapperRequest);
+        planRepository.save(plan);
     }
 
     /**
@@ -129,13 +116,12 @@ public class PlanService {
      * @since 2024.02.18
      */
     public void withdraw(String email, Long planId) {
-        User savedUser = findUserByEmail(email);
+        User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
 
-        Plan savedPlan = findPlanById(planId, savedUser);
+        Plan savedPlan = planRepository.findById(planId, savedUser);
         savedPlan.withdraw(savedUser);
-        PlanUpdateEntranceStatusMapperRequest mapperRequest = PlanUpdateEntranceStatusMapperRequest.from(savedPlan);
-        planMapper.updateEntranceStatus(mapperRequest);
+        planRepository.updateEntranceStatus(savedPlan);
     }
 
     /**
@@ -146,13 +132,12 @@ public class PlanService {
      * @since 2024.02.18
      */
     public void wait(String email, Long planId) {
-        User savedUser = findUserByEmail(email);
+        User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsAdministrator();
 
-        Plan savedPlan = findPlanById(planId, savedUser);
+        Plan savedPlan = planRepository.findById(planId, savedUser);
         savedPlan.waiting();
-        PlanUpdateEntranceStatusMapperRequest mapperRequest = PlanUpdateEntranceStatusMapperRequest.from(savedPlan);
-        planMapper.updateEntranceStatus(mapperRequest);
+        planRepository.updateEntranceStatus(savedPlan);
     }
 
     /**
@@ -163,13 +148,12 @@ public class PlanService {
      * @since 2024.02.18
      */
     public void approve(String email, Long planId) {
-        User savedUser = findUserByEmail(email);
+        User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsAdministrator();
 
-        Plan savedPlan = findPlanById(planId, savedUser);
+        Plan savedPlan = planRepository.findById(planId, savedUser);
         savedPlan.approve();
-        PlanUpdateEntranceStatusMapperRequest mapperRequest = PlanUpdateEntranceStatusMapperRequest.from(savedPlan);
-        planMapper.updateEntranceStatus(mapperRequest);
+        planRepository.updateEntranceStatus(savedPlan);
     }
 
     /**
@@ -180,24 +164,11 @@ public class PlanService {
      * @since 2024.02.18
      */
     public void deny(String email, Long planId) {
-        User savedUser = findUserByEmail(email);
+        User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsAdministrator();
 
-        Plan savedPlan = findPlanById(planId, savedUser);
+        Plan savedPlan = planRepository.findById(planId, savedUser);
         savedPlan.deny();
-        PlanUpdateEntranceStatusMapperRequest mapperRequest = PlanUpdateEntranceStatusMapperRequest.from(savedPlan);
-        planMapper.updateEntranceStatus(mapperRequest);
-    }
-
-    private User findUserByEmail(String email) {
-        return userMapper.findByEmail(email)
-            .orElseThrow(() -> new ApplicationException(NOT_EXIST_USER))
-            .toDomain();
-    }
-
-    private Plan findPlanById(Long id, User user) {
-        return planMapper.findById(id)
-            .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
-            .toDomain(user);
+        planRepository.updateEntranceStatus(savedPlan);
     }
 }

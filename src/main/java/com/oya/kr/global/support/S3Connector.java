@@ -4,6 +4,8 @@ import static com.oya.kr.global.exception.GlobalErrorCodeList.FAIL_CONVERT_S3_IM
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +49,21 @@ public class S3Connector implements StorageConnector {
         File file = convertMultiPartToFile(resource);
         String fileName = s3Generator.createResourceName(resource);
         return uploadFileToS3(fileName, file);
+    }
+
+    /**
+     * S3 이미지 리스트 저장
+     *
+     * @parameter List<MultipartFile>
+     * @return List<String>
+     * @author 김유빈
+     * @since 2024.02.21
+     */
+    @Override
+    public List<String> saveAll(List<MultipartFile> resources) {
+        return resources.stream()
+            .map(this::save)
+            .collect(Collectors.toUnmodifiableList());
     }
 
     private File convertMultiPartToFile(MultipartFile file) {

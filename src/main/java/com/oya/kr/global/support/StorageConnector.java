@@ -1,5 +1,7 @@
 package com.oya.kr.global.support;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -9,4 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 public interface StorageConnector {
 
     String save(MultipartFile resource);
+
+    List<String> saveAll(List<MultipartFile> resources);
 }
