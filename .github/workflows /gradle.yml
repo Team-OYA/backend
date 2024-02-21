@@ -1,0 +1,55 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches: [feat/OYA-115-setting-profile]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+          distribution: 'corretto'
+
+      - name: Create application.properties
+        run: |
+          echo "${{ secrets.APPLICATION_TEST }}" > src/main/resources/application-test.properties
+          echo "${{ secrets.APPLICATION_LOCAL }}" > src/main/resources/application-local.properties
+          echo "${{ secrets.APPLICATION_DEV }}" > src/main/resources/application-dev.properties
+
+      - name: Build with Gradle
+        run: ./gradlew build -x test
+
+      - name: Docker build and push
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }} .
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
+
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ubuntu
+          key: ${{ secrets.PRIVATE_KEY }}
+          script: |
+            # Stop and remove the existing container
+            docker stop ${{ secrets.DOCKER_CONTAINER_NAME }}
+            docker rm ${{ secrets.DOCKER_CONTAINER_NAME }}
+            
+            # Remove the existing image
+            docker rmi ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
+            
+            # Login
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            
+            # Pull and run the application container
+            docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_CONTAINER_NAME }}
+            docker run -d -p 8080:8080 --name ${{ secrets.DOCKER_CONTAINER_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
