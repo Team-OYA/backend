@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.popup.mapper.PopupCollectionMapper">
+
+    <select id="findByPopupIdAndUserId" parameterType="popupCollectionMapperRequest" resultType="popupCollectionMapperResponse">
+        SELECT ID, USER_ID, POPUP_ID
+        FROM POPUP_COLLECTION
+        WHERE POPUP_ID = #{popupId}
+            AND USER_ID = #{userId}
+            AND DELETED = 0
+    </select>
+
+    <insert id="save" parameterType="popupCollectionMapperRequest">
+        INSERT INTO POPUP_COLLECTION (USER_ID, POPUP_ID)
+        VALUES (#{userId}, #{popupId})
+        <selectKey keyProperty="popupCollectionId" resultType="long" order="AFTER">
+            SELECT NVL(MAX(ID), 0)
+            FROM POPUP_COLLECTION
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="Long">
+        DELETE FROM POPUP_COLLECTION
+        WHERE ID = #{id}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE
+        FROM POPUP_COLLECTION
+    </delete>
+
+</mapper>

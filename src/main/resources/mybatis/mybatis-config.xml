@@ -49,6 +49,8 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest" alias="popupImageSaveMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest" alias="popupSearchRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest" alias="popupViewCreateOrUpdateMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupCollectionMapperRequest" alias="popupCollectionMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupCollectionSaveMapperRequest" alias="popupCollectionSaveMapperRequest"/>
 
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
@@ -68,6 +70,7 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanMapperResponse" alias="planMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupMapperResponse" alias="popupMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse" alias="popupDetailMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupCollectionMapperResponse" alias="popupCollectionMapperResponse"/>
 
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>

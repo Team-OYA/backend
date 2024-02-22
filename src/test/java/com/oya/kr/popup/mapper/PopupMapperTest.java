@@ -22,6 +22,7 @@ import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.enums.WithdrawalStatus;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupCollectionSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
@@ -40,6 +41,9 @@ public class PopupMapperTest extends SpringApplicationTest {
 
     @Autowired
     private PopupMapper popupMapper;
+
+    @Autowired
+    private PopupCollectionMapper popupCollectionMapper;
 
     @Autowired
     private PopupViewMapper popupViewMapper;
@@ -67,6 +71,7 @@ public class PopupMapperTest extends SpringApplicationTest {
      */
     @BeforeEach
     void setUp() {
+        popupCollectionMapper.deleteAll();
         popupViewMapper.deleteAll();
         popupImageMapper.deleteAll();
         popupMapper.deleteAll();
@@ -83,6 +88,7 @@ public class PopupMapperTest extends SpringApplicationTest {
      */
     @AfterEach
     void init() {
+        popupCollectionMapper.deleteAll();
         popupViewMapper.deleteAll();
         popupImageMapper.deleteAll();
         popupMapper.deleteAll();
@@ -236,6 +242,33 @@ public class PopupMapperTest extends SpringApplicationTest {
 
         // when
         List<PopupDetailMapperResponse> mapperResponses = popupMapper.findScheduled(request);
+
+        // then
+        assertThat(mapperResponses).hasSize(1);
+    }
+
+    /**
+     * findCollections 메서드 테스트 작성
+     *
+     * @author 김유빈
+     * @since 2024.02.21
+     */
+    @DisplayName("스크랩한 팝업스토어 게시글 목록을 조회한다")
+    @Test
+    void findCollections() {
+        // given
+        User savedUser = savedUser();
+        Plan savedPlan = savedPlan(savedUser);
+        Popup popup = Popup.saved(savedPlan, "title", "description");
+        PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
+        popupMapper.save(popupSaveMapperRequest);
+
+        popupCollectionMapper.save(new PopupCollectionSaveMapperRequest(savedUser.getId(), popupSaveMapperRequest.getPopupId()));
+
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), 0, 5);
+
+        // when
+        List<PopupDetailMapperResponse> mapperResponses = popupMapper.findCollections(request);
 
         // then
         assertThat(mapperResponses).hasSize(1);

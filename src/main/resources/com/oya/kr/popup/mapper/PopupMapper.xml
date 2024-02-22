@@ -52,6 +52,19 @@
         <include refid="offsetForPaging" />
     </select>
 
+    <select id="findCollections" parameterType="popupSearchRequest" resultType="popupDetailMapperResponse">
+        <include refid="selectPopupWithPlanAndPopupImage" />
+            JOIN POPUP_COLLECTION PC
+                ON P.ID = PC.POPUP_ID
+                    AND PC.DELETED = 0
+        <![CDATA[
+        WHERE WITHDRAWAL_STATUS != #{withdrawalStatus}
+            AND P.DELETED = 0
+        ORDER BY PULLED_DATE DESC
+        ]]>
+        <include refid="offsetForPaging" />
+    </select>
+
     <select id="findAllRecommended" parameterType="popupSearchRequest" resultType="popupDetailMapperResponse">
         <include refid="selectPopupWithPlanAndPopupImage" />
         LEFT JOIN (
@@ -86,8 +99,10 @@
         FROM POPUP P
             LEFT JOIN POPUP_IMAGE PI
                 ON P.ID = PI.POPUP_ID
+                    AND PI.DELETED = 0
             JOIN PLAN PN
                 ON P.PLAN_ID = PN.ID
+                    AND PN.DELETED = 0
     </sql>
 
     <sql id="offsetForPaging">
