@@ -58,9 +58,10 @@ public class PopupRepository {
      * @since 2024.02.21
      */
     public PopupDetailMapperResponse findByIdWithDate(Long id, Long userId) {
-        countView(userId, id);
-        return popupMapper.findByIdWithDate(id)
+        PopupDetailMapperResponse response = popupMapper.findByIdWithDate(id)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
+        countView(id, userId);
+        return response;
     }
 
     /**
@@ -144,7 +145,6 @@ public class PopupRepository {
      * repository 계층으로 분리
      *
      * @parameter Popup
-     * @return long
      * @author 김유빈
      * @since 2024.02.21
      */
