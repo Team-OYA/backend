@@ -65,10 +65,11 @@ public class PopupRepository {
      * @author 김유빈
      * @since 2024.02.21
      */
-    public PopupDetailMapperResponse findByIdWithView(Long id, Long userId) {
-        countView(userId, id);
-        return popupMapper.findByIdWithDate(id)
+    public PopupDetailMapperResponse findByIdWithDate(Long id, Long userId) {
+        PopupDetailMapperResponse response = popupMapper.findByIdWithDate(id)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
+        countView(id, userId);
+        return response;
     }
 
     /**
