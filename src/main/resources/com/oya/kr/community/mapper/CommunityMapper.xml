@@ -59,6 +59,7 @@
         WHERE
             c.DELETED = #{deleted}
           AND u.USER_TYPE = #{userType}
+          AND cv.DELETED = #{deleted}
         GROUP BY
             c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
         ORDER BY c.MODIFIED_DATE DESC
