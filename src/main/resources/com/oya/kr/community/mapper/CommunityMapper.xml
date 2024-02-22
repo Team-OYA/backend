@@ -49,6 +49,23 @@
         <include refid="offsetForPaging" />
     </select>
 
+    <select id="findByType" parameterType="readCommunityMapperRequest" resultType="communityBasicMapperResponse">
+        <include refid="selecCommunity" />
+        <![CDATA[
+        FROM
+            COMMUNITY c
+                LEFT JOIN USERS u on c.WRITE_ID = u.ID
+                LEFT JOIN COMMUNITY_VIEW cv ON c.ID = cv.COMMUNITY_ID
+        WHERE
+            c.DELETED = #{deleted}
+          AND u.USER_TYPE = #{userType}
+        GROUP BY
+            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
+        ORDER BY c.MODIFIED_DATE DESC
+        ]]>
+        <include refid="offsetForPaging" />
+    </select>
+
     <update id="delete">
         UPDATE COMMUNITY
         SET DELETED = '1'

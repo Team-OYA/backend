@@ -58,9 +58,9 @@ public class CommunityRepository {
      * @since 2024.02.18
      */
     public CommunityBasicMapperResponse findByIdWithView(Long id, Long userId) {
-        communityViewMapper.createOrUpdateCommunityView(id, userId); // 조회수 증가
         CommunityBasicMapperResponse response = communityMapper.findById(id)
             .orElseThrow(() -> new ApplicationException(CommunityErrorCodeList.NOT_EXIST_COMMUNITY));
+        communityViewMapper.createOrUpdateCommunityView(id, userId); // 조회수 증가
         if (response.isDeleted()) {
             throw new ApplicationException(CommunityErrorCodeList.DELETED_COMMUNITY);
         }
@@ -87,8 +87,20 @@ public class CommunityRepository {
      * @author 김유빈
      * @since 2024.02.21
      */
-    public List<CommunityBasicMapperResponse> findAll(String communityType, int pageNo, int amount) {
-        return communityMapper.findByAll(new ReadCommunityMapperRequest(false, communityType, pageNo, amount));
+    public List<CommunityBasicMapperResponse> findAll(String userType, int pageNo, int amount) {
+        return communityMapper.findByAll(new ReadCommunityMapperRequest(false, userType, pageNo, amount));
+    }
+
+    /**
+     * 게시글 type 에 따른 호출
+     *
+     * @parameter Long, int, int
+     * @return List<CommunityBasicMapperResponse>
+     * @author 이상민
+     * @since 2024.02.22
+     */
+    public List<CommunityBasicMapperResponse> findByType(String userType, int pageNo, int amount) {
+        return communityMapper.findByType(new ReadCommunityMapperRequest(false, userType, pageNo, amount));
     }
 
     /**

@@ -21,6 +21,7 @@ public interface CommunityMapper {
 	void saveVote(SaveVoteMapperRequest saveVoteMapperRequest);
 	Optional<CommunityBasicMapperResponse> findById(long communityId);
 	List<CommunityBasicMapperResponse> findByAll(ReadCommunityMapperRequest readCommunityMapperRequest);
+	List<CommunityBasicMapperResponse> findByType(ReadCommunityMapperRequest readCommunityMapperRequest);
 	void delete(long communityId);
 	void deleteByUserId(Long userId);
 	void saveImage(@Param("imageUrl") String imageUrl, @Param("communityId") long communityId);

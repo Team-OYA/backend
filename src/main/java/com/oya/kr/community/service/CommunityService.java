@@ -27,11 +27,12 @@ import com.oya.kr.community.domain.Community;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.community.repository.CommunityRepository;
 import com.oya.kr.community.repository.VoteRepository;
-import com.oya.kr.global.dto.Pagination;
+import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.StorageConnector;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.user.domain.User;
+import com.oya.kr.user.domain.enums.UserType;
 import com.oya.kr.user.repository.UserRepository;
 
 import lombok.AccessLevel;
@@ -139,7 +140,7 @@ public class CommunityService {
 	 * @since 2024.02.18
 	 */
 	@Transactional(readOnly = true)
-	public CommunityResponse reads(String type,String email, Pagination pagination) {
+	public CommunityResponse reads(String type,String email, PaginationRequest pagination) {
 		User loginUser = userRepository.findByEmail(email);
 		List<CommunityBasicMapperResponse> responseList;
 		if(type.equals("all")){
@@ -147,8 +148,8 @@ public class CommunityService {
 		}else if(type.equals("collections")){
 			responseList = communityRepository.findAllCollections(loginUser.getId(), pagination.getPageNo(), pagination.getAmount());
 		}else{
-			String communityType = CommunityType.from(type).getName();
-			responseList = communityRepository.findAll(communityType, pagination.getPageNo(), pagination.getAmount());
+			String userType = UserType.from(type).getName();
+			responseList = communityRepository.findByType(userType, pagination.getPageNo(), pagination.getAmount());
 		}
 		return mapToCommunityResponses(loginUser, responseList);
 	}

@@ -129,6 +129,13 @@ public class UserController {
 		return authentication.getCredentials().toString();
 	}
 
+	/**
+	 * 로그아웃 (리프레시 토큰의 기간 만료 처리, 삭제)
+	 *
+	 * @header principal
+	 * @author 이상민
+	 * @since 2024.02.13
+	 */
 	@GetMapping("/mypage")
 	public void me(Principal principal) {
 		logger.info(principal.getName());
