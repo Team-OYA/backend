@@ -19,7 +19,7 @@ import com.oya.kr.community.controller.dto.response.CommunityDetailResponse;
 import com.oya.kr.community.controller.dto.response.CommunityResponse;
 import com.oya.kr.community.controller.dto.response.StatisticsResponse;
 import com.oya.kr.community.service.CommunityService;
-import com.oya.kr.global.dto.Pagination;
+import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.dto.response.ApplicationResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -89,7 +89,7 @@ public class CommunityController {
 	 */
 	@GetMapping
 	public ResponseEntity<ApplicationResponse<CommunityResponse>> reads(Principal principal,
-		@RequestParam("type") String type, Pagination pagination) {
+		@RequestParam("type") String type, PaginationRequest pagination) {
 		return ResponseEntity.ok(ApplicationResponse.success(communityService.reads(type, principal.getName(), pagination)));
 	}
 
