@@ -67,8 +67,8 @@ public class PopupService {
     @Transactional(readOnly = true)
     public PopupsListResponse findAll(String email, PaginationRequest paginationRequest, String sort) {
         PopupSort popupSort = PopupSort.from(sort);
-        List<PopupDetailMapperResponse> mapperResponses = popupSort.selectForSorting(
-            popupRepository, paginationRequest.getPageNo(), paginationRequest.getAmount()).get();
+        List<PopupDetailMapperResponse> mapperResponses = popupRepository.findAll(popupSort,
+            paginationRequest.getPageNo(), paginationRequest.getAmount());
         return PopupsListResponse.from(mapperResponses);
     }
 

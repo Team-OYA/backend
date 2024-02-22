@@ -11,6 +11,7 @@ import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.PopupImage;
+import com.oya.kr.popup.domain.enums.PopupSort;
 import com.oya.kr.popup.domain.enums.WithdrawalStatus;
 import com.oya.kr.popup.mapper.PopupCollectionMapper;
 import com.oya.kr.popup.mapper.PopupImageMapper;
@@ -85,37 +86,14 @@ public class PopupRepository {
     /**
      * repository 계층으로 분리
      *
-     * @parameter int, int
+     * @parameter PopupSort, int, int
      * @return List<PopupDetailMapperResponse>
      * @author 김유빈
-     * @since 2024.02.21
+     * @since 2024.02.22
      */
-    public List<PopupDetailMapperResponse> findAll(int pageNo, int amount) {
-        return popupMapper.findAll(new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), pageNo, amount));
-    }
-
-    /**
-     * repository 계층으로 분리
-     *
-     * @parameter int, int
-     * @return List<PopupDetailMapperResponse>
-     * @author 김유빈
-     * @since 2024.02.21
-     */
-    public List<PopupDetailMapperResponse> findInProgress(int pageNo, int amount) {
-        return popupMapper.findInProgress(new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), pageNo, amount));
-    }
-
-    /**
-     * repository 계층으로 분리
-     *
-     * @parameter int, int
-     * @return List<PopupDetailMapperResponse>
-     * @author 김유빈
-     * @since 2024.02.21
-     */
-    public List<PopupDetailMapperResponse> findScheduled(int pageNo, int amount) {
-        return popupMapper.findScheduled(new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), pageNo, amount));
+    public List<PopupDetailMapperResponse> findAll(PopupSort popupSort, int pageNo, int amount) {
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), pageNo, amount);
+        return popupSort.selectForSorting(popupMapper, request).get();
     }
 
     /**
