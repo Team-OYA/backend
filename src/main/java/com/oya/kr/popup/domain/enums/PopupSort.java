@@ -20,6 +20,7 @@ public enum PopupSort {
     ALL("all", "모든 팝업스토어 게시글 리스트 조회"),
     PROGRESS("progress", "진행중인 팝업스토어 게시글 리스트 조회"),
     SCHEDULED("scheduled", "예정된 팝업스토어 게시글 리스트 조회"),
+    COLLECTIONS("collections", "스크랩한 팝업스토어 게시글 리스트 조회"),
     ;
 
     private final String name;
@@ -63,6 +64,9 @@ public enum PopupSort {
         if (isScheduled()) {
             return () -> popupMapper.findScheduled(request);
         }
+        if (isCollections()) {
+            return () -> popupMapper.findCollections(request);
+        }
         return ArrayList::new;
     }
 
@@ -97,5 +101,16 @@ public enum PopupSort {
      */
     public boolean isScheduled() {
         return this == SCHEDULED;
+    }
+
+    /**
+     * 스크랩 조회 여부 반환
+     *
+     * @return boolean
+     * @author 김유빈
+     * @since 2024.02.22
+     */
+    public boolean isCollections() {
+        return this == COLLECTIONS;
     }
 }
