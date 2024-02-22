@@ -17,8 +17,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.oya.kr.common.SpringApplicationTest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
+import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
+import com.oya.kr.user.repository.UserRepository;
 
 /**
  * @author 이상민
@@ -30,6 +32,8 @@ class UserServiceTest extends SpringApplicationTest {
 	private UserService userService;
 	@Mock
 	private UserMapper userMapper;
+	@Mock
+	private UserRepository userRepository;
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -49,7 +53,7 @@ class UserServiceTest extends SpringApplicationTest {
 		String email = "testuser@example.com";
 
 		// when
-		when(userMapper.duplicatedEmail(email)).thenReturn(1);
+		when(userRepository.duplicatedEmail(email)).thenReturn(1);
 
 		// then
 		ApplicationException exception = assertThrows(ApplicationException.class,
@@ -68,7 +72,7 @@ class UserServiceTest extends SpringApplicationTest {
 		String nickname = "TestUser";
 
 		// when
-		when(userMapper.duplicatedNickname(nickname)).thenReturn(1);
+		when(userRepository.duplicatedNickname(nickname)).thenReturn(1);
 
 		// then
 		ApplicationException exception = assertThrows(ApplicationException.class,
@@ -84,9 +88,13 @@ class UserServiceTest extends SpringApplicationTest {
 	@Test
 	void findByEmail_doesnt_user() {
 		// given
+		String notExistEmail = "noexist@gmail.com";
+
 		// when
+		when(userRepository.findByEmail(notExistEmail)).thenThrow(new ApplicationException(NOT_EXIST_USER));
+
 		// then
-		assertThatThrownBy(() -> userService.findByEmail("noexist@gmail.com"))
+		assertThatThrownBy(() -> userService.findByEmail(notExistEmail))
 			.isInstanceOf(ApplicationException.class)
 			.hasMessageContaining(NOT_EXIST_USER.getMessage());
 	}
@@ -121,9 +129,10 @@ class UserServiceTest extends SpringApplicationTest {
 		userMapper.insertUser(request);
 
 		// when
+		when(userRepository.findByEmail(request.getEmail())).thenReturn(mock(User.class));
+
 		// then
-		assertThatThrownBy(() -> userService.findByEmail(request.getEmail()))
-			.isInstanceOf(ApplicationException.class)
-			.hasMessage(NOT_EXIST_USER.getMessage());
+		assertThatCode(() -> userService.findByEmail(request.getEmail()))
+			.doesNotThrowAnyException();
 	}
 }

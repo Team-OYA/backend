@@ -8,8 +8,9 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.popup.mapper.PopupMapper;
+import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
-import com.oya.kr.popup.repository.PopupRepository;
 
 import lombok.Getter;
 
@@ -19,6 +20,7 @@ public enum PopupSort {
     ALL("all", "모든 팝업스토어 게시글 리스트 조회"),
     PROGRESS("progress", "진행중인 팝업스토어 게시글 리스트 조회"),
     SCHEDULED("scheduled", "예정된 팝업스토어 게시글 리스트 조회"),
+    COLLECTIONS("collections", "스크랩한 팝업스토어 게시글 리스트 조회"),
     ;
 
     private final String name;
@@ -52,15 +54,18 @@ public enum PopupSort {
      * @author 김유빈
      * @since 2024.02.19
      */
-    public Supplier<List<PopupDetailMapperResponse>> selectForSorting(PopupRepository popupRepository, int pageNo, int amount) {
+    public Supplier<List<PopupDetailMapperResponse>> selectForSorting(PopupMapper popupMapper, PopupSearchMapperRequest request) {
         if (isAll()) {
-            return () -> popupRepository.findAll(pageNo, amount);
+            return () -> popupMapper.findAll(request);
         }
         if (isProgress()) {
-            return () -> popupRepository.findInProgress(pageNo, amount);
+            return () -> popupMapper.findInProgress(request);
         }
         if (isScheduled()) {
-            return () -> popupRepository.findScheduled(pageNo, amount);
+            return () -> popupMapper.findScheduled(request);
+        }
+        if (isCollections()) {
+            return () -> popupMapper.findCollections(request);
         }
         return ArrayList::new;
     }
@@ -96,5 +101,16 @@ public enum PopupSort {
      */
     public boolean isScheduled() {
         return this == SCHEDULED;
+    }
+
+    /**
+     * 스크랩 조회 여부 반환
+     *
+     * @return boolean
+     * @author 김유빈
+     * @since 2024.02.22
+     */
+    public boolean isCollections() {
+        return this == COLLECTIONS;
     }
 }

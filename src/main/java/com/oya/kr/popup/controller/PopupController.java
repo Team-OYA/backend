@@ -112,4 +112,18 @@ public class PopupController {
         PopupImageResponse response = popupService.saveImage(principal.getName(), image);
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
+
+    /**
+     * 팝업스토어 게시글 스크랩 / 스크랩 취소 기능 구현
+     *
+     * @parameter Principal, Long
+     * @return ResponseEntity<ApplicationResponse<Void>>
+     * @author 김유빈
+     * @since 2024.02.21
+     */
+    @PostMapping("/{popupId}/collections")
+    public ResponseEntity<ApplicationResponse<Void>> collect(Principal principal, @PathVariable Long popupId) {
+        popupService.collect(principal.getName(), popupId);
+        return ResponseEntity.ok(ApplicationResponse.success(null));
+    }
 }
