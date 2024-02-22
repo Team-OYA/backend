@@ -3,4 +3,4 @@ target
 
 src/main/resources/secret
 
-application.properties
+application-*.properties
