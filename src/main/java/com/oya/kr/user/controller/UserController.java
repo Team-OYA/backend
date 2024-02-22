@@ -1,7 +1,6 @@
 package com.oya.kr.user.controller;
 
 import java.security.Principal;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oya.kr.global.dto.response.ApplicationResponse;
@@ -21,8 +18,8 @@ import com.oya.kr.user.controller.dto.request.DuplicatedEmailRequest;
 import com.oya.kr.user.controller.dto.request.DuplicatedNicknameRequest;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.request.LoginRequest;
-import com.oya.kr.user.controller.dto.response.BasicUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
+import com.oya.kr.user.domain.User;
 import com.oya.kr.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -44,7 +41,7 @@ public class UserController {
 	 * 회원가입 - 사용자(1), 사업체(2), 관리자(3)
 	 *
 	 * @param joinRequest
-	 * @return ResponseEntity<ApplicationResponse<String>>
+	 * @return JoinResponse
 	 * @author 이상민
 	 * @since 2024.02.12
 	 */
@@ -58,7 +55,7 @@ public class UserController {
 	 * 이메일 중복확인 API
 	 *
 	 * @parameter DuplicatedEmailRequest
-	 * @return ResponseEntity<ApplicationResponse<String>>
+	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
@@ -73,7 +70,7 @@ public class UserController {
 	 * 닉네임 중복확인 API
 	 *
 	 * @parameter DuplicatedNicknameRequest
-	 * @return ResponseEntity<ApplicationResponse<String>>
+	 * @return String
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
@@ -88,7 +85,7 @@ public class UserController {
 	 * 로그인 - JWT 토큰 발급
 	 *
 	 * @parameter loginRequest
-	 * @return ResponseEntity<ApplicationResponse<JwtTokenResponse>>
+	 * @return JwtTokenResponse
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
@@ -102,56 +99,46 @@ public class UserController {
 	 * 토큰 재발급 (accessToken 가지고 refreshToken 찾아서 accessToken 다시 재발급)
 	 *
 	 * @header principal
-	 * @return ResponseEntity<ApplicationResponse<JwtTokenResponse>>
+	 * @return JwtTokenResponse
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
 	@PostMapping("/users/reissue")
 	public ResponseEntity<ApplicationResponse<JwtTokenResponse>> reissue(Principal principal) {
-		return ResponseEntity.ok(ApplicationResponse.success(userService.reissueAccessToken(principal.getName(), getAccessToken())));
+		User user = userService.findByEmail(principal.getName());
+		JwtTokenResponse tokenResponse = userService.reissueAccessToken(user, getAccessToken());
+		return ResponseEntity.ok(ApplicationResponse.success(tokenResponse));
 	}
 
 	/**
-	 * 로그아웃
+	 * 로그아웃 (리프레시 토큰의 기간 만료 처리, 삭제)
 	 *
 	 * @header principal
-	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
 	@PostMapping("/logout")
 	public ResponseEntity<ApplicationResponse<String>> logout(Principal principal) {
-		return ResponseEntity.ok(ApplicationResponse.success(userService.logout(getAccessToken())));
-	}
-
-	/**
-	 * 사용자 상세조회
-	 *
-	 * @header principal
-	 * @return ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>>
-	 * @author 이상민
-	 * @since 2024.02.22
-	 */
-	@GetMapping("/admin/users/{userId}")
-	public ResponseEntity<ApplicationResponse<?>> read(Principal principal, @PathVariable long userId) {
-		return ResponseEntity.ok(ApplicationResponse.success(userService.read(userId)));
-	}
-
-	/**
-	 * 사용자 리스트
-	 *
-	 * @header principal
-	 * @return ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>>
-	 * @author 이상민
-	 * @since 2024.02.22
-	 */
-	@GetMapping("/admin/users")
-	public ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>> reads(Principal principal, @RequestParam("type") String type) {
-		return ResponseEntity.ok(ApplicationResponse.success(userService.reads(type)));
+		User user = userService.findByEmail(principal.getName());
+		userService.logout(user, getAccessToken());
+		return ResponseEntity.ok(ApplicationResponse.success("로그아웃되었습니다."));
 	}
 
 	private String getAccessToken() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return authentication.getCredentials().toString();
 	}
+
+	/**
+	 * 로그아웃 (리프레시 토큰의 기간 만료 처리, 삭제)
+	 *
+	 * @header principal
+	 * @author 이상민
+	 * @since 2024.02.13
+	 */
+	@GetMapping("/mypage")
+	public void me(Principal principal) {
+		logger.info(principal.getName());
+	}
+
 }

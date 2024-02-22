@@ -31,7 +31,7 @@ public class VoteService {
 	 */
 	public String check(String email, long votedId) {
 		User loginUser = userRepository.findByEmail(email);
-		voteRepository.save(loginUser.getId(), votedId);
+		voteRepository.save(votedId, loginUser.getId());
 		return "투표를 체크했습니다.";
 	}
 
