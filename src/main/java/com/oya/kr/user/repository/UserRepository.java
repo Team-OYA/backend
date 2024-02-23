@@ -138,11 +138,22 @@ public class UserRepository {
         return userMapper.duplicatedNickname(nickname);
     }
 
-
+    /**
+     * 사업체 보기
+     *
+     * @author 이상민
+     * @since 2024.02.23
+     */
     public List<BusinessMapperResponse> findByBusiness(Long userId) {
         return userMapper.findByBusiness(userId);
     }
 
+    /**
+     * 일반 사용자 보기
+     *
+     * @author 이상민
+     * @since 2024.02.23
+     */
     public List<BasicMapperResponse> findByBasic(Long userId) {
         return userMapper.findByBasic(userId);
     }

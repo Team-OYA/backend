@@ -44,7 +44,7 @@ public class UserController {
 	 * 회원가입 - 사용자(1), 사업체(2), 관리자(3)
 	 *
 	 * @param joinRequest
-	 * @return JoinResponse
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.12
 	 */
@@ -58,7 +58,7 @@ public class UserController {
 	 * 이메일 중복확인 API
 	 *
 	 * @parameter DuplicatedEmailRequest
-	 * @return String
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
@@ -73,7 +73,7 @@ public class UserController {
 	 * 닉네임 중복확인 API
 	 *
 	 * @parameter DuplicatedNicknameRequest
-	 * @return String
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
@@ -88,7 +88,7 @@ public class UserController {
 	 * 로그인 - JWT 토큰 발급
 	 *
 	 * @parameter loginRequest
-	 * @return JwtTokenResponse
+	 * @return ResponseEntity<ApplicationResponse<JwtTokenResponse>>
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
@@ -102,7 +102,7 @@ public class UserController {
 	 * 토큰 재발급 (accessToken 가지고 refreshToken 찾아서 accessToken 다시 재발급)
 	 *
 	 * @header principal
-	 * @return JwtTokenResponse
+	 * @return ResponseEntity<ApplicationResponse<JwtTokenResponse>>
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
@@ -115,6 +115,7 @@ public class UserController {
 	 * 로그아웃
 	 *
 	 * @header principal
+	 * @return ResponseEntity<ApplicationResponse<String>>
 	 * @author 이상민
 	 * @since 2024.02.13
 	 */
@@ -127,6 +128,7 @@ public class UserController {
 	 * 사용자 상세조회
 	 *
 	 * @header principal
+	 * @return ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>>
 	 * @author 이상민
 	 * @since 2024.02.22
 	 */
@@ -139,11 +141,12 @@ public class UserController {
 	 * 사용자 리스트
 	 *
 	 * @header principal
+	 * @return ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>>
 	 * @author 이상민
 	 * @since 2024.02.22
 	 */
 	@GetMapping("/admin/users")
-	public ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>> read(Principal principal, @RequestParam("type") String type) {
+	public ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>> reads(Principal principal, @RequestParam("type") String type) {
 		return ResponseEntity.ok(ApplicationResponse.success(userService.reads(type)));
 	}
 
