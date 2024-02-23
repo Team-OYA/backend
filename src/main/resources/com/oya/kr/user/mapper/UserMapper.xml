@@ -2,6 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.user.mapper.UserMapper">
 
+    <!-- @author 이상민 -->
+    <!-- @since 2024.02.16-->
+
     <insert id="insertUser" parameterType="SignupUserRequest">
         {call create_user_and_business(
                 #{nickname, mode=IN, jdbcType=VARCHAR},
@@ -94,60 +97,80 @@
         WHERE ID = #{userId}
     </delete>
 
-    <resultMap id="AdminMapperResult" type="com.oya.kr.user.mapper.dto.response.AdminMapperResponse">
-        <id property="userId" column="id"/>
+    <resultMap id="basicMapperResponse" type="com.oya.kr.user.mapper.dto.response.BasicMapperResponse">
+        <result property="userId" column="userId"/>
         <result property="nickname" column="nickname"/>
         <result property="email" column="email"/>
-        <result property="password" column="password"/>
         <result property="birthDate" column="birth_date"/>
         <result property="gender" column="gender"/>
-        <result property="registrationType" column="registration_type"/>
         <result property="userType" column="user_type"/>
-        <result property="businessRegistrationNumber" column="business_registration_number"/>
         <result property="profileUrl" column="profile_url"/>
-        <result property="usersCreatedDate" column="created_date"/>
-        <result property="usersModifiedDate" column="modified_date"/>
-        <result property="deleted" column="deleted"/>
-
-        <!-- Business fields -->
-        <result property="businessId" column="id"/>
-        <result property="nameOfCompany" column="name_of_company"/>
-        <result property="nameOfRepresentative" column="name_of_representative"/>
-        <result property="dateOfBusinessCommencement" column="date_of_business_commencement"/>
-        <result property="businessItem" column="businessitem"/>
-        <result property="connectedNumber" column="connected_number"/>
-        <result property="faxNumber" column="fax_number"/>
-        <result property="zipCode" column="zip_code"/>
-        <result property="businessAddress" column="business_address"/>
+        <result property="userCreatedDate" column="created_date"/>
+        <result property="userModifiedDate" column="modified_date"/>
+        <result property="userDeleted" column="deleted"/>
+        <result property="communityCount" column="communityCount"/>
     </resultMap>
 
-    <select id="readUsers" resultMap="AdminMapperResult">
+    <resultMap id="businessMapperResponse" type="com.oya.kr.user.mapper.dto.response.BusinessMapperResponse" extends="basicMapperResponse">
+        <result property="businessId" column="businessId"/>
+        <result property="nameOfCompany" column="nameOfCompany"/>
+        <result property="nameOfRepresentative" column="nameOfRepresentative"/>
+        <result property="dateOfBusinessCommencement" column="dateOfBusinessCommencement"/>
+        <result property="businessItem" column="businessItem"/>
+        <result property="connectedNumber" column="connectedNumber"/>
+        <result property="faxNumber" column="faxNumber"/>
+        <result property="zipCode" column="zipCode"/>
+        <result property="businessAddress" column="businessAddress"/>
+        <result property="planCount" column="planCount"/>
+        <result property="popupCount" column="popupCount"/>
+    </resultMap>
+
+    <select id="findByBasic" resultMap="basicMapperResponse" resultType="com.oya.kr.user.mapper.dto.response.BasicMapperResponse">
         SELECT
-            U.ID,
-            U.NICKNAME,
-            U.EMAIL,
-            U.PASSWORD,
-            U.BIRTH_DATE,
-            U.GENDER,
-            U.REGISTRATION_TYPE,
-            U.USER_TYPE,
-            U.BUSINESS_REGISTRATION_NUMBER,
-            U.PROFILE_URL,
-            U.CREATED_DATE,
-            U.MODIFIED_DATE,
-            U.DELETED,
-            B.ID,
-            B.NAME_OF_COMPANY,
-            B.NAME_OF_REPRESENTATIVE,
-            B.DATE_OF_BUSINESS_COMMENCEMENT,
-            B.BUSINESSITEM,
-            B.CONNECTED_NUMBER,
-            B.FAX_NUMBER,
-            B.ZIP_CODE,
-            B.BUSINESS_ADDRESS
+        U.ID as userId, U.NICKNAME, U.EMAIL, U.BIRTH_DATE, U.GENDER, U.REGISTRATION_TYPE, U.USER_TYPE,
+        U.PROFILE_URL, U.CREATED_DATE, U.MODIFIED_DATE, U.DELETED,
+        COUNT(C.ID) AS communityCount
+        FROM USERS U
+        LEFT JOIN COMMUNITY C ON U.ID = C.WRITE_ID
+        <where>
+            <if test="userId != null">
+                AND U.ID = #{userId}
+            </if>
+            AND U.USER_TYPE = 'user'
+        </where>
+        GROUP BY
+        U.ID, U.NICKNAME, U.EMAIL, U.BIRTH_DATE, U.GENDER, U.REGISTRATION_TYPE, U.USER_TYPE,
+        U.PROFILE_URL, U.CREATED_DATE, U.MODIFIED_DATE, U.DELETED
+    </select>
+
+    <select id="findByBusiness" resultMap="businessMapperResponse">
+        SELECT
+        U.ID as userId, U.NICKNAME, U.EMAIL, U.BIRTH_DATE, U.GENDER, U.REGISTRATION_TYPE, U.USER_TYPE,
+        U.PROFILE_URL, U.CREATED_DATE, U.MODIFIED_DATE, U.DELETED,
+        U.BUSINESS_REGISTRATION_NUMBER,
+        B.ID as businessId,B.NAME_OF_COMPANY,B.NAME_OF_REPRESENTATIVE,B.DATE_OF_BUSINESS_COMMENCEMENT,
+        B.BUSINESSITEM,B.CONNECTED_NUMBER,B.FAX_NUMBER,B.ZIP_CODE,B.BUSINESS_ADDRESS,
+        COUNT(C.ID) as communityCount,
+        COUNT(P.ID) as planCount,
+        COUNT(PP.ID) as popupCount
         FROM
-            USERS U
-                LEFT JOIN BUSINESS B ON U.ID = B.USER_ID
+        USERS U
+        LEFT JOIN BUSINESS B ON U.ID = B.USER_ID
+        LEFT JOIN COMMUNITY C ON U.ID = C.WRITE_ID
+        LEFT JOIN PLAN P ON B.ID = P.USER_ID
+        LEFT JOIN POPUP pp ON P.ID = pp.PLAN_ID
+        <where>
+            <if test="userId != null">
+                AND U.ID = #{userId}
+            </if>
+            AND U.USER_TYPE = 'business'
+        </where>
+        GROUP BY
+        U.ID, U.NICKNAME, U.EMAIL, U.BIRTH_DATE, U.GENDER, U.REGISTRATION_TYPE, U.USER_TYPE,
+        U.PROFILE_URL, U.CREATED_DATE, U.MODIFIED_DATE, U.DELETED,
+        U.BUSINESS_REGISTRATION_NUMBER,
+        B.ID,B.NAME_OF_COMPANY,B.NAME_OF_REPRESENTATIVE,B.DATE_OF_BUSINESS_COMMENCEMENT,
+        B.BUSINESSITEM,B.CONNECTED_NUMBER,B.FAX_NUMBER,B.ZIP_CODE,B.BUSINESS_ADDRESS
     </select>
 
 </mapper>

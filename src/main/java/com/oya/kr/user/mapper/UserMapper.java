@@ -7,7 +7,8 @@ import org.apache.ibatis.annotations.Param;
 
 import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
-import com.oya.kr.user.mapper.dto.response.AdminMapperResponse;
+import com.oya.kr.user.mapper.dto.response.BasicMapperResponse;
+import com.oya.kr.user.mapper.dto.response.BusinessMapperResponse;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 /**
@@ -32,5 +33,7 @@ public interface UserMapper {
 
 	void deleteFromUserId(Long id);
 
-	List<AdminMapperResponse> readUsers();
+	List<BasicMapperResponse> findByBasic(Long userId);
+
+	List<BusinessMapperResponse> findByBusiness(Long userId);
 }
