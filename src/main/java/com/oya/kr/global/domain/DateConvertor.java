@@ -20,11 +20,17 @@ public class DateConvertor {
 	}
 
 	public static String convertDateFormatForResponse(LocalDate date) {
+		if (date == null) {
+			return null;
+		}
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 		return date.format(formatter);
 	}
 
 	public static String convertDateFormatForResponse(LocalDateTime date) {
+		if (date == null) {
+			return null;
+		}
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss");
 		return date.format(formatter);
 	}

@@ -2,6 +2,7 @@ package com.oya.kr.user.repository;
 
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -15,7 +16,8 @@ import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
-import com.oya.kr.user.mapper.dto.response.AdminMapperResponse;
+import com.oya.kr.user.mapper.dto.response.BasicMapperResponse;
+import com.oya.kr.user.mapper.dto.response.BusinessMapperResponse;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -136,7 +138,17 @@ public class UserRepository {
         return userMapper.duplicatedNickname(nickname);
     }
 
-    public List<AdminMapperResponse> readUsers() {
-        return userMapper.readUsers();
+
+    public List<BusinessMapperResponse> findByBusinessAll(Long userId) {
+        return userMapper.findByBusiness(userId);
+    }
+
+    public List<BasicMapperResponse> findByBasicAll(Long userId) {
+        return userMapper.findByBasic(userId);
+    }
+
+    public List<BasicMapperResponse> getUserCommunityCount(Long userId, String type) {
+        List<HashMap<String, Object>> map = userMapper.getUserCommunityCount(userId, type);
+        return null;
     }
 }

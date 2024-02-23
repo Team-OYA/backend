@@ -3,7 +3,9 @@ package com.oya.kr.user.service;
 import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,10 +19,14 @@ import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.request.LoginRequest;
+import com.oya.kr.user.controller.dto.response.BusinessUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
-import com.oya.kr.user.controller.dto.response.UserDetailResponse;
+import com.oya.kr.user.controller.dto.response.BasicUserResponse;
 import com.oya.kr.user.domain.User;
+import com.oya.kr.user.domain.enums.UserType;
 import com.oya.kr.user.mapper.dto.response.AdminMapperResponse;
+import com.oya.kr.user.mapper.dto.response.BasicMapperResponse;
+import com.oya.kr.user.mapper.dto.response.BusinessMapperResponse;
 import com.oya.kr.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -163,22 +169,48 @@ public class UserService {
 		return "로그아웃되었습니다.";
 	}
 
-	public List<UserDetailResponse> readUsers(String type, String email) {
-		List<AdminMapperResponse> list = userRepository.readUsers();
-		return null;
+	/**
+	 * 사용자 상세보기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.23
+	 */
+	public List<? extends BasicUserResponse> read(long userId) {
+		User user = userRepository.findByUserId(userId);
+		List<? extends BasicUserResponse> result;
+		if(user.getUserType().isBusiness()){
+			List<BusinessMapperResponse> businessMapperResponses = userRepository.findByBusinessAll(userId);
+			result = businessMapperResponses.stream()
+				.map(BusinessUserResponse::new)
+				.collect(Collectors.toList());
+		}else{
+			List<BasicMapperResponse> basicMapperResponses = userRepository.findByBasicAll(userId);
+			result = basicMapperResponses.stream()
+				.map(BasicUserResponse::new)
+				.collect(Collectors.toList());
+		}
+		return result;
 	}
 
-
 	/**
-	 * 사용자 상세조회
+	 * 사용자 리스트 보기
 	 *
-	 * @header userId, email
-	 * @return UserDetailResponse
 	 * @author 이상민
-	 * @since 2024.02.22
+	 * @since 2024.02.23
 	 */
-	public UserDetailResponse read(long userId, String email) {
-		User loginUser = userRepository.findByEmail(email);
-		return null;
+	public List<? extends BasicUserResponse> reads(String type) {
+		List<? extends BasicUserResponse> result;
+		if(type.equals(UserType.BUSINESS.getName())){
+			List<BusinessMapperResponse> businessMapperResponses = userRepository.findByBusinessAll(null);
+			result = businessMapperResponses.stream()
+				.map(BusinessUserResponse::new)
+				.collect(Collectors.toList());
+		}else{
+			List<BasicMapperResponse> basicMapperResponses = userRepository.findByBasicAll(null);
+			result = basicMapperResponses.stream()
+				.map(BasicUserResponse::new)
+				.collect(Collectors.toList());
+		}
+		return result;
 	}
 }

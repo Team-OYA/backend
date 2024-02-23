@@ -1,6 +1,7 @@
 package com.oya.kr.user.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oya.kr.global.dto.response.ApplicationResponse;
@@ -19,8 +21,8 @@ import com.oya.kr.user.controller.dto.request.DuplicatedEmailRequest;
 import com.oya.kr.user.controller.dto.request.DuplicatedNicknameRequest;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.request.LoginRequest;
+import com.oya.kr.user.controller.dto.response.BasicUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
-import com.oya.kr.user.domain.User;
 import com.oya.kr.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -121,9 +123,32 @@ public class UserController {
 		return ResponseEntity.ok(ApplicationResponse.success(userService.logout(getAccessToken())));
 	}
 
+	/**
+	 * 사용자 상세조회
+	 *
+	 * @header principal
+	 * @author 이상민
+	 * @since 2024.02.22
+	 */
+	@GetMapping("/users/{userId}")
+	public ResponseEntity<ApplicationResponse<?>> read(Principal principal, @PathVariable long userId) {
+		return ResponseEntity.ok(ApplicationResponse.success(userService.read(userId)));
+	}
+
+	/**
+	 * 사용자 리스트
+	 *
+	 * @header principal
+	 * @author 이상민
+	 * @since 2024.02.22
+	 */
+	@GetMapping("/users")
+	public ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>> read(Principal principal, @RequestParam("type") String type) {
+		return ResponseEntity.ok(ApplicationResponse.success(userService.reads(type)));
+	}
+
 	private String getAccessToken() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return authentication.getCredentials().toString();
 	}
-
 }
