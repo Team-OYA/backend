@@ -35,12 +35,7 @@ public interface UserMapper {
 
 	void deleteFromUserId(Long id);
 
-	List<AdminMapperResponse> readUsers();
-
 	List<BasicMapperResponse> findByBasic(Long userId);
+
 	List<BusinessMapperResponse> findByBusiness(Long userId);
-
-	List<HashMap<String, Object>> getUserCommunityCount(@Param("userId") Long userId,
-		@Param("userType") String userType);
-
 }

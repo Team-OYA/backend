@@ -139,16 +139,11 @@ public class UserRepository {
     }
 
 
-    public List<BusinessMapperResponse> findByBusinessAll(Long userId) {
+    public List<BusinessMapperResponse> findByBusiness(Long userId) {
         return userMapper.findByBusiness(userId);
     }
 
-    public List<BasicMapperResponse> findByBasicAll(Long userId) {
+    public List<BasicMapperResponse> findByBasic(Long userId) {
         return userMapper.findByBasic(userId);
-    }
-
-    public List<BasicMapperResponse> getUserCommunityCount(Long userId, String type) {
-        List<HashMap<String, Object>> map = userMapper.getUserCommunityCount(userId, type);
-        return null;
     }
 }

@@ -3,7 +3,6 @@ package com.oya.kr.user.service;
 import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +23,6 @@ import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.controller.dto.response.BasicUserResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.domain.enums.UserType;
-import com.oya.kr.user.mapper.dto.response.AdminMapperResponse;
 import com.oya.kr.user.mapper.dto.response.BasicMapperResponse;
 import com.oya.kr.user.mapper.dto.response.BusinessMapperResponse;
 import com.oya.kr.user.repository.UserRepository;
@@ -177,19 +175,8 @@ public class UserService {
 	 */
 	public List<? extends BasicUserResponse> read(long userId) {
 		User user = userRepository.findByUserId(userId);
-		List<? extends BasicUserResponse> result;
-		if(user.getUserType().isBusiness()){
-			List<BusinessMapperResponse> businessMapperResponses = userRepository.findByBusinessAll(userId);
-			result = businessMapperResponses.stream()
-				.map(BusinessUserResponse::new)
-				.collect(Collectors.toList());
-		}else{
-			List<BasicMapperResponse> basicMapperResponses = userRepository.findByBasicAll(userId);
-			result = basicMapperResponses.stream()
-				.map(BasicUserResponse::new)
-				.collect(Collectors.toList());
-		}
-		return result;
+		UserType userType = user.getUserType();
+		return getUserResponses(userId, userType);
 	}
 
 	/**
@@ -199,14 +186,19 @@ public class UserService {
 	 * @since 2024.02.23
 	 */
 	public List<? extends BasicUserResponse> reads(String type) {
+		UserType userType = UserType.from(type);
+		return getUserResponses(null, userType);
+	}
+
+	private List<? extends BasicUserResponse> getUserResponses(Long userId, UserType userType) {
 		List<? extends BasicUserResponse> result;
-		if(type.equals(UserType.BUSINESS.getName())){
-			List<BusinessMapperResponse> businessMapperResponses = userRepository.findByBusinessAll(null);
+		if(userType.isBusiness()){
+			List<BusinessMapperResponse> businessMapperResponses = userRepository.findByBusiness(userId);
 			result = businessMapperResponses.stream()
 				.map(BusinessUserResponse::new)
 				.collect(Collectors.toList());
 		}else{
-			List<BasicMapperResponse> basicMapperResponses = userRepository.findByBasicAll(null);
+			List<BasicMapperResponse> basicMapperResponses = userRepository.findByBasic(userId);
 			result = basicMapperResponses.stream()
 				.map(BasicUserResponse::new)
 				.collect(Collectors.toList());
