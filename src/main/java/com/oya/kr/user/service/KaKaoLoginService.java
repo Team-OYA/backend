@@ -42,8 +42,7 @@ public class KaKaoLoginService {
 	public JwtTokenResponse accessTokenLogin(AccessTokenRequest token) {
 		KakaoInfo kakaoInfo = kakaoApiClient.requestOauthInfo(token);
 		User user = findOrCreateMember(kakaoInfo);
-
-		String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+		String accessToken = tokenProvider.createAccessToken(user);
 		String refreshToken = tokenProvider.createRefreshToken(user);
 		return new JwtTokenResponse("Bearer ", accessToken, refreshToken);
 	}

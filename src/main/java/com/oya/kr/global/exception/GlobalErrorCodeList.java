@@ -13,6 +13,7 @@ public enum GlobalErrorCodeList implements ErrorCode {
 	UNSUPPORTED_TOKEN("G0003", HttpStatus.FORBIDDEN, "지원되지 않는 JWT TOKEN입니다."),
 	WRONG_TOKEN("G0004", HttpStatus.FORBIDDEN, "잘못 설계된 TOKEN입니다."),
 	WRONG_ENUM("G0005", HttpStatus.FORBIDDEN, "존재하지 않는 ENUM입니다."),
+	EXPIRE_REFRESH_TOKEN("G0006", HttpStatus.FORBIDDEN, "REFRESH TOKEN이 만료되었습니다. 다시 로그인해주세요."),
 
 	// s3
 	FAIL_CONVERT_S3_IMAGE("G0006", HttpStatus.BAD_REQUEST, "S3 이미지 파일 변환에 실패하였습니다."),

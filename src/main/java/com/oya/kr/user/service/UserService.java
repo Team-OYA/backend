@@ -1,7 +1,9 @@
 package com.oya.kr.user.service;
 
-import static com.oya.kr.global.jwt.TokenProvider.*;
+import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
+
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,17 +11,24 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oya.kr.global.repository.RedisRepository;
 import com.oya.kr.global.domain.Header;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.request.LoginRequest;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
+import com.oya.kr.user.controller.dto.response.UserDetailResponse;
 import com.oya.kr.user.domain.User;
+import com.oya.kr.user.mapper.dto.response.AdminMapperResponse;
 import com.oya.kr.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.14
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -31,6 +40,8 @@ public class UserService {
 
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final TokenProvider tokenProvider;
+
+	private final RedisRepository redisRepository;
 
 	/**
 	 * 회원가입
@@ -102,8 +113,11 @@ public class UserService {
 		if (!user.checkPassword(bCryptPasswordEncoder, loginRequest.getPassword())) {
 			throw new ApplicationException(NOT_CORRECTED_PASSWORD);
 		}
-		String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+		String accessToken = tokenProvider.createAccessToken(user);
 		String refreshToken = tokenProvider.createRefreshToken(user);
+
+		// accessToken, refreshToken 저장
+		redisRepository.saveData(accessToken, refreshToken);
 		return new JwtTokenResponse(Header.BEARER.getValue(), accessToken, refreshToken);
 	}
 
@@ -125,17 +139,46 @@ public class UserService {
 	 * @author 이상민
 	 * @since 2024.02.12
 	 */
-	public JwtTokenResponse reissueAccessToken(User user, String accessToken) {
-		// accessToken으로 refreshToken 찾기
-		String refreshToken = "";
+	public JwtTokenResponse reissueAccessToken(String email, String accessToken) {
+		User user = userRepository.findByEmail(email);
+		String refreshToken = (String) redisRepository.getData(accessToken);
 		if (tokenProvider.validToken(refreshToken)) {
-			String newAccessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+			String newAccessToken = tokenProvider.createAccessToken(user);
+			redisRepository.deleteData(accessToken);
+			redisRepository.saveData(newAccessToken, refreshToken);
 			return new JwtTokenResponse(Header.BEARER.getValue(), newAccessToken, refreshToken);
+		}else{
+			throw new ApplicationException(EXPIRE_REFRESH_TOKEN);
 		}
+	}
+
+	/**
+	 * 로그아웃
+	 *
+	 * @author 이상민
+	 * @since 2024.02.23
+	 */
+	public String logout(String accessToken) {
+		redisRepository.deleteData(accessToken);
+		return "로그아웃되었습니다.";
+	}
+
+	public List<UserDetailResponse> readUsers(String type, String email) {
+		List<AdminMapperResponse> list = userRepository.readUsers();
 		return null;
 	}
 
-	public void logout(User user, String accessToken) {
-	}
 
+	/**
+	 * 사용자 상세조회
+	 *
+	 * @header userId, email
+	 * @return UserDetailResponse
+	 * @author 이상민
+	 * @since 2024.02.22
+	 */
+	public UserDetailResponse read(long userId, String email) {
+		User loginUser = userRepository.findByEmail(email);
+		return null;
+	}
 }

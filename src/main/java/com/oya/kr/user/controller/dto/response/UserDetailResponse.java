@@ -5,8 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class JoinResponse {
+public class UserDetailResponse {
 
-	private final long userId;
-	private final String email;
 }

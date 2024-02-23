@@ -45,11 +45,12 @@ public class KakaoApiClient {
 	public KakaoInfo requestOauthInfo(AccessTokenRequest token) {
 
 		URI uri = URI.create(kakaoUrl);
-		RestTemplate restTemplate = new RestTemplate();
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(Header.AUTH.getValue(), Header.BEARER.getValue() + token.getAccessToken());
 		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<KakaoInfo> responseEntity = restTemplate.exchange(
 			new RequestEntity<>(headers, HttpMethod.POST, uri), KakaoInfo.class);
 

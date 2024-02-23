@@ -2,6 +2,7 @@ package com.oya.kr.user.repository;
 
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,6 +15,7 @@ import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
+import com.oya.kr.user.mapper.dto.response.AdminMapperResponse;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -132,5 +134,9 @@ public class UserRepository {
      */
     public Integer duplicatedNickname(String nickname) {
         return userMapper.duplicatedNickname(nickname);
+    }
+
+    public List<AdminMapperResponse> readUsers() {
+        return userMapper.readUsers();
     }
 }

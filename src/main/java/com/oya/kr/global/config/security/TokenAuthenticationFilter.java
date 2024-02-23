@@ -1,5 +1,7 @@
 package com.oya.kr.global.config.security;
 
+import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
+
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -15,6 +17,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
+import com.oya.kr.global.repository.RedisRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,6 +31,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	private final static String HEADER_AUTHORIZATION = "Authorization";
 	private final static String TOKEN_PREFIX = "Bearer ";
 	private final TokenProvider tokenProvider;
+	private final RedisRepository redisRepository;
 
 	/**
 	 * security 필터
@@ -46,9 +50,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		}
 
 		try {
-			String token = getAccessToken(authorizationHeader);
-			if (tokenProvider.validToken(token)) {
-				Authentication authentication = tokenProvider.getAuthentication(token);
+			String accessToken = getAccessToken(authorizationHeader);
+			if (tokenProvider.validToken(accessToken)) {
+
+				Object getAccessToken = redisRepository.getData(accessToken);
+				if(getAccessToken == null){
+					throw new ApplicationException(EXPIRE_REFRESH_TOKEN);
+				}
+
+				Authentication authentication = tokenProvider.getAuthentication(accessToken);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 			filterChain.doFilter(request, response);

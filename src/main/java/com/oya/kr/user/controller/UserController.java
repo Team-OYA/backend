@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -105,13 +106,11 @@ public class UserController {
 	 */
 	@PostMapping("/users/reissue")
 	public ResponseEntity<ApplicationResponse<JwtTokenResponse>> reissue(Principal principal) {
-		User user = userService.findByEmail(principal.getName());
-		JwtTokenResponse tokenResponse = userService.reissueAccessToken(user, getAccessToken());
-		return ResponseEntity.ok(ApplicationResponse.success(tokenResponse));
+		return ResponseEntity.ok(ApplicationResponse.success(userService.reissueAccessToken(principal.getName(), getAccessToken())));
 	}
 
 	/**
-	 * 로그아웃 (리프레시 토큰의 기간 만료 처리, 삭제)
+	 * 로그아웃
 	 *
 	 * @header principal
 	 * @author 이상민
@@ -119,19 +118,12 @@ public class UserController {
 	 */
 	@PostMapping("/logout")
 	public ResponseEntity<ApplicationResponse<String>> logout(Principal principal) {
-		User user = userService.findByEmail(principal.getName());
-		userService.logout(user, getAccessToken());
-		return ResponseEntity.ok(ApplicationResponse.success("로그아웃되었습니다."));
+		return ResponseEntity.ok(ApplicationResponse.success(userService.logout(getAccessToken())));
 	}
 
 	private String getAccessToken() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return authentication.getCredentials().toString();
-	}
-
-	@GetMapping("/mypage")
-	public void me(Principal principal) {
-		logger.info(principal.getName());
 	}
 
 }
