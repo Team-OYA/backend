@@ -192,17 +192,20 @@ public class UserService {
 
 	private List<? extends BasicUserResponse> getUserResponses(Long userId, UserType userType) {
 		List<? extends BasicUserResponse> result;
+		List<? extends BasicMapperResponse> basicMapperResponses;
 		if(userType.isBusiness()){
-			List<BusinessMapperResponse> businessMapperResponses = userRepository.findByBusiness(userId);
-			result = businessMapperResponses.stream()
-				.map(BusinessUserResponse::new)
-				.collect(Collectors.toList());
+			basicMapperResponses = userRepository.findByBusiness(userId);
 		}else{
-			List<BasicMapperResponse> basicMapperResponses = userRepository.findByBasic(userId);
-			result = basicMapperResponses.stream()
-				.map(BasicUserResponse::new)
-				.collect(Collectors.toList());
+			basicMapperResponses = userRepository.findByBasic(userId);
 		}
-		return result;
+		return basicMapperResponses.stream()
+			.map(response->{
+				if(userType.isBusiness()){
+					return new BusinessUserResponse((BusinessMapperResponse) response);
+				}else{
+					return new BasicUserResponse(response);
+				}
+			})
+			.collect(Collectors.toList());
 	}
 }
