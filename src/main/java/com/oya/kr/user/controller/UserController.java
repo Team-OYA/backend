@@ -130,7 +130,7 @@ public class UserController {
 	 * @author 이상민
 	 * @since 2024.02.22
 	 */
-	@GetMapping("/users/{userId}")
+	@GetMapping("/admin/users/{userId}")
 	public ResponseEntity<ApplicationResponse<?>> read(Principal principal, @PathVariable long userId) {
 		return ResponseEntity.ok(ApplicationResponse.success(userService.read(userId)));
 	}
@@ -142,7 +142,7 @@ public class UserController {
 	 * @author 이상민
 	 * @since 2024.02.22
 	 */
-	@GetMapping("/users")
+	@GetMapping("/admin/users")
 	public ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>> read(Principal principal, @RequestParam("type") String type) {
 		return ResponseEntity.ok(ApplicationResponse.success(userService.reads(type)));
 	}
