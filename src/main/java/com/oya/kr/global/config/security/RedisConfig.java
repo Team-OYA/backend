@@ -32,7 +32,10 @@ public class RedisConfig {
 	 */
 	@Bean
 	public RedisConnectionFactory redisConnectionFactory() {
-		return new LettuceConnectionFactory(REDIS_HOST, REDIS_PORT);
+		LettuceConnectionFactory lettuceConnectionFactory = new LettuceConnectionFactory();
+		lettuceConnectionFactory.setHostName(REDIS_HOST);
+		lettuceConnectionFactory.setPort(REDIS_PORT);
+		return lettuceConnectionFactory;
 	}
 
 	/**

@@ -2,7 +2,6 @@ package com.oya.kr.user.repository;
 
 import static com.oya.kr.user.exception.UserErrorCodeList.NOT_EXIST_USER;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -16,8 +15,7 @@ import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
-import com.oya.kr.user.mapper.dto.response.BasicMapperResponse;
-import com.oya.kr.user.mapper.dto.response.BusinessMapperResponse;
+import com.oya.kr.user.mapper.dto.response.AdminMapperResponse;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -138,23 +136,7 @@ public class UserRepository {
         return userMapper.duplicatedNickname(nickname);
     }
 
-    /**
-     * 사업체 보기
-     *
-     * @author 이상민
-     * @since 2024.02.23
-     */
-    public List<BusinessMapperResponse> findByBusiness(Long userId) {
-        return userMapper.findByBusiness(userId);
-    }
-
-    /**
-     * 일반 사용자 보기
-     *
-     * @author 이상민
-     * @since 2024.02.23
-     */
-    public List<BasicMapperResponse> findByBasic(Long userId) {
-        return userMapper.findByBasic(userId);
+    public List<AdminMapperResponse> readUsers() {
+        return userMapper.readUsers();
     }
 }
