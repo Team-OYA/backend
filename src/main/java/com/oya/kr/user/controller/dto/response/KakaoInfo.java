@@ -43,6 +43,10 @@ public class KakaoInfo {
 		private KakaoProfile profile;
 		private String email;
 
+		// Default constructor
+		public KakaoAccount() {
+		}
+
 		public KakaoAccount(KakaoProfile profile, String email) {
 			this.profile = profile;
 			this.email = email;
@@ -54,11 +58,14 @@ public class KakaoInfo {
 	public static class KakaoProfile {
 		private String nickname;
 		@JsonProperty("profile_image_url")
-		private String profileImageUrl; // 추가된 부분
+		private String profileImageUrl;
 
-		public KakaoProfile(String nickname, String url) {
+		public KakaoProfile() {
+		}
+
+		public KakaoProfile(String nickname, String profileImageUrl) {
 			this.nickname = nickname;
-			this.profileImageUrl = url;
+			this.profileImageUrl = profileImageUrl;
 		}
 	}
 }

@@ -31,9 +31,7 @@ public class KaKaoController {
 	 * @since 2024.02.15
 	 */
 	@PostMapping("/oauth/login")
-	public ResponseEntity<ApplicationResponse<JwtTokenResponse>> loginKakao(
-		@RequestBody AccessTokenRequest accessToken,
-		@RequestParam("type") String type) {
+	public ResponseEntity<ApplicationResponse<JwtTokenResponse>> loginKakao(@RequestBody AccessTokenRequest accessToken) {
 		return ResponseEntity.ok(ApplicationResponse.success(kaKaoLoginService.accessTokenLogin(accessToken)));
 	}
 }

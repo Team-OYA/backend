@@ -1,14 +1,22 @@
 package com.oya.kr.user.mapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 
 import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
+import com.oya.kr.user.mapper.dto.response.BasicMapperResponse;
+import com.oya.kr.user.mapper.dto.response.BusinessMapperResponse;
 import com.oya.kr.user.mapper.dto.response.UserMapperResponse;
 
+/**
+ * @author 이상민
+ * @since 2024.02.14
+ */
 public interface UserMapper {
+
 	Optional<UserMapperResponse> findByEmail(@Param("email") String email);
 
 	int insertUser(SignupAdministratorMapperRequest signupAdministratorMapperRequest);
@@ -24,4 +32,8 @@ public interface UserMapper {
 	Optional<UserMapperResponse> findById(long userId);
 
 	void deleteFromUserId(Long id);
+
+	List<BasicMapperResponse> findByBasic(Long userId);
+
+	List<BusinessMapperResponse> findByBusiness(Long userId);
 }

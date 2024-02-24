@@ -25,29 +25,50 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * @author 이상민
+ * @since 2024.02.14
+ */
 @RequiredArgsConstructor
 @Service
 @Slf4j
 public class TokenProvider {
 
 	public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
-
-	// private final RedisDao redisDao;
 	private static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
 	private final JwtProperties jwtProperties;
 
-	public String generateToken(com.oya.kr.user.domain.User user, Duration expiredAt) {
+	/**
+	 * 	AccesssToken 생성
+	 *
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
+	public String createAccessToken(com.oya.kr.user.domain.User user) {
 		Date now = new Date();
-		return makeToken(new Date(now.getTime() + expiredAt.toMillis()), user);
+		return makeToken(new Date(now.getTime() + ACCESS_TOKEN_DURATION.toMillis()), user);
 	}
 
-	// refreshToken 생성
+	/**
+	 * 	refreshToken 생성
+	 *
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	public String createRefreshToken(com.oya.kr.user.domain.User user) {
-		String refreshToken = generateToken(user, REFRESH_TOKEN_DURATION);
-		// redis에 저장
-		return refreshToken;
+		Date now = new Date();
+		return makeToken(new Date(now.getTime() + REFRESH_TOKEN_DURATION.toMillis()), user);
 	}
 
+	/**
+	 * 	hToken 생성
+	 *
+	 * @return String
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	private String makeToken(Date expiry, com.oya.kr.user.domain.User user) {
 		Date now = new Date();
 
@@ -62,6 +83,13 @@ public class TokenProvider {
 			.compact(); // JWT 토큰 생성
 	}
 
+	/**
+	 * 	Token 검증
+	 *
+	 * @return boolean
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	public boolean validToken(String token) {
 		try {
 			Jwts.parser()
@@ -86,7 +114,13 @@ public class TokenProvider {
 		}
 	}
 
-	// 토큰 기반으로 인증 정보를 가져오는 메서드
+	/**
+	 * 	토큰 기반으로 인증 정보를 가져오기
+	 *
+	 * @return Authentication
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	public Authentication getAuthentication(String token) {
 		Claims claims = getClaims(token);
 		Set<SimpleGrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority("USER"));
@@ -94,7 +128,13 @@ public class TokenProvider {
 		return new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
 	}
 
-	// 토큰 기반으로 유저 ID를 가져오는 메서드
+	/**
+	 * 	토큰 기반으로 유저 ID를 가져오기
+	 *
+	 * @return Long
+	 * @author 이상민
+	 * @since 2024.02.14
+	 */
 	public Long getUserId(String token) {
 		Claims claims = getClaims(token);
 		return claims.get("id", Long.class);

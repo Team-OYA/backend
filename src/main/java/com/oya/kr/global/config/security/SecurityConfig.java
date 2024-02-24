@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.oya.kr.global.jwt.TokenProvider;
+import com.oya.kr.global.repository.RedisRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	private final TokenProvider tokenProvider;
+	private final RedisRepository redisRepository;
 
 	/**
 	 * Spring Security가 인증 및 권한 검사를 수행하지 않도록 설정
@@ -64,7 +66,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 		http.authorizeRequests()
 			.antMatchers("/api/v1/join", "/api/v1/login", "/oauth/login").permitAll()
-			// .antMatchers("/api/v1/mypage", "/api/v1/users/reissue").authenticated()
 			.anyRequest().authenticated();
 	}
 
@@ -76,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	 */
 	@Bean
 	public TokenAuthenticationFilter tokenAuthenticationFilter() {
-		return new TokenAuthenticationFilter(tokenProvider);
+		return new TokenAuthenticationFilter(tokenProvider, redisRepository);
 	}
 
 	/**

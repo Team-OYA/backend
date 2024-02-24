@@ -1,7 +1,10 @@
 package com.oya.kr.user.service;
 
-import static com.oya.kr.global.jwt.TokenProvider.*;
+import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
 import static com.oya.kr.user.exception.UserErrorCodeList.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,17 +12,27 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oya.kr.global.repository.RedisRepository;
 import com.oya.kr.global.domain.Header;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.request.LoginRequest;
+import com.oya.kr.user.controller.dto.response.BusinessUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
+import com.oya.kr.user.controller.dto.response.BasicUserResponse;
 import com.oya.kr.user.domain.User;
+import com.oya.kr.user.domain.enums.UserType;
+import com.oya.kr.user.mapper.dto.response.BasicMapperResponse;
+import com.oya.kr.user.mapper.dto.response.BusinessMapperResponse;
 import com.oya.kr.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.14
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -31,6 +44,8 @@ public class UserService {
 
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	private final TokenProvider tokenProvider;
+
+	private final RedisRepository redisRepository;
 
 	/**
 	 * 회원가입
@@ -102,8 +117,11 @@ public class UserService {
 		if (!user.checkPassword(bCryptPasswordEncoder, loginRequest.getPassword())) {
 			throw new ApplicationException(NOT_CORRECTED_PASSWORD);
 		}
-		String accessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+		String accessToken = tokenProvider.createAccessToken(user);
 		String refreshToken = tokenProvider.createRefreshToken(user);
+
+		// accessToken, refreshToken 저장
+		redisRepository.saveData(accessToken, refreshToken);
 		return new JwtTokenResponse(Header.BEARER.getValue(), accessToken, refreshToken);
 	}
 
@@ -125,17 +143,69 @@ public class UserService {
 	 * @author 이상민
 	 * @since 2024.02.12
 	 */
-	public JwtTokenResponse reissueAccessToken(User user, String accessToken) {
-		// accessToken으로 refreshToken 찾기
-		String refreshToken = "";
+	public JwtTokenResponse reissueAccessToken(String email, String accessToken) {
+		User user = userRepository.findByEmail(email);
+		String refreshToken = (String) redisRepository.getData(accessToken);
 		if (tokenProvider.validToken(refreshToken)) {
-			String newAccessToken = tokenProvider.generateToken(user, ACCESS_TOKEN_DURATION);
+			String newAccessToken = tokenProvider.createAccessToken(user);
+			redisRepository.deleteData(accessToken);
+			redisRepository.saveData(newAccessToken, refreshToken);
 			return new JwtTokenResponse(Header.BEARER.getValue(), newAccessToken, refreshToken);
+		}else{
+			throw new ApplicationException(EXPIRE_REFRESH_TOKEN);
 		}
-		return null;
 	}
 
-	public void logout(User user, String accessToken) {
+	/**
+	 * 로그아웃
+	 *
+	 * @author 이상민
+	 * @since 2024.02.23
+	 */
+	public String logout(String accessToken) {
+		redisRepository.deleteData(accessToken);
+		return "로그아웃되었습니다.";
 	}
 
+	/**
+	 * 사용자 상세보기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.23
+	 */
+	public List<? extends BasicUserResponse> read(long userId) {
+		User user = userRepository.findByUserId(userId);
+		UserType userType = user.getUserType();
+		return getUserResponses(userId, userType);
+	}
+
+	/**
+	 * 사용자 리스트 보기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.23
+	 */
+	public List<? extends BasicUserResponse> reads(String type) {
+		UserType userType = UserType.from(type);
+		return getUserResponses(null, userType);
+	}
+
+	private List<? extends BasicUserResponse> getUserResponses(Long userId, UserType userType) {
+		List<? extends BasicUserResponse> result;
+		List<? extends BasicMapperResponse> basicMapperResponses;
+		if(userType.isBusiness()){
+			basicMapperResponses = userRepository.findByBusiness(userId);
+		}else{
+			basicMapperResponses = userRepository.findByBasic(userId);
+		}
+		return basicMapperResponses.stream()
+			.map(response->{
+				if(userType.isBusiness()){
+					return new BusinessUserResponse((BusinessMapperResponse) response);
+				}else{
+					return new BasicUserResponse(response);
+				}
+			})
+			.collect(Collectors.toList());
+	}
 }
