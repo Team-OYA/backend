@@ -9,6 +9,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -28,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
 	private final static String HEADER_AUTHORIZATION = "Authorization";
 	private final static String TOKEN_PREFIX = "Bearer ";
 	private final TokenProvider tokenProvider;
@@ -43,7 +47,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
 
+		logger.info("regquest 값 : " + String.valueOf(request));
 		String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
+		logger.info("token : " + authorizationHeader);
 		if (!isAuthenticationRequired(request)) {
 			filterChain.doFilter(request, response);
 			return;

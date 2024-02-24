@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
+import com.oya.kr.global.repository.RedisRepository;
 import com.oya.kr.user.controller.client.KakaoApiClient;
 import com.oya.kr.user.controller.dto.request.AccessTokenRequest;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
@@ -31,6 +32,8 @@ public class KaKaoLoginService {
 	private final KakaoApiClient kakaoApiClient;
 	private final UserService userService;
 
+	private final RedisRepository redisRepository;
+
 	/**
 	 * access Token 으로 카카오 로그인
 	 *
@@ -44,6 +47,7 @@ public class KaKaoLoginService {
 		User user = findOrCreateMember(kakaoInfo);
 		String accessToken = tokenProvider.createAccessToken(user);
 		String refreshToken = tokenProvider.createRefreshToken(user);
+		redisRepository.saveData(accessToken, refreshToken);
 		return new JwtTokenResponse("Bearer ", accessToken, refreshToken);
 	}
 
