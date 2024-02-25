@@ -47,7 +47,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
 
-		logger.info("regquest 값 : " + String.valueOf(request));
+		logger.info("request 값 : " + String.valueOf(request));
 		String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
 		logger.info("token : " + authorizationHeader);
 		if (!isAuthenticationRequired(request)) {

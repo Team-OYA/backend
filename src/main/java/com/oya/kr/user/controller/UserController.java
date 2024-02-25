@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.oya.kr.global.dto.response.ApplicationResponse;
+import com.oya.kr.user.controller.dto.request.AccessTokenRequest;
 import com.oya.kr.user.controller.dto.request.DuplicatedEmailRequest;
 import com.oya.kr.user.controller.dto.request.DuplicatedNicknameRequest;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
@@ -107,7 +108,7 @@ public class UserController {
 	 * @since 2024.02.13
 	 */
 	@PostMapping("/users/reissue")
-	public ResponseEntity<ApplicationResponse<JwtTokenResponse>> reissue(Principal principal) {
+	public ResponseEntity<ApplicationResponse<JwtTokenResponse>> reissue(Principal principal, @RequestBody AccessTokenRequest accessToken) {
 		return ResponseEntity.ok(ApplicationResponse.success(userService.reissueAccessToken(principal.getName(), getAccessToken())));
 	}
 
