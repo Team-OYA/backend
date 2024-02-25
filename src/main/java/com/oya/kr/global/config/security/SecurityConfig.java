@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		http.authorizeRequests()
-			.antMatchers("/api/v1/join", "/api/v1/login", "/oauth/login").permitAll()
+			.antMatchers("/api/v1/join", "/api/v1/login", "/api/v1/oauth/login").permitAll()
 			.anyRequest().authenticated();
 	}
 
