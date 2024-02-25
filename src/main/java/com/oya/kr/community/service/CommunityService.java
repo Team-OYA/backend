@@ -173,6 +173,7 @@ public class CommunityService {
 	 */
 	public String saveCollection(String email, long communityId) {
 		User loginUser = userRepository.findByEmail(email);
+		communityRepository.findByIdWithView(communityId, loginUser.getId());
 		CollectionMapperRequest request = new CollectionMapperRequest(communityId, loginUser.getId());
 		boolean success = communityRepository.saveCollections(request);
 		if (success) {
