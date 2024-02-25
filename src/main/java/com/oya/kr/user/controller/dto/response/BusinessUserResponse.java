@@ -9,6 +9,7 @@ import lombok.Getter;
 public class BusinessUserResponse extends BasicUserResponse{
 
 	private final Long businessId;
+	private final String businessRegistrationNumber;
 	private final String nameOfCompany; // 상호
 	private final String nameOfRepresentative; // 대표자
 	private final String dateOfBusinessCommencement; // 개업일
@@ -33,5 +34,6 @@ public class BusinessUserResponse extends BasicUserResponse{
 		this.businessAddress = businessMapperResponse.getBusinessAddress();
 		this.planCount = businessMapperResponse.getPlanCount();
 		this.popupCount = businessMapperResponse.getPopupCount();
+		this.businessRegistrationNumber = businessMapperResponse.getBusinessRegistrationNumber();
 	}
 }
