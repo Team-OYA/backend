@@ -9,12 +9,17 @@
           AND DELETED = 0
     </select>
 
-    <select id="findByIdWithDate" parameterType="Long" resultType="popupDetailMapperResponse">
-        SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, null,
-            PN.CATEGORY, OPEN_DATE, CLOSE_DATE
+    <select id="findByIdWithDate" parameterType="popupDetailMapperRequest" resultType="popupDetailMapperResponse">
+        SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, null, PN.USER_ID,
+            PN.CATEGORY, OPEN_DATE, CLOSE_DATE,
+            NVL2(PC.ID, 1, 0) COLLECTED
         FROM POPUP P
             JOIN PLAN PN
                 ON P.PLAN_ID = PN.ID
+            LEFT JOIN POPUP_COLLECTION PC
+                ON P.ID = PC.POPUP_ID
+                AND PC.USER_ID = #{userId}
+                AND PC.DELETED = 0
         WHERE P.ID = #{popupId}
             AND P.DELETED = 0
     </select>
@@ -94,8 +99,8 @@
 
     <sql id="selectPopupWithPlanAndPopupImage">
         SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
-            PI.URL AS thumbnail, PN.CATEGORY,
-            OPEN_DATE, CLOSE_DATE
+            PI.URL thumbnail, PN.USER_ID userId, PN.CATEGORY,
+            OPEN_DATE, CLOSE_DATE, 1
         FROM POPUP P
             LEFT JOIN POPUP_IMAGE PI
                 ON P.ID = PI.POPUP_ID

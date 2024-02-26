@@ -50,6 +50,7 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest" alias="popupViewCreateOrUpdateMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupCollectionMapperRequest" alias="popupCollectionMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupCollectionSaveMapperRequest" alias="popupCollectionSaveMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest" alias="popupDetailMapperRequest"/>
 
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>

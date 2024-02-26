@@ -35,6 +35,9 @@ public class PlanMapperTest extends SpringApplicationTest {
     private PlanMapper planMapper;
 
     @Autowired
+    private PopupMapper popupMapper;
+
+    @Autowired
     private UserMapper userMapper;
 
     @Autowired
@@ -52,6 +55,7 @@ public class PlanMapperTest extends SpringApplicationTest {
     @BeforeEach
     void setUp() {
         businessMapper.deleteAll();
+        popupMapper.deleteAll();
         planMapper.deleteAll();
         userMapper.deleteAll();
     }
@@ -65,6 +69,7 @@ public class PlanMapperTest extends SpringApplicationTest {
     @AfterEach
     void init() {
         businessMapper.deleteAll();
+        popupMapper.deleteAll();
         planMapper.deleteAll();
         userMapper.deleteAll();
     }

@@ -88,6 +88,11 @@ public class CommunityService {
 	 * @return CommunityDetailResponse
 	 * @author 이상민
 	 * @since 2024.02.18
+	 *
+	 * 커뮤니티 게시글 스크랩 여부 추가
+	 *
+	 * @author 김유빈
+	 * @since 2024.02.16
 	 */
 	public CommunityDetailResponse read(String email, long communityId) {
 		User loginUser = userRepository.findByEmail(email);
@@ -98,8 +103,10 @@ public class CommunityService {
 		Community community = response.toDomain(writeUser);
 		int countView = response.getCountView();
 
+		boolean collected = communityRepository.existCollection(communityId, loginUser.getId());
+
 		List<VoteResponse> voteResponseList = getVoteList(community.getCommunityType().getName(), loginUser, community.getId());
-		return CommunityDetailResponse.from(imageList, community, countView, voteResponseList);
+		return CommunityDetailResponse.from(imageList, community, countView, voteResponseList, loginUser.getId(), collected);
 	}
 
 	/**

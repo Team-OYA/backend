@@ -23,6 +23,7 @@ import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.enums.WithdrawalStatus;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupCollectionSaveMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
@@ -137,7 +138,9 @@ public class PopupMapperTest extends SpringApplicationTest {
         popupMapper.save(request);
 
         // when
-        Optional<PopupDetailMapperResponse> mapperResponse = popupMapper.findByIdWithDate(request.getPopupId());
+        Optional<PopupDetailMapperResponse> mapperResponse = popupMapper.findByIdWithDate(
+            new PopupDetailMapperRequest(request.getPopupId(), savedUser.getId())
+        );
 
         // then
         assertThat(mapperResponse).isPresent();

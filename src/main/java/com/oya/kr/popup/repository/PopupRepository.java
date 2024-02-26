@@ -19,6 +19,7 @@ import com.oya.kr.popup.mapper.PopupMapper;
 import com.oya.kr.popup.mapper.PopupViewMapper;
 import com.oya.kr.popup.mapper.dto.request.PopupCollectionMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupCollectionSaveMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
@@ -66,7 +67,7 @@ public class PopupRepository {
      * @since 2024.02.21
      */
     public PopupDetailMapperResponse findByIdWithDate(Long id, Long userId) {
-        PopupDetailMapperResponse response = popupMapper.findByIdWithDate(id)
+        PopupDetailMapperResponse response = popupMapper.findByIdWithDate(new PopupDetailMapperRequest(id, userId))
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
         countView(id, userId);
         return response;

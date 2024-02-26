@@ -1,5 +1,6 @@
 package com.oya.kr.community.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -207,6 +208,23 @@ class CommunityMapperTest extends SpringApplicationTest {
 
 		// then
 		assertEquals(count1+1, count2);
+	}
+
+	/**
+	 * @author 김유빈
+	 * @since 2024.02.26
+	 */
+	@DisplayName("existCollection() : 스크랩 여부를 확인할 수 있다.")
+	@Test
+	void existCollection() {
+		// given
+		saveBasicCommunity();
+
+		// when
+		boolean collected = communityMapper.existCollection(communityId, user.getId());
+
+		// then
+		assertThat(collected).isFalse();
 	}
 
 	private int staticCount(){
