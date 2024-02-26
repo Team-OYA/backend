@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
@@ -27,4 +28,7 @@ public interface CommunityMapper {
 	void saveImage(@Param("imageUrl") String imageUrl, @Param("communityId") long communityId);
 	List<String> findByImage(long communityId);
 	List<StatisticsResponseMapper> statistics();
+	int findSizeByAll();
+	int findSizeByType(String type);
+	int findSizeByCollection(Long userId);
 }

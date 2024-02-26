@@ -143,6 +143,10 @@ public class CommunityService {
 	public CommunityResponse reads(String type,String email, PaginationRequest pagination) {
 		User loginUser = userRepository.findByEmail(email);
 		List<CommunityBasicMapperResponse> responseList;
+
+		// 전체 리스트 사이즈 찾기
+		int sum = communityRepository.findSizeByType(loginUser, type);
+
 		if(type.equals("all")){
 			responseList = communityRepository.findAll(null, pagination.getPageNo(), pagination.getAmount());
 		}else if(type.equals("collections")){
@@ -151,16 +155,16 @@ public class CommunityService {
 			String userType = UserType.from(type).getName();
 			responseList = communityRepository.findByType(userType, pagination.getPageNo(), pagination.getAmount());
 		}
-		return mapToCommunityResponses(loginUser, responseList);
+		return mapToCommunityResponses(loginUser, responseList, sum);
 	}
 
-	private CommunityResponse mapToCommunityResponses(User loginUser, List<CommunityBasicMapperResponse> responseList) {
+	private CommunityResponse mapToCommunityResponses(User loginUser, List<CommunityBasicMapperResponse> responseList, int sum) {
 		List<CommunityDetailResponse> communityDetailRespons = new ArrayList<>();
 		responseList.forEach(response -> {
 			CommunityDetailResponse communityDetailResponse = read(loginUser.getEmail(), response.getId());
 			communityDetailRespons.add(communityDetailResponse);
 		});
-		return new CommunityResponse(communityDetailRespons);
+		return new CommunityResponse(sum, communityDetailRespons);
 	}
 
 	/**
