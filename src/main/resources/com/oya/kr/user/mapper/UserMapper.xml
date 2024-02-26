@@ -123,6 +123,7 @@
         <result property="businessAddress" column="businessAddress"/>
         <result property="planCount" column="planCount"/>
         <result property="popupCount" column="popupCount"/>
+        <result property="businessRegistrationNumber" column="business_registration_number"/>
     </resultMap>
 
     <select id="findByBasic" resultMap="basicMapperResponse" resultType="com.oya.kr.user.mapper.dto.response.BasicMapperResponse">
@@ -141,6 +142,7 @@
         GROUP BY
         U.ID, U.NICKNAME, U.EMAIL, U.BIRTH_DATE, U.GENDER, U.REGISTRATION_TYPE, U.USER_TYPE,
         U.PROFILE_URL, U.CREATED_DATE, U.MODIFIED_DATE, U.DELETED
+        ORDER BY U.CREATED_DATE DESC
     </select>
 
     <select id="findByBusiness" resultMap="businessMapperResponse">
@@ -149,7 +151,7 @@
         U.PROFILE_URL, U.CREATED_DATE, U.MODIFIED_DATE, U.DELETED,
         U.BUSINESS_REGISTRATION_NUMBER,
         B.ID as businessId,B.NAME_OF_COMPANY,B.NAME_OF_REPRESENTATIVE,B.DATE_OF_BUSINESS_COMMENCEMENT,
-        B.BUSINESSITEM,B.CONNECTED_NUMBER,B.FAX_NUMBER,B.ZIP_CODE,B.BUSINESS_ADDRESS,
+        B.BUSINESSITEM,B.CONNECTED_NUMBER,B.FAX_NUMBER,B.ZIP_CODE,B.BUSINESS_ADDRESS, U.BUSINESS_REGISTRATION_NUMBER,
         COUNT(C.ID) as communityCount,
         COUNT(P.ID) as planCount,
         COUNT(PP.ID) as popupCount
@@ -170,7 +172,8 @@
         U.PROFILE_URL, U.CREATED_DATE, U.MODIFIED_DATE, U.DELETED,
         U.BUSINESS_REGISTRATION_NUMBER,
         B.ID,B.NAME_OF_COMPANY,B.NAME_OF_REPRESENTATIVE,B.DATE_OF_BUSINESS_COMMENCEMENT,
-        B.BUSINESSITEM,B.CONNECTED_NUMBER,B.FAX_NUMBER,B.ZIP_CODE,B.BUSINESS_ADDRESS
+        B.BUSINESSITEM,B.CONNECTED_NUMBER,B.FAX_NUMBER,B.ZIP_CODE,B.BUSINESS_ADDRESS, U.BUSINESS_REGISTRATION_NUMBER
+        ORDER BY U.CREATED_DATE DESC
     </select>
 
 </mapper>

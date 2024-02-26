@@ -34,8 +34,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TokenProvider {
 
-	public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(1);
-	private static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(14);
+	public static final Duration ACCESS_TOKEN_DURATION = Duration.ofDays(30);
+	private static final Duration REFRESH_TOKEN_DURATION = Duration.ofDays(90);
 	private final JwtProperties jwtProperties;
 
 	/**

@@ -18,6 +18,7 @@ public class BusinessMapperResponse extends BasicMapperResponse{
 	private final String faxNumber;
 	private final String zipCode;
 	private final String businessAddress; // 사업장 소재지
+	private final String businessRegistrationNumber;
 
 	private final int planCount;
 	private final int popupCount;
@@ -26,7 +27,7 @@ public class BusinessMapperResponse extends BasicMapperResponse{
 		String registrationType, String userType, String profileUrl, LocalDateTime userCreatedDate,
 		LocalDateTime userModifiedDate, boolean userDeleted, int communityCount, Long businessId, String nameOfCompany,
 		String nameOfRepresentative, LocalDate dateOfBusinessCommencement, String businessItem, String connectedNumber,
-		String faxNumber, String zipCode, String businessAddress, int planCount, int popupCount) {
+		String faxNumber, String zipCode, String businessAddress, int planCount, int popupCount, String businessRegistrationNumber) {
 		super(userId, nickname, email, birthDate, gender, registrationType, userType, profileUrl, userCreatedDate,
 			userModifiedDate, userDeleted, communityCount);
 		this.businessId = businessId;
@@ -40,5 +41,6 @@ public class BusinessMapperResponse extends BasicMapperResponse{
 		this.businessAddress = businessAddress;
 		this.planCount = planCount;
 		this.popupCount = popupCount;
+		this.businessRegistrationNumber = businessRegistrationNumber;
 	}
 }
