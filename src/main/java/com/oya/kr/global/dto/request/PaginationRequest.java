@@ -1,14 +1,19 @@
 package com.oya.kr.global.dto.request;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
 @Getter
-@Setter
-@ToString
 public class PaginationRequest {
 
-    private int pageNo;
-    private int amount;
+    private final int pageNo;
+    private final int amount;
+
+    public PaginationRequest(int pageNo, int amount) {
+        this.pageNo = Math.max(0, pageNo) * amount;
+        this.amount = amount;
+    }
 }

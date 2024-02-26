@@ -89,8 +89,8 @@ public class CommunityController {
 	 */
 	@GetMapping
 	public ResponseEntity<ApplicationResponse<CommunityResponse>> reads(Principal principal,
-		@RequestParam("type") String type, PaginationRequest pagination) {
-		return ResponseEntity.ok(ApplicationResponse.success(communityService.reads(type, principal.getName(), pagination)));
+		@RequestParam("type") String type, @RequestParam("pageNo") int pageNo, @RequestParam("amount") int amount) {
+		return ResponseEntity.ok(ApplicationResponse.success(communityService.reads(type, principal.getName(), new PaginationRequest(pageNo, amount))));
 	}
 
 	/**

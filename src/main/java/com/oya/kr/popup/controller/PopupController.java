@@ -51,7 +51,7 @@ public class PopupController {
     /**
      * 팝업스토어 게시글 리스트 조회 기능 구현
      *
-     * @parameter Principal, PaginationRequest, String
+     * @parameter Principal, pageNo, amount, String
      * @return ResponseEntity<ApplicationResponse<PopupsListResponse>>
      * @author 김유빈
      * @since 2024.02.19
@@ -59,24 +59,24 @@ public class PopupController {
     @GetMapping
     public ResponseEntity<ApplicationResponse<PopupsListResponse>> findAll(
         Principal principal,
-        PaginationRequest paginationRequest,
+        @RequestParam("pageNo") int pageNo, @RequestParam("amount") int amount,
         @RequestParam String sort) {
-        PopupsListResponse response = popupService.findAll(principal.getName(), paginationRequest, sort);
+        PopupsListResponse response = popupService.findAll(principal.getName(), new PaginationRequest(pageNo, amount), sort);
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 
     /**
      * 팝업스토어 게시글 추천 리스트 조회 기능 구현
      *
-     * @parameter Principal, PaginationRequest
+     * @parameter Principal, pageNo, amount
      * @return ResponseEntity<ApplicationResponse<PopupsListResponse>>
      * @author 김유빈
      * @since 2024.02.20
      */
     @GetMapping("/recommended")
     public ResponseEntity<ApplicationResponse<PopupsListResponse>> findAllRecommended(
-        Principal principal, PaginationRequest paginationRequest) {
-        PopupsListResponse response = popupService.findAllRecommended(principal.getName(), paginationRequest);
+        Principal principal, @RequestParam("pageNo") int pageNo, @RequestParam(value="amount", defaultValue = "10") int amount) {
+        PopupsListResponse response = popupService.findAllRecommended(principal.getName(), new PaginationRequest(pageNo, amount));
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 
