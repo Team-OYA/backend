@@ -17,7 +17,9 @@ public class PopupDetailMapperResponse {
     private final String withdrawalStatus;
     private final long planId;
     private final String thumbnail;
+    private final Long userId;
     private final String category;
     private final LocalDate openDate;
     private final LocalDate closeDate;
+    private final boolean collected;
 }

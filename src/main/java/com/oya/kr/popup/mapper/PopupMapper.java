@@ -3,6 +3,7 @@ package com.oya.kr.popup.mapper;
 import java.util.List;
 import java.util.Optional;
 
+import com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
@@ -16,7 +17,7 @@ public interface PopupMapper {
 
     Optional<PopupMapperResponse> findById(Long popupId);
 
-    Optional<PopupDetailMapperResponse> findByIdWithDate(Long popupId);
+    Optional<PopupDetailMapperResponse> findByIdWithDate(PopupDetailMapperRequest request);
 
     List<PopupMapperResponse> findAllByPlanId(Long planId);
 

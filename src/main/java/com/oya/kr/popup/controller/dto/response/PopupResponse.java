@@ -22,8 +22,10 @@ public class PopupResponse {
     private final CategoryResponse category;
     private final LocalDate openDate;
     private final LocalDate closeDate;
+    private final boolean written;
+    private final boolean collected;
 
-    public static PopupResponse from(PopupDetailMapperResponse response) {
+    public static PopupResponse from(PopupDetailMapperResponse response, Long userId) {
         return new PopupResponse(
             response.getId(),
             response.getPlanId(),
@@ -32,7 +34,9 @@ public class PopupResponse {
             response.getPulledDate(),
             CategoryResponse.from(Category.from(response.getCategory())),
             response.getOpenDate(),
-            response.getCloseDate()
+            response.getCloseDate(),
+            userId.equals(response.getUserId()),
+            response.isCollected()
         );
     }
 

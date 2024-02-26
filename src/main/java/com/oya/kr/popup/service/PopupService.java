@@ -53,7 +53,7 @@ public class PopupService {
     public PopupResponse findById(String email, Long popupId) {
         User savedUser = userRepository.findByEmail(email);
         PopupDetailMapperResponse popupMapperResponse = popupRepository.findByIdWithDate(popupId, savedUser.getId());
-        return PopupResponse.from(popupMapperResponse);
+        return PopupResponse.from(popupMapperResponse, savedUser.getId());
     }
 
     /**
