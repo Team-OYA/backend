@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 public class PopupListResponse {
 
     private final long planId;
+    private final long popupId;
     private final String title;
     private final String description;
     private final LocalDateTime pulledDate;
@@ -26,6 +27,7 @@ public class PopupListResponse {
     public static PopupListResponse from(PopupDetailMapperResponse response) {
         return new PopupListResponse(
             response.getPlanId(),
+            response.getId(),
             response.getTitle(),
             response.getDescription(),
             response.getPulledDate(),
