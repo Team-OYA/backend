@@ -213,4 +213,15 @@ public class CommunityRepository {
             return communityMapper.findSizeByType(type);
         }
 	}
+
+    /**
+     * 커뮤니티 게시글 스크랩 여부 반환
+     *
+     * @parameter long, Long
+     * @author 김유빈
+     * @since 2024.02.26
+     */
+    public boolean existCollection(long communityId, Long userId) {
+        return communityMapper.existCollection(communityId, userId);
+    }
 }

@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public class CommunityDetailResponse {
+
 	private final long writeId;
 	private final String nickname;
 	private final String email;
@@ -33,7 +34,11 @@ public class CommunityDetailResponse {
 	private final List<VoteResponse> voteResponseList;
 	private final List<String> imageList;
 
-	public static CommunityDetailResponse from(List<String> imageList, Community community, int countView, List<VoteResponse> voteResponseList) {
+	private final boolean written;
+	private final boolean collected;
+
+	public static CommunityDetailResponse from(List<String> imageList, Community community, int countView,
+		List<VoteResponse> voteResponseList, Long userId, boolean collected) {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 		String createdDateString = community.getCreatedDate().format(formatter);
@@ -54,7 +59,9 @@ public class CommunityDetailResponse {
 			modifiedDateString,
 			countView,
 			voteResponseList,
-			imageList
+			imageList,
+			userId.equals(community.getUser().getId()),
+			collected
 		);
 	}
 }

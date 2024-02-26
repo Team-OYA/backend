@@ -119,6 +119,23 @@
             AND CC.DELETED = 0
     </select>
 
+    <!--
+    스크랩 여부 반환 추가
+
+    @author 김유빈
+    @since 2024.02.26
+    -->
+    <select id="existCollection" resultType="boolean">
+        SELECT NVL2(CC.ID, 1, 0) COLLECTED
+        FROM COMMUNITY C
+        LEFT JOIN COMMUNITY_COLLECTION CC
+            ON C.ID = CC.COMMUNITY_ID
+                AND USER_ID = #{userId}
+                AND CC.DELETED = 0
+        WHERE C.ID = #{communityId}
+            AND C.DELETED = 0
+    </select>
+
     <sql id="selecCommunity">
         SELECT
             c.ID,
