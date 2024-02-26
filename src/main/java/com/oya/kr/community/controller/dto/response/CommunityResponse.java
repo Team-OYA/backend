@@ -13,5 +13,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CommunityResponse {
 
+	private final int listSize; // 전체 게시글 리스트
 	private final List<CommunityDetailResponse> communityDetailResponseList;
 }

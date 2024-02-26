@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ReadCollectionsMapperRequest {
 
-	private final long userId;
+	private final Long userId;
 	private final boolean collectionDeleted;
 	private final boolean communityDeleted;
 	private final String userType;

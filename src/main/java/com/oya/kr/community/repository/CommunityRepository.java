@@ -112,7 +112,7 @@ public class CommunityRepository {
      * @since 2024.02.21
      */
     public List<CommunityBasicMapperResponse> findAllCollections(Long userId, int pageNo, int amount) {
-        return collectionMapper.findByAll(new ReadCollectionsMapperRequest(userId,false,false, null, pageNo, amount));
+        return collectionMapper.findByAll(new ReadCollectionsMapperRequest(userId,false,false, "All", pageNo, amount));
     }
 
     /**
@@ -196,4 +196,21 @@ public class CommunityRepository {
         }
         communityMapper.delete(id);
     }
+
+    /**
+     * repository 계층으로 분리
+     *
+     * @parameter Long, Long
+     * @author 김유빈
+     * @since 2024.02.21
+     */
+    public int findSizeByType(User loginUser, String type) {
+        if(type.equals("all")){
+            return communityMapper.findSizeByAll();
+        }else if(type.equals("collections")){
+            return communityMapper.findSizeByCollection(loginUser.getId());
+        }else{
+            return communityMapper.findSizeByType(type);
+        }
+	}
 }

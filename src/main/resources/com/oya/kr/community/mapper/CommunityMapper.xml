@@ -95,6 +95,30 @@
         GROUP BY CATEGORY_CODE
     </select>
 
+    <select id="findSizeByAll" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM COMMUNITY
+        WHERE DELETED = 0
+    </select>
+
+    <select id="findSizeByType" resultType="java.lang.Integer">
+        SELECT COUNT(ID)
+        FROM COMMUNITY
+        WHERE COMMUNITY_TYPE = #{type}
+            AND DELETED = 0
+        GROUP BY ID
+    </select>
+
+    <select id="findSizeByCollection" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM COMMUNITY C
+                 LEFT JOIN COMMUNITY_COLLECTION CC
+                           ON C.ID = CC.COMMUNITY_ID
+        Where CC.USER_ID = #{userId}
+            AND C.DELETED = 0
+            AND CC.DELETED = 0
+    </select>
+
     <sql id="selecCommunity">
         SELECT
             c.ID,

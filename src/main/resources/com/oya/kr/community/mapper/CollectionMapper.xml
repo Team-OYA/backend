@@ -29,7 +29,6 @@
     </update>
 
     <select id="findByAll" parameterType="readCollectionsMapperRequest" resultType="communityBasicMapperResponse">
-    <![CDATA[
         SELECT
             c.ID,
             TITLE,
@@ -43,6 +42,7 @@
             COUNT(cv.COMMUNITY_ID) as countView
         FROM
             COMMUNITY c
+                LEFT JOIN USERS u on c.WRITE_ID = u.ID
                 LEFT JOIN COMMUNITY_VIEW cv ON c.ID = cv.COMMUNITY_ID
                 LEFT JOIN COMMUNITY_COLLECTION cc ON c.ID = cc.COMMUNITY_ID
         WHERE
@@ -53,7 +53,6 @@
             c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
         ORDER BY MODIFIED_DATE DESC
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
-        ]]>
     </select>
 
     <delete id="deleteByUserId">
