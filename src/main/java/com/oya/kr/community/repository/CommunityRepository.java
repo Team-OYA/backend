@@ -112,7 +112,7 @@ public class CommunityRepository {
      * @since 2024.02.21
      */
     public List<CommunityBasicMapperResponse> findAllCollections(Long userId, int pageNo, int amount) {
-        return collectionMapper.findByAll(new ReadCollectionsMapperRequest(userId,false,false, "All", pageNo, amount));
+        return collectionMapper.findByAll(new ReadCollectionsMapperRequest(userId,false,false, null, pageNo, amount));
     }
 
     /**
