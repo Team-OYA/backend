@@ -65,6 +65,13 @@
             <version>6.0.2.RELEASE</version>
         </dependency>
 
+        <!-- aws ses -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-ses</artifactId>
+            <version>1.11.227</version>
+        </dependency>
+
 
         <!-- Spring -->
         <dependency>
