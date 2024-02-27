@@ -11,6 +11,7 @@ import lombok.Getter;
 @Getter
 public enum EntranceStatus {
 
+	ALL("", "전체 조회"),
 	REQUEST("request", "입점 요청"),
 	WAITING("waiting", "입점 대기"),
 	WITHDRAWAL("withdrawal", "입점 철회"),

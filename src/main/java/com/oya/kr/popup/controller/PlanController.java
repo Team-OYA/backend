@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,7 @@ import com.oya.kr.popup.controller.dto.response.CategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
 import com.oya.kr.popup.controller.dto.response.EntranceStatusResponses;
+import com.oya.kr.popup.controller.dto.response.MyPlansResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
 import com.oya.kr.popup.service.PlanService;
 
@@ -99,6 +101,23 @@ public class PlanController {
     @GetMapping("/isNotWritten")
     public ResponseEntity<ApplicationResponse<PlansResponse>> findAllWithoutPopup(Principal principal) {
         PlansResponse response = planService.findAll(principal.getName());
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 나의 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter Principal, String, String, int, int
+     * @return ResponseEntity<ApplicationResponse<MyPlansResponse>>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @GetMapping("/me")
+    public ResponseEntity<ApplicationResponse<MyPlansResponse>> findAllAboutMe(
+        Principal principal,
+        @RequestParam(defaultValue = "") String category, @RequestParam(defaultValue = "") String entranceStatus,
+        @RequestParam int pageNo, @RequestParam int amount) {
+        MyPlansResponse response = planService.findAllAboutMe(principal.getName(), category, entranceStatus, pageNo, amount);
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 

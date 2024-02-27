@@ -19,6 +19,28 @@
         )
     </select>
 
+    <select id="findAllAboutMe" parameterType="planAboutMeMapperRequest" resultType="planAboutMeMapperResponse">
+        SELECT P.ID, OFFICE, FLOOR, OPEN_DATE, CLOSE_DATE, ENTRANCE_STATUS, CATEGORY, P.CREATED_DATE,
+               NVL2(PU.ID, 1, 0) WRITTEN_POPUP
+        FROM PLAN P
+            LEFT JOIN POPUP PU
+                ON P.ID = PU.PLAN_ID
+                    AND PU.DELETED = 0
+        WHERE P.USER_ID = #{userId}
+            AND P.CATEGORY LIKE '%'||#{category}||'%'
+            AND P.ENTRANCE_STATUS LIKE '%'||#{entranceStatus}||'%'
+        <include refid="offsetForPaging" />
+    </select>
+
+    <select id="countAboutMe" parameterType="planAboutMeMapperRequest">
+        SELECT COUNT(*) count
+        FROM PLAN
+        WHERE USER_Id = #{userId}
+            AND CATEGORY LIKE '%'||#{category}||'%'
+            AND ENTRANCE_STATUS LIKE '%'||#{entranceStatus}||'%'
+            AND DELETED = 0
+    </select>
+
     <insert id="save" parameterType="planSaveMapperRequest">
         INSERT INTO PLAN(OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
                          CONTACT_INFORMATION, CATEGORY, USER_ID)
@@ -41,5 +63,9 @@
         DELETE
         FROM PLAN
     </delete>
+
+    <sql id="offsetForPaging">
+        OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
+    </sql>
 
 </mapper>

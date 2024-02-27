@@ -1,6 +1,7 @@
 package com.oya.kr.popup.service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -15,12 +16,15 @@ import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesRe
 import com.oya.kr.popup.controller.dto.response.DepartmentResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
 import com.oya.kr.popup.controller.dto.response.EntranceStatusResponses;
+import com.oya.kr.popup.controller.dto.response.MyPlanResponse;
+import com.oya.kr.popup.controller.dto.response.MyPlansResponse;
 import com.oya.kr.popup.controller.dto.response.PlanResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.domain.enums.Department;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.enums.EntranceStatus;
+import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
@@ -117,6 +121,34 @@ public class PlanService {
         return new PlansResponse(
             planRepository.findAllWithoutPopup(savedUser).stream()
                 .map(PlanResponse::from)
+                .collect(Collectors.toUnmodifiableList())
+        );
+    }
+
+    /**
+     * 나의 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter String, String, String, int, int
+     * @return MyPlansResponse
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @Transactional(readOnly = true)
+    public MyPlansResponse findAllAboutMe(String email, String category, String entranceStatus, int pageNo, int amount) {
+        User savedUser = userRepository.findByEmail(email);
+        savedUser.validateUserIsBusiness();
+
+        Category savedCategory = Category.from(category);
+        EntranceStatus savedEntranceStatus = EntranceStatus.from(entranceStatus);
+
+        List<PlanAboutMeMapperResponse> mapperResponses = planRepository.findAllAboutMe(savedUser.getId(),
+            savedCategory, savedEntranceStatus, pageNo, amount);
+        int total = planRepository.countAboutMe(savedUser.getId(), savedCategory, savedEntranceStatus);
+
+        return new MyPlansResponse(
+            total,
+            mapperResponses.stream()
+                .map(MyPlanResponse::from)
                 .collect(Collectors.toUnmodifiableList())
         );
     }
