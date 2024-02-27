@@ -32,6 +32,25 @@
         <include refid="offsetForPaging" />
     </select>
 
+    <select id="findAll" parameterType="allPlanMapperRequest" resultType="allPlanMapperResponse">
+        SELECT P.ID, OFFICE, FLOOR, OPEN_DATE, CLOSE_DATE, ENTRANCE_STATUS, CATEGORY, P.CREATED_DATE,
+            NVL2(PU.ID, 1, 0) WRITTEN_POPUP,
+            B.NAME_OF_COMPANY COMPANY_NAME
+        FROM PLAN P
+            LEFT JOIN POPUP PU
+                ON P.ID = PU.PLAN_ID
+                    AND PU.DELETED = 0
+        JOIN USERS U
+            ON P.USER_ID = U.ID
+                AND U.DELETED = 0
+        LEFT JOIN BUSINESS B
+            ON U.ID = B.USER_ID
+                AND B.DELETED = 0
+        WHERE P.CATEGORY LIKE '%'||#{category}||'%'
+            AND P.ENTRANCE_STATUS LIKE '%'||#{entranceStatus}||'%'
+        <include refid="offsetForPaging"/>
+    </select>
+
     <select id="countAboutMe" parameterType="planAboutMeMapperRequest">
         SELECT COUNT(*) count
         FROM PLAN
@@ -39,6 +58,14 @@
             AND CATEGORY LIKE '%'||#{category}||'%'
             AND ENTRANCE_STATUS LIKE '%'||#{entranceStatus}||'%'
             AND DELETED = 0
+    </select>
+
+    <select id="countAboutAll" parameterType="allPlanMapperRequest">
+        SELECT COUNT(*) count
+        FROM PLAN
+        WHERE CATEGORY LIKE '%'||#{category}||'%'
+          AND ENTRANCE_STATUS LIKE '%'||#{entranceStatus}||'%'
+          AND DELETED = 0
     </select>
 
     <insert id="save" parameterType="planSaveMapperRequest">

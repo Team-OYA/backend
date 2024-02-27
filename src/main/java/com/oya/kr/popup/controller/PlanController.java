@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
+import com.oya.kr.popup.controller.dto.response.AllPlansResponse;
 import com.oya.kr.popup.controller.dto.response.CategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
@@ -100,7 +101,7 @@ public class PlanController {
      */
     @GetMapping("/isNotWritten")
     public ResponseEntity<ApplicationResponse<PlansResponse>> findAllWithoutPopup(Principal principal) {
-        PlansResponse response = planService.findAll(principal.getName());
+        PlansResponse response = planService.findAllWithoutPopup(principal.getName());
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 
@@ -118,6 +119,23 @@ public class PlanController {
         @RequestParam(defaultValue = "") String category, @RequestParam(defaultValue = "") String entranceStatus,
         @RequestParam int pageNo, @RequestParam int amount) {
         MyPlansResponse response = planService.findAllAboutMe(principal.getName(), category, entranceStatus, pageNo, amount);
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 모든 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter Principal, String, String, int, int
+     * @return ResponseEntity<ApplicationResponse<AllPlansResponse>>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @GetMapping
+    public ResponseEntity<ApplicationResponse<AllPlansResponse>> findAll(
+        Principal principal,
+        @RequestParam(defaultValue = "") String category, @RequestParam(defaultValue = "") String entranceStatus,
+        @RequestParam int pageNo, @RequestParam int amount) {
+        AllPlansResponse response = planService.findAll(principal.getName(), category, entranceStatus, pageNo, amount);
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 

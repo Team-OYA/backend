@@ -10,6 +10,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.oya.kr.global.support.StorageConnector;
 import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
+import com.oya.kr.popup.controller.dto.response.AllPlanResponse;
+import com.oya.kr.popup.controller.dto.response.AllPlansResponse;
 import com.oya.kr.popup.controller.dto.response.CategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentCategoryResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
@@ -24,6 +26,7 @@ import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.domain.enums.Department;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.enums.EntranceStatus;
+import com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.user.domain.User;
@@ -115,7 +118,7 @@ public class PlanService {
      * @since 2024.02.19
      */
     @Transactional(readOnly = true)
-    public PlansResponse findAll(String email) {
+    public PlansResponse findAllWithoutPopup(String email) {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
         return new PlansResponse(
@@ -149,6 +152,33 @@ public class PlanService {
             total,
             mapperResponses.stream()
                 .map(MyPlanResponse::from)
+                .collect(Collectors.toUnmodifiableList())
+        );
+    }
+
+    /**
+     * 모든 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter String, String, String, int, int
+     * @return AllPlansResponse
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @Transactional(readOnly = true)
+    public AllPlansResponse findAll(String email, String category, String entranceStatus, int pageNo, int amount) {
+        User savedUser = userRepository.findByEmail(email);
+        savedUser.validateUserIsAdministrator();
+
+        Category savedCategory = Category.from(category);
+        EntranceStatus savedEntranceStatus = EntranceStatus.from(entranceStatus);
+
+        List<AllPlanMapperResponse> mapperResponses = planRepository.findAll(savedCategory, savedEntranceStatus, pageNo, amount);
+        int total = planRepository.countAboutAll(savedCategory, savedEntranceStatus);
+
+        return new AllPlansResponse(
+            total,
+            mapperResponses.stream()
+                .map(AllPlanResponse::from)
                 .collect(Collectors.toUnmodifiableList())
         );
     }
