@@ -16,6 +16,7 @@ import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
 import com.oya.kr.popup.controller.dto.response.CategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
+import com.oya.kr.popup.controller.dto.response.EntranceStatusResponses;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
 import com.oya.kr.popup.service.PlanService;
 
@@ -36,6 +37,7 @@ public class PlanController {
     /**
      * 카테고리 리스트 조회 기능 구현
      *
+     * @parameter Principal
      * @return ResponseEntity<ApplicationResponse<CategoriesResponse>>
      * @author 김유빈
      * @since 2024.02.27
@@ -44,6 +46,20 @@ public class PlanController {
     public ResponseEntity<ApplicationResponse<CategoriesResponse>> findAllCategories(Principal principal) {
         CategoriesResponse response = planService.findAllCategories(principal.getName());
         return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 사업계획서 진행 단계 리스트 조회 기능 구현
+     *
+     * @parameter Principal
+     * @return ResponseEntity<ApplicationResponse<EntranceStatusResponses>>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @GetMapping("/entranceStatus")
+    public ResponseEntity<ApplicationResponse<EntranceStatusResponses>> findAllEntranceStatus(Principal principal) {
+        EntranceStatusResponses responses = planService.findAllEntranceStatus(principal.getName());
+        return ResponseEntity.ok(ApplicationResponse.success(responses));
     }
 
     /**

@@ -14,11 +14,13 @@ import com.oya.kr.popup.controller.dto.response.DepartmentCategoryResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
+import com.oya.kr.popup.controller.dto.response.EntranceStatusResponses;
 import com.oya.kr.popup.controller.dto.response.PlanResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.domain.enums.Department;
 import com.oya.kr.popup.domain.Plan;
+import com.oya.kr.popup.domain.enums.EntranceStatus;
 import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
@@ -42,13 +44,29 @@ public class PlanService {
     /**
      * 카테고리 리스트 조회 기능 구현
      *
+     * @parameter String
      * @return CategoriesResponse
      * @author 김유빈
      * @since 2024.02.27
      */
+    @Transactional(readOnly = true)
     public CategoriesResponse findAllCategories(String email) {
         Category[] categories = Category.values();
         return CategoriesResponse.from(categories);
+    }
+
+    /**
+     * 사업계획서 진행 단계 리스트 조회 기능 구현
+     *
+     * @parameter String
+     * @return EntranceStatusResponses
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @Transactional(readOnly = true)
+    public EntranceStatusResponses findAllEntranceStatus(String email) {
+        EntranceStatus[] entranceStatuses = EntranceStatus.values();
+        return EntranceStatusResponses.from(entranceStatuses);
     }
 
     /**
