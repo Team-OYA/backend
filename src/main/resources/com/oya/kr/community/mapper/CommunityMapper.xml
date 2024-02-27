@@ -102,11 +102,12 @@
     </select>
 
     <select id="findSizeByType" resultType="java.lang.Integer">
-        SELECT COUNT(ID)
-        FROM COMMUNITY
-        WHERE COMMUNITY_TYPE = #{type}
-            AND DELETED = 0
-        GROUP BY ID
+        SELECT COUNT(*)
+        FROM COMMUNITY C
+                 LEFT JOIN USERS U
+                           ON C.WRITE_ID = U.ID
+        WHERE U.USER_TYPE = #{type}
+          AND C.DELETED = 0
     </select>
 
     <select id="findSizeByCollection" resultType="java.lang.Integer">
