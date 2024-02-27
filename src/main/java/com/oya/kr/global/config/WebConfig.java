@@ -53,7 +53,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 	@Bean
 	public MultipartResolver multipartResolver() {
 		CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-		resolver.setMaxUploadSize(100000); // 최대 업로드 크기 설정
+		resolver.setMaxUploadSize(10000000); // 최대 업로드 크기 설정
 		return resolver;
 	}
 
