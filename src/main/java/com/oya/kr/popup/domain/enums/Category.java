@@ -15,6 +15,7 @@ import lombok.Getter;
 @Getter
 public enum Category {
 
+    ALL("", "all", "전체 조회"),
     FOOD("CG000001", "food", "식품"),
     LIVING("CG000002", "living", "생활"),
     STATIONERY("CG000003", "stationery", "문구"),
@@ -45,6 +46,6 @@ public enum Category {
         return Arrays.stream(values())
             .filter(it -> it.code.equals(category))
             .findFirst()
-            .orElseThrow(() -> new ApplicationException(NOT_EXIST_DEPARTMENT_FLOOR));
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_CATEGORY));
     }
 }

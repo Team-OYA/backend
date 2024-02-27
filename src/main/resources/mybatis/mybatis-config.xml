@@ -51,6 +51,8 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupCollectionMapperRequest" alias="popupCollectionMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupCollectionSaveMapperRequest" alias="popupCollectionSaveMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest" alias="popupDetailMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanAboutMeMapperRequest" alias="planAboutMeMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.AllPlanMapperRequest" alias="allPlanMapperRequest"/>
 
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
@@ -71,6 +73,8 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupMapperResponse" alias="popupMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse" alias="popupDetailMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupCollectionMapperResponse" alias="popupCollectionMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse" alias="planAboutMeMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse" alias="allPlanMapperResponse"/>
 
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>

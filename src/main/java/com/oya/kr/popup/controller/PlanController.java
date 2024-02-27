@@ -7,14 +7,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
+import com.oya.kr.popup.controller.dto.response.AllPlansResponse;
+import com.oya.kr.popup.controller.dto.response.CategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
+import com.oya.kr.popup.controller.dto.response.EntranceStatusResponses;
+import com.oya.kr.popup.controller.dto.response.MyPlansResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
 import com.oya.kr.popup.service.PlanService;
 
@@ -31,6 +36,34 @@ import lombok.RequiredArgsConstructor;
 public class PlanController {
 
     private final PlanService planService;
+
+    /**
+     * 카테고리 리스트 조회 기능 구현
+     *
+     * @parameter Principal
+     * @return ResponseEntity<ApplicationResponse<CategoriesResponse>>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @GetMapping("/categories")
+    public ResponseEntity<ApplicationResponse<CategoriesResponse>> findAllCategories(Principal principal) {
+        CategoriesResponse response = planService.findAllCategories(principal.getName());
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 사업계획서 진행 단계 리스트 조회 기능 구현
+     *
+     * @parameter Principal
+     * @return ResponseEntity<ApplicationResponse<EntranceStatusResponses>>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @GetMapping("/entranceStatus")
+    public ResponseEntity<ApplicationResponse<EntranceStatusResponses>> findAllEntranceStatus(Principal principal) {
+        EntranceStatusResponses responses = planService.findAllEntranceStatus(principal.getName());
+        return ResponseEntity.ok(ApplicationResponse.success(responses));
+    }
 
     /**
      * 현대백화점 지점 리스트 조회 기능 구현
@@ -68,7 +101,41 @@ public class PlanController {
      */
     @GetMapping("/isNotWritten")
     public ResponseEntity<ApplicationResponse<PlansResponse>> findAllWithoutPopup(Principal principal) {
-        PlansResponse response = planService.findAll(principal.getName());
+        PlansResponse response = planService.findAllWithoutPopup(principal.getName());
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 나의 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter Principal, String, String, int, int
+     * @return ResponseEntity<ApplicationResponse<MyPlansResponse>>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @GetMapping("/me")
+    public ResponseEntity<ApplicationResponse<MyPlansResponse>> findAllAboutMe(
+        Principal principal,
+        @RequestParam(defaultValue = "") String category, @RequestParam(defaultValue = "") String entranceStatus,
+        @RequestParam int pageNo, @RequestParam int amount) {
+        MyPlansResponse response = planService.findAllAboutMe(principal.getName(), category, entranceStatus, pageNo, amount);
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 모든 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter Principal, String, String, int, int
+     * @return ResponseEntity<ApplicationResponse<AllPlansResponse>>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @GetMapping
+    public ResponseEntity<ApplicationResponse<AllPlansResponse>> findAll(
+        Principal principal,
+        @RequestParam(defaultValue = "") String category, @RequestParam(defaultValue = "") String entranceStatus,
+        @RequestParam int pageNo, @RequestParam int amount) {
+        AllPlansResponse response = planService.findAll(principal.getName(), category, entranceStatus, pageNo, amount);
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 

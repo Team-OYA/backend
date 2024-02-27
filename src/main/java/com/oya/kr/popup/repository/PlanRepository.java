@@ -9,9 +9,15 @@ import org.springframework.stereotype.Repository;
 
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.popup.domain.Plan;
+import com.oya.kr.popup.domain.enums.Category;
+import com.oya.kr.popup.domain.enums.EntranceStatus;
 import com.oya.kr.popup.mapper.PlanMapper;
+import com.oya.kr.popup.mapper.dto.request.AllPlanMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PlanAboutMeMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest;
+import com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
 import com.oya.kr.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -52,6 +58,58 @@ public class PlanRepository {
         return planMapper.findAllWithoutPopup().stream()
             .map(planMapper -> planMapper.toDomain(user))
             .collect(Collectors.toUnmodifiableList());
+    }
+
+    /**
+     * 나의 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter Long, Category, EntranceStatus, int, int
+     * @return List<PlanAboutMeMapperResponse>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    public List<PlanAboutMeMapperResponse> findAllAboutMe(
+        Long userId, Category category, EntranceStatus entranceStatus, int pageNo, int amount) {
+        return planMapper.findAllAboutMe(
+            new PlanAboutMeMapperRequest(userId, category.getCode(), entranceStatus.getName(), pageNo, amount));
+    }
+
+    /**
+     * 모든 사업계획서 리스트 조회 기능 구현
+     *
+     * @parameter Category, EntranceStatus, int, int
+     * @return List<AllPlanMapperResponse>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    public List<AllPlanMapperResponse> findAll(
+        Category category, EntranceStatus entranceStatus, int pageNo, int amount) {
+        return planMapper.findAll(
+            new AllPlanMapperRequest(category.getCode(), entranceStatus.getName(), pageNo, amount));
+    }
+
+    /**
+     * 나의 사업계획서 리스트 조회 시 total 개수 조회 기능 구현
+     *
+     * @parameter Long, Category, EntranceStatus
+     * @return int
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    public int countAboutMe(Long userId, Category category, EntranceStatus entranceStatus) {
+        return planMapper.countAboutMe(new PlanAboutMeMapperRequest(userId, category.getCode(), entranceStatus.getName(), 0, 0));
+    }
+
+    /**
+     * 모든 사업계획서 리스트 조회 시 total 개수 조회 기능 구현
+     *
+     * @parameter Category, EntranceStatus
+     * @return int
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    public int countAboutAll(Category category, EntranceStatus entranceStatus) {
+        return planMapper.countAboutAll(new AllPlanMapperRequest(category.getCode(), entranceStatus.getName(), 0, 0));
     }
 
     /**
