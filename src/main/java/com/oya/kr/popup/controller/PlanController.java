@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
+import com.oya.kr.popup.controller.dto.response.CategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentFloorsWithCategoriesResponse;
 import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
@@ -31,6 +32,19 @@ import lombok.RequiredArgsConstructor;
 public class PlanController {
 
     private final PlanService planService;
+
+    /**
+     * 카테고리 리스트 조회 기능 구현
+     *
+     * @return ResponseEntity<ApplicationResponse<CategoriesResponse>>
+     * @author 김유빈
+     * @since 2024.02.27
+     */
+    @GetMapping("/categories")
+    public ResponseEntity<ApplicationResponse<CategoriesResponse>> findAllCategories(Principal principal) {
+        CategoriesResponse response = planService.findAllCategories(principal.getName());
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
 
     /**
      * 현대백화점 지점 리스트 조회 기능 구현
