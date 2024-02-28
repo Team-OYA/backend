@@ -78,6 +78,7 @@
 
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
+        <typeAlias type="com.oya.kr.user.mapper.dto.response.AdUserDetailMapperResponse" alias="adUserDetailMapperResponse"/>
 
     </typeAliases>
 </configuration>
