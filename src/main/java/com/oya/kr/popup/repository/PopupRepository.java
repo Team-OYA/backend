@@ -17,10 +17,12 @@ import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.PopupImage;
 import com.oya.kr.popup.domain.enums.PopupSort;
 import com.oya.kr.popup.domain.enums.WithdrawalStatus;
+import com.oya.kr.popup.mapper.PopupAdMapper;
 import com.oya.kr.popup.mapper.PopupCollectionMapper;
 import com.oya.kr.popup.mapper.PopupImageMapper;
 import com.oya.kr.popup.mapper.PopupMapper;
 import com.oya.kr.popup.mapper.PopupViewMapper;
+import com.oya.kr.popup.mapper.dto.request.PopupAdSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupCollectionMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupCollectionSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest;
@@ -50,6 +52,7 @@ public class PopupRepository {
     private final PopupImageMapper popupImageMapper;
     private final PopupViewMapper popupViewMapper;
     private final PopupCollectionMapper popupCollectionMapper;
+    private final PopupAdMapper popupAdMapper;
 
     /**
      * repository 계층으로 분리
@@ -158,6 +161,20 @@ public class PopupRepository {
     public void saveImage(PopupImage popupImage) {
         PopupImageSaveMapperRequest popupImageSaveMapperRequest = PopupImageSaveMapperRequest.from(popupImage);
         popupImageMapper.save(popupImageSaveMapperRequest);
+    }
+
+    /**
+     * 팝업스토어 게시글 광고 저장
+     *
+     * @parameter Popup, Long
+     * @return long
+     * @author 김유빈
+     * @since 2024.02.28
+     */
+    public long saveAd(Popup popup, Long amount) {
+        PopupAdSaveMapperRequest request = new PopupAdSaveMapperRequest(popup.getId(), amount);
+        popupAdMapper.save(request);
+        return request.getId();
     }
 
     /**

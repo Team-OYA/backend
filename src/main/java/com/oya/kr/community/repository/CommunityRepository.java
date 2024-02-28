@@ -10,9 +10,11 @@ import com.oya.kr.community.controller.dto.request.CommunityRequest;
 import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.community.exception.CommunityErrorCodeList;
 import com.oya.kr.community.mapper.CollectionMapper;
+import com.oya.kr.community.mapper.CommunityAdMapper;
 import com.oya.kr.community.mapper.CommunityMapper;
 import com.oya.kr.community.mapper.CommunityViewMapper;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
+import com.oya.kr.community.mapper.dto.request.CommunityAdSaveMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadMeMapperRequest;
@@ -33,6 +35,7 @@ public class CommunityRepository {
     private final CommunityMapper communityMapper;
     private final CommunityViewMapper communityViewMapper;
     private final CollectionMapper collectionMapper;
+    private final CommunityAdMapper communityAdMapper;
 
     /**
      * 게시글 기본 정보 조회
@@ -249,5 +252,19 @@ public class CommunityRepository {
      */
     public StatisticsCommunityMapperResponse statisticsForBusiness(Long userId) {
         return communityMapper.statisticsForBusiness(userId);
+    }
+
+    /**
+     * 커뮤니티 게시글 광고 저장
+     *
+     * @parameter CommunityBasicMapperResponse, Long
+     * @return long
+     * @author 김유빈
+     * @since 2024.02.28
+     */
+    public long saveAd(CommunityBasicMapperResponse community, Long amount) {
+        CommunityAdSaveMapperRequest request = new CommunityAdSaveMapperRequest(community.getId(), amount);
+        communityAdMapper.save(request);
+        return request.getId();
     }
 }

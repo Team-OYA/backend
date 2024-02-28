@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.community.mapper.CommunityAdMapper">
+
+    <insert id="save" parameterType="communityAdSaveMapperRequest">
+        INSERT INTO COMMUNITY_ADVERTISEMENT(COMMUNITY_ID, AMOUNT)
+        VALUES (#{communityId}, #{amount})
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+            SELECT NVL(MAX(ID), 0)
+            FROM COMMUNITY_ADVERTISEMENT
+        </selectKey>
+    </insert>
+
+</mapper>

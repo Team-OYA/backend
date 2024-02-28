@@ -41,6 +41,7 @@
         <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest" alias="readCollectionsMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.CommunityAdSaveMapperRequest" alias="communityAdSaveMapperRequest"/>
 
         <!-- global -->
 
@@ -57,6 +58,7 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest" alias="popupDetailMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanAboutMeMapperRequest" alias="planAboutMeMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.AllPlanMapperRequest" alias="allPlanMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupAdSaveMapperRequest" alias="popupAdSaveMapperRequest"/>
 
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
