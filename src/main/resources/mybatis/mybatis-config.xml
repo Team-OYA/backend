@@ -70,6 +70,7 @@
         <typeAlias type="com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse" alias="communityBasicMapperResponse"/>
         <typeAlias type="com.oya.kr.community.controller.dto.response.VoteResponse" alias="voteResponse"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper" alias="statisticsResponseMapper"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadMeMapperRequest" alias="readMeMapperRequest"/>
 
         <!-- popup -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse" alias="categoryMapperResponse"/>

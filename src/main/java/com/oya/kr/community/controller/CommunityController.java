@@ -85,7 +85,7 @@ public class CommunityController {
 	}
 
 	/**
-	 * 커뮤니티 게시글 리스트 조회 (sort : all, business, user, collections)
+	 * 커뮤니티 게시글 리스트 조회 (sort : all, business, user, collections, me)
 	 *
 	 * @param type, pageNo, amount
 	 * @return ResponseEntity<ApplicationResponse<String>>

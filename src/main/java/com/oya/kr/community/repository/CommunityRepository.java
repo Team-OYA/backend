@@ -15,6 +15,7 @@ import com.oya.kr.community.mapper.CommunityViewMapper;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
+import com.oya.kr.community.mapper.dto.request.ReadMeMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
@@ -223,5 +224,17 @@ public class CommunityRepository {
      */
     public boolean existCollection(long communityId, Long userId) {
         return communityMapper.existCollection(communityId, userId);
+    }
+
+    /**
+     * 내가 작성한 커뮤니티 게시글 리스트 조회
+     *
+     * @param  userId, pagination
+     * @return List<CommunityBasicMapperResponse>
+     * @author 이상민
+     * @since 2024.02.28
+     */
+    public List<CommunityBasicMapperResponse> findAllMe(Long userId, int pageNo, int amount) {
+        return communityMapper.findAllMe(new ReadMeMapperRequest(userId, pageNo, amount));
     }
 }
