@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.oya.kr.community.repository.CommunityRepository;
 import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.S3Connector;
@@ -15,10 +16,14 @@ import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
+import com.oya.kr.popup.controller.dto.response.StatisticsResponse;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.enums.PopupSort;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.StatisticsCommunityMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.StatisticsPopupMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.popup.repository.PopupRepository;
 import com.oya.kr.user.domain.User;
@@ -39,6 +44,7 @@ public class PopupService {
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
     private final PopupRepository popupRepository;
+    private final CommunityRepository communityRepository;
     private final S3Connector s3Connector;
 
     /**
@@ -134,6 +140,23 @@ public class PopupService {
         User savedUser = userRepository.findByEmail(email);
         Popup savedPopup = popupRepository.findById(popupId, null);
         popupRepository.collect(savedPopup, savedUser);
+    }
+
+    /**
+     * 사업체 팝업스토어 현황 조회 기능 구현
+     *
+     * @parameter String
+     * @author 김유빈
+     * @since 2024.02.28
+     */
+    public StatisticsResponse statistics(String email) {
+        User savedUser = userRepository.findByEmail(email);
+
+        StatisticsPlanMapperResponse planMapperResponse = planRepository.statistics(savedUser.getId());
+        StatisticsPopupMapperResponse popupMapperResponse = popupRepository.statistics(savedUser.getId());
+        StatisticsCommunityMapperResponse communityMapperResponse = communityRepository.statisticsForBusiness(savedUser.getId());
+
+        return StatisticsResponse.from(planMapperResponse, popupMapperResponse, communityMapperResponse);
     }
 
     private void validatePlanDoesNotHavePopup(Plan plan) {

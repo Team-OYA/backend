@@ -10,6 +10,7 @@ import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
+import com.oya.kr.popup.mapper.dto.response.StatisticsCommunityMapperResponse;
 
 /**
  * @author 이상민
@@ -27,6 +28,7 @@ public interface CommunityMapper {
 	void saveImage(@Param("imageUrl") String imageUrl, @Param("communityId") long communityId);
 	List<String> findByImage(long communityId);
 	List<StatisticsResponseMapper> statistics();
+	StatisticsCommunityMapperResponse statisticsForBusiness(Long userId);
 	int findSizeByAll();
 	int findSizeByType(String type);
 	int findSizeByCollection(Long userId);

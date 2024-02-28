@@ -10,6 +10,7 @@ import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest
 import com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PlanMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse;
 
 /**
  * @author 김유빈
@@ -24,6 +25,8 @@ public interface PlanMapper {
     List<PlanAboutMeMapperResponse> findAllAboutMe(PlanAboutMeMapperRequest request);
 
     List<AllPlanMapperResponse> findAll(AllPlanMapperRequest request);
+
+    StatisticsPlanMapperResponse statistics(Long userId);
 
     int countAboutMe(PlanAboutMeMapperRequest request);
 

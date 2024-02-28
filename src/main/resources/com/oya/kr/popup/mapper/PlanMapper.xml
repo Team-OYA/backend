@@ -51,6 +51,18 @@
         <include refid="offsetForPaging"/>
     </select>
 
+    <select id="statistics" parameterType="Long" resultType="statisticsPlanMapperResponse">
+        SELECT
+            COUNT(*) TOTAL,
+            SUM(CASE WHEN ENTRANCE_STATUS = 'request' THEN 1 ELSE 0 END) REQUEST,
+            SUM(CASE WHEN ENTRANCE_STATUS = 'waiting' THEN 1 ELSE 0 END) WAITING,
+            SUM(CASE WHEN ENTRANCE_STATUS = 'approval' THEN 1 ELSE 0 END) APPROVAL,
+            SUM(CASE WHEN ENTRANCE_STATUS = 'rejection' THEN 1 ELSE 0 END) REJECTION,
+            SUM(CASE WHEN ENTRANCE_STATUS = 'withdrawal' THEN 1 ELSE 0 END) WITHDRAWAL
+        FROM PLAN
+        WHERE USER_ID = #{userId} AND DELETED = 0
+    </select>
+
     <select id="countAboutMe" parameterType="planAboutMeMapperRequest">
         SELECT COUNT(*) count
         FROM PLAN
