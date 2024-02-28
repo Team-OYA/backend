@@ -135,4 +135,10 @@ public class PlanRepository {
         PlanUpdateEntranceStatusMapperRequest mapperRequest = PlanUpdateEntranceStatusMapperRequest.from(plan);
         planMapper.updateEntranceStatus(mapperRequest);
     }
+
+    public Plan findById(Long id) {
+        return planMapper.findById(id)
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
+            .toDomain();
+    }
 }

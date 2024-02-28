@@ -21,6 +21,7 @@ import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
 import com.oya.kr.popup.controller.dto.response.EntranceStatusResponses;
 import com.oya.kr.popup.controller.dto.response.MyPlansResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
+import com.oya.kr.popup.controller.dto.response.UserPlanResponse;
 import com.oya.kr.popup.service.PlanService;
 
 import lombok.AccessLevel;
@@ -210,5 +211,18 @@ public class PlanController {
     public ResponseEntity<ApplicationResponse<Void>> deny(Principal principal, @PathVariable Long planId) {
         planService.deny(principal.getName(), planId);
         return ResponseEntity.ok(ApplicationResponse.success(null));
+    }
+
+    /**
+     * 나의 사업계획서 조회
+     *
+     * @parameter Principal, planId
+     * @return ResponseEntity<ApplicationResponse<AllPlansResponse>>
+     * @author 이상민
+     * @since 2024.02.29
+     */
+    @GetMapping("/{planId}")
+    public ResponseEntity<ApplicationResponse<UserPlanResponse>> findById(Principal principal, @PathVariable Long planId) {
+        return ResponseEntity.ok(ApplicationResponse.success(planService.findById(planId)));
     }
 }

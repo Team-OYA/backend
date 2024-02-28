@@ -25,6 +25,7 @@ import com.oya.kr.popup.controller.dto.response.MyPlanResponse;
 import com.oya.kr.popup.controller.dto.response.MyPlansResponse;
 import com.oya.kr.popup.controller.dto.response.PlanResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
+import com.oya.kr.popup.controller.dto.response.UserPlanResponse;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.domain.enums.Department;
 import com.oya.kr.popup.domain.Plan;
@@ -34,9 +35,6 @@ import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
-
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 
 /**
  * @author 김유빈
@@ -315,4 +313,8 @@ public class PlanService {
             savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), title, content);
         sesSender.send(request);
     }
+
+	public UserPlanResponse findById(Long planId) {
+        return new UserPlanResponse(planRepository.findById(planId));
+	}
 }
