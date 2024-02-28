@@ -17,7 +17,7 @@ public class ChatMessageDetailResponse {
 
 	public ChatMessageDetailResponse(MessageDetailMapperResponse message) {
 		this.senderNickname = null;
-		this.message = getMessage();
+		this.message = message.getContent();
 		this.sendingTime = DateConvertor.convertDateFormatForResponse(message.getModifiedDate());
 	}
 }

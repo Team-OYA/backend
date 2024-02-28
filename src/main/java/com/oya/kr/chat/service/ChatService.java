@@ -79,12 +79,12 @@ public class ChatService {
 		return userRepository.findByEmail(email);
 	}
 
-	public List<ChatMessageDetailResponse> findByChatRoomId(Long roomId) {
-		// List<ChatMessageRequest> list = new ArrayList<>();
-		return chatMessageRepository.findByChatRoomId(roomId);
-		// responses.forEach(detail ->{
-		// 	list.add(new ChatMessageRequest(detail));
-		// });
-		// return list;
+	public List<ChatMessageRequest> findByChatRoomId(Long roomId) {
+		List<ChatMessageDetailResponse> responses = chatMessageRepository.findByChatRoomId(roomId);
+		List<ChatMessageRequest> list = new ArrayList<>();
+		responses.forEach(detail ->{
+			list.add(new ChatMessageRequest(detail));
+		});
+		return list;
 	}
 }

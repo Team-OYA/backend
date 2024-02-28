@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- roomDetails.jsp 파일 -->
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
@@ -20,7 +21,13 @@
 <button onclick="connect()">Connect</button>
 <button onclick="disconnect()">Disconnect</button>
 
-<div id="messages"></div>
+<div id="messages">
+<c:forEach var="chatRoomResponse" items="${chatMessage}">
+        Sender Nickname: ${chatRoomResponse.senderNickname} Message: ${chatRoomResponse.message} Sending Time: ${chatRoomResponse.sendingTime}
+        <br/>
+</c:forEach>
+</div>
+
 
 <input type="text" id="message" placeholder="Enter your message"/>
 <button onclick="sendMessage()">Send</button>
@@ -48,6 +55,8 @@
         console.log("Disconnected");
     }
 
+    var previousMessagesDiv = document.createElement('div');
+
     function sendMessage() {
         var message = document.getElementById('message').value;
         var chatMessageRequest = {
@@ -62,6 +71,10 @@
     function showMessage(message) {
         var messageDiv = document.createElement('div');
         messageDiv.innerHTML = "<p>" + message.sender + " (" + message.sendingTime + "): " + message.message + "</p>";
+
+        // 현재 메시지 div를 이전 메시지 div에 추가
+        // previousMessagesDiv.appendChild(messageDiv);
+
         document.getElementById('messages').appendChild(messageDiv);
     }
 
