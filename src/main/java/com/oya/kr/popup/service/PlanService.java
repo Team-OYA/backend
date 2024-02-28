@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.oya.kr.global.support.MailSender;
 import com.oya.kr.global.support.StorageConnector;
+import com.oya.kr.global.support.dto.request.SenderRequest;
 import com.oya.kr.popup.controller.dto.request.PlanSaveRequest;
 import com.oya.kr.popup.controller.dto.response.AllPlanResponse;
 import com.oya.kr.popup.controller.dto.response.AllPlansResponse;
@@ -41,12 +44,23 @@ import lombok.RequiredArgsConstructor;
  */
 @Service
 @Transactional
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class PlanService {
 
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
     private final StorageConnector s3Connector;
+    private final MailSender sesSender;
+
+    public PlanService(
+        UserRepository userRepository,
+        PlanRepository planRepository,
+        StorageConnector s3Connector,
+        @Qualifier("SESSender") MailSender sesSender) {
+        this.userRepository = userRepository;
+        this.planRepository = planRepository;
+        this.s3Connector = s3Connector;
+        this.sesSender = sesSender;
+    }
 
     /**
      * 카테고리 리스트 조회 기능 구현
@@ -231,6 +245,19 @@ public class PlanService {
         Plan savedPlan = planRepository.findById(planId, savedUser);
         savedPlan.waiting();
         planRepository.updateEntranceStatus(savedPlan);
+
+        String title = "[THEPOP] 제안해주신 사업계획서가 대기 상태로 전환되었습니다.";
+        String content = String.format(
+            "%s 고객님, 안녕하세요.\n"
+                + "제안해주신 사업계획서가 대기 상태로 전환되었습니다.\n"
+                + "대기 상태에는 커뮤니티 게시글을 자유롭게 작성하실 수 있습니다.\n"
+                + "이후 제안이 승인되면 팝업스토어 게시글을 올려 팝업스토어를 홍보하실 수 있습니다.\n"
+                + "팝업스토어 제안에 감사드립니다.\n"
+                + "THEPOP 드림", savedUser.getNickname());
+
+        SenderRequest request = new SenderRequest(
+            savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), title, content);
+        sesSender.send(request);
     }
 
     /**
@@ -247,6 +274,18 @@ public class PlanService {
         Plan savedPlan = planRepository.findById(planId, savedUser);
         savedPlan.approve();
         planRepository.updateEntranceStatus(savedPlan);
+
+        String title = "[THEPOP] 제안해주신 사업계획서가 승인되었습니다.";
+        String content = String.format(
+            "%s 고객님, 안녕하세요.\n"
+                + "팝업스토어 입점을 축하드립니다!\n"
+                + "사업계획서가 승인되어 팝업스토어 게시글을 올려 팝업스토어를 홍보하실 수 있습니다.\n"
+                + "팝업스토어 제안에 감사드립니다.\n"
+                + "THEPOP 드림", savedUser.getNickname());
+
+        SenderRequest request = new SenderRequest(
+            savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), title, content);
+        sesSender.send(request);
     }
 
     /**
@@ -263,5 +302,17 @@ public class PlanService {
         Plan savedPlan = planRepository.findById(planId, savedUser);
         savedPlan.deny();
         planRepository.updateEntranceStatus(savedPlan);
+
+        String title = "[THEPOP] 제안해주신 사업계획서가 거절되었습니다.";
+        String content = String.format(
+            "%s 고객님, 안녕하세요.\n"
+                + "안타깝지만 제안해주신 사업계획서는 현대백화점과 함께하지 못하게 되었습니다.\n"
+                + "이후에 더 좋은 사업계획서가 있다면 언제든 연락 바랍니다.\n"
+                + "팝업스토어 제안에 감사드립니다.\n"
+                + "THEPOP 드림", savedUser.getNickname());
+
+        SenderRequest request = new SenderRequest(
+            savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), title, content);
+        sesSender.send(request);
     }
 }
