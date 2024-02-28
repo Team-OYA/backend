@@ -133,9 +133,16 @@
         FROM COMMUNITY C
                  LEFT JOIN COMMUNITY_COLLECTION CC
                            ON C.ID = CC.COMMUNITY_ID
-        Where CC.USER_ID = #{userId}
-            AND C.DELETED = 0
-            AND CC.DELETED = 0
+        Where C.USER_ID = #{userId}
+          AND C.DELETED = 0
+          AND CC.DELETED = 0
+    </select>
+
+    <select id="findByWriteId" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM COMMUNITY
+        Where WRITE_ID = #{userId}
+          AND DELETED = 0
     </select>
 
     <!--

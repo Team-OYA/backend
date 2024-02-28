@@ -208,7 +208,9 @@ public class CommunityRepository {
     public int findSizeByType(User loginUser, String type) {
         if(type.equals("all")){
             return communityMapper.findSizeByAll();
-        }else if(type.equals("collections")){
+        }else if(type.equals("me")){
+            return communityMapper.findByWriteId(loginUser.getId());
+        } else if(type.equals("collections")){
             return communityMapper.findSizeByCollection(loginUser.getId());
         }else{
             return communityMapper.findSizeByType(type);

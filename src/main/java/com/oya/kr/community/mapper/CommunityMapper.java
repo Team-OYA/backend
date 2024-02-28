@@ -33,4 +33,5 @@ public interface CommunityMapper {
 	int findSizeByCollection(Long userId);
 	boolean existCollection(@Param("communityId") long communityId, @Param("userId") Long userId);
 	List<CommunityBasicMapperResponse> findAllMe(ReadMeMapperRequest readMeMapperRequest);
+	int findByWriteId(Long userId);
 }
