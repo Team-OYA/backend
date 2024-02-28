@@ -23,6 +23,10 @@ public enum GlobalErrorCodeList implements ErrorCode {
 
 	// regex
 	INVALID_FORMAT_CONTACT("G0008", HttpStatus.BAD_REQUEST, "연락처 형식이 잘못되었습니다."),
+
+	// rest template
+	HTTP_CLIENT_ERROR("G0009", HttpStatus.BAD_REQUEST, "외부 API 와의 연동에 실패하였습니다. 입력값을 확인해주세요."),
+	HTTP_SERVER_ERROR("G0010", HttpStatus.BAD_REQUEST, "외부 API 서버가 불안정하여 연동에 실패하였습니다. 다시 시도해주세요."),
 	;
 
 	private final String code;
