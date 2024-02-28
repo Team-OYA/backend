@@ -11,9 +11,7 @@ public class ChatRoomDetailMapperResponse {
 
 	private final Long id;
 	private final String name;
+	private final Long creator;
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifiedDate;
-
-	// private final User sender;
-	// private final User receiver;
 }

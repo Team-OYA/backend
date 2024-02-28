@@ -16,6 +16,5 @@ public class ChatRoom extends Base {
 
 	private Long id;
 	private String name;
-	private User sender;
-	private User receiver;
+	private User creator;
 }

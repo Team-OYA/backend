@@ -39,8 +39,9 @@ public class ChatService {
 	 * @author 이상민
 	 * @since 2024.02.27
 	 */
-	public void createChatRoom(String roomName){
-		chatRoomRepository.createChatRoom(new CreateChatRoomMapperRequest(roomName));
+	public void createChatRoom(String roomName, String email){
+		User user = userRepository.findByEmail(email);
+		chatRoomRepository.createChatRoom(new CreateChatRoomMapperRequest(roomName, user.getId()));
 	}
 
 	/**
@@ -49,8 +50,19 @@ public class ChatService {
 	 * @author 이상민
 	 * @since 2024.02.27
 	 */
-	public List<ChatRoomDetailResponse> findAllRoom(Long userId){
-		return chatRoomRepository.findAllRoom(userId);
+	public List<ChatRoomDetailResponse> findAllRoom(String email){
+		User user = userRepository.findByEmail(email);
+		return chatRoomRepository.findRoomByUser(user.getId());
+	}
+
+	/**
+	 * 관리자 채팅방 리스트 보여주기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.27
+	 */
+	public List<ChatRoomDetailResponse> findAllRoom() {
+		return chatRoomRepository.findAllRoom();
 	}
 
 	/**
@@ -87,4 +99,5 @@ public class ChatService {
 		});
 		return list;
 	}
+
 }

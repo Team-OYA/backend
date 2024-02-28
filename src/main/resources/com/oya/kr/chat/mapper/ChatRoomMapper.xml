@@ -5,17 +5,23 @@
     <!-- @author 이상민 -->
     <!-- @since 2024.02.28-->
     <insert id="save" parameterType="com.oya.kr.chat.mapper.dto.request.CreateChatRoomMapperRequest">
-        INSERT INTO CHAT_ROOM(NAME)
-        VALUES(#{name})
+        INSERT INTO CHAT_ROOM(NAME, CREATOR)
+        VALUES(#{name}, #{sender})
     </insert>
 
     <select id="findByAll" resultType="com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse">
-        SELECT ID, NAME, CREATED_DATE, MODIFIED_DATE
+        SELECT ID, NAME, CREATOR, CREATED_DATE, MODIFIED_DATE
         FROM CHAT_ROOM
     </select>
 
+    <select id="findRoomByUser" resultType="com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse">
+        SELECT ID, NAME, CREATOR, CREATED_DATE, MODIFIED_DATE
+        FROM CHAT_ROOM
+        WHERE CREATOR = #{userId}
+    </select>
+
     <select id="findRoomById" resultType="com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse">
-        SELECT ID, NAME, CREATED_DATE, MODIFIED_DATE
+        SELECT ID, NAME, CREATOR, CREATED_DATE, MODIFIED_DATE
         FROM CHAT_ROOM
         WHERE ID = #{roomId}
     </select>

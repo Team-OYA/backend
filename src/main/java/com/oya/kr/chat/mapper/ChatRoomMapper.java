@@ -8,5 +8,6 @@ import com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse;
 public interface ChatRoomMapper {
 	void save(CreateChatRoomMapperRequest createChatRoomMapperRequest);
 	List<ChatRoomDetailMapperResponse> findByAll();
+	List<ChatRoomDetailMapperResponse> findRoomByUser(Long userId);
 	ChatRoomDetailMapperResponse findRoomById(Long roomId);
 }

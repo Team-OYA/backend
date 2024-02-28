@@ -18,14 +18,35 @@ public class ChatRoomRepository { // 채팅 방 생성 및 정보 조회
 
 	public final ChatRoomMapper chatRoomMapper;
 
-	public List<ChatRoomDetailResponse> findAllRoom(Long userId){
+	/**
+	 * 채팅방 리스트 보여주기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.27
+	 */
+	public List<ChatRoomDetailResponse> findRoomByUser(Long userId){
 		// TODO : 채팅방 생성순서 최근 순으로 반환
 		// TODO : userId 추가
 		List<ChatRoomDetailResponse> detailResponses = new ArrayList<>();
-		List<ChatRoomDetailMapperResponse> list = chatRoomMapper.findByAll();
+		List<ChatRoomDetailMapperResponse> list = chatRoomMapper.findRoomByUser(userId);
 		list.forEach(response->{
 				detailResponses.add(new ChatRoomDetailResponse(response));
 			});
+		return detailResponses;
+	}
+
+	/**
+	 * 관리자 채팅방 리스트 보여주기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.27
+	 */
+	public List<ChatRoomDetailResponse> findAllRoom() {
+		List<ChatRoomDetailResponse> detailResponses = new ArrayList<>();
+		List<ChatRoomDetailMapperResponse> list = chatRoomMapper.findByAll();
+		list.forEach(response->{
+			detailResponses.add(new ChatRoomDetailResponse(response));
+		});
 		return detailResponses;
 	}
 

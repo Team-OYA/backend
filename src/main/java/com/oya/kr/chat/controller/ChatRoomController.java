@@ -1,6 +1,7 @@
 package com.oya.kr.chat.controller;
 
-import org.springframework.messaging.simp.SimpMessagingTemplate;
+import java.security.Principal;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,18 @@ import lombok.RequiredArgsConstructor;
 public class ChatRoomController {
 
 	private final ChatService chatService;
-	private final SimpMessagingTemplate messagingTemplate;
+
+	/**
+	 * 관리자 채팅방 리스트 보여주기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.28
+	 */
+	@GetMapping("/rooms/admin")
+	public String adminShowChatRooms(Model model) {
+		model.addAttribute("chatRoomResponses", chatService.findAllRoom());
+		return "chat/roomList";
+	}
 
 	/**
 	 * 채팅방 리스트 보여주기
@@ -34,7 +46,7 @@ public class ChatRoomController {
 	 */
 	@GetMapping("/rooms")
 	public String showChatRooms(Model model) {
-		model.addAttribute("chatRoomResponses", chatService.findAllRoom(1L));
+		model.addAttribute("chatRoomResponses", chatService.findAllRoom("test1233@gmail.com"));
 		return "chat/roomList";
 	}
 
@@ -60,7 +72,7 @@ public class ChatRoomController {
 	 */
 	@PostMapping("/createRoom")
 	public String createChatRoom(@RequestParam String roomName) {
-		chatService.createChatRoom(roomName);
+		chatService.createChatRoom(roomName, "test1233@gmail.com");
 		return "redirect:/chat/rooms";
 	}
 }

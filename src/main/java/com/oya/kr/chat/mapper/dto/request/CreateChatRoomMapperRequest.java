@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CreateChatRoomMapperRequest {
 
-	private final String name;
-
-	// private final Long sender;
-	// private final Long receiver;
+	private final String name; // 채팅 방 이름
+	private final Long sender; // creator
 }
