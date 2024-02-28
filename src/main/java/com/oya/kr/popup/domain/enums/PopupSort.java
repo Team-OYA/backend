@@ -17,6 +17,7 @@ import lombok.Getter;
 @Getter
 public enum PopupSort {
 
+    ME("me", "내가 작성한 팝업스토어 게시글 리스트 조회"),
     ALL("all", "모든 팝업스토어 게시글 리스트 조회"),
     PROGRESS("progress", "진행중인 팝업스토어 게시글 리스트 조회"),
     SCHEDULED("scheduled", "예정된 팝업스토어 게시글 리스트 조회"),
@@ -112,5 +113,16 @@ public enum PopupSort {
      */
     public boolean isCollections() {
         return this == COLLECTIONS;
+    }
+
+    /**
+     * 내가 작성한 팝업 조회 여부 반환
+     *
+     * @return boolean
+     * @author 이상민
+     * @since 2024.02.28
+     */
+    public boolean isMe() {
+        return this == ME;
     }
 }

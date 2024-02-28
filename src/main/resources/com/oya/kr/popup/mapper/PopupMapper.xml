@@ -114,4 +114,18 @@
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
     </sql>
 
+    <!--
+   내가 작성한 팝업 조회 여부 반환
+
+    @return boolean
+    @author 이상민
+    @since 2024.02.28
+   -->
+    <select id="findMe" >
+        <include refid="selectPopupWithPlanAndPopupImage" />
+        WHERE WITHDRAWAL_STATUS != #{request.withdrawalStatus} AND P.DELETED = 0 AND PN.USER_ID = #{userId}
+        ORDER BY PULLED_DATE DESC
+        OFFSET #{request.pageNo} ROWS FETCH NEXT #{request.amount} ROWS ONLY
+    </select>
+
 </mapper>

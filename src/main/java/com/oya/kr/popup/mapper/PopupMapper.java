@@ -3,6 +3,8 @@ package com.oya.kr.popup.mapper;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
@@ -34,4 +36,6 @@ public interface PopupMapper {
     void save(PopupSaveMapperRequest request);
 
     void deleteAll();
+
+    List<PopupDetailMapperResponse> findMe(@Param("request")PopupSearchMapperRequest request, @Param("userId")Long userId);
 }

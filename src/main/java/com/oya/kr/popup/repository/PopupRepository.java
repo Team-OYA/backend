@@ -98,6 +98,20 @@ public class PopupRepository {
         return popupSort.selectForSorting(popupMapper, request).get();
     }
 
+
+    /**
+     * 나의 팝업스토어 게시글
+     *
+     * @parameter int, int
+     * @return List<PopupDetailMapperResponse>
+     * @author 이상민
+     * @since 2024.02.28
+     */
+    public List<PopupDetailMapperResponse> findMe(Long userId, PopupSort popupSort, int pageNo, int amount) {
+        PopupSearchMapperRequest request = new PopupSearchMapperRequest(WithdrawalStatus.APPROVAL.getName(), pageNo, amount);
+        return popupMapper.findMe(request, userId);
+    }
+
     /**
      * repository 계층으로 분리
      *
