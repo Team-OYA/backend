@@ -47,7 +47,7 @@ public class CommunityController {
 	public ResponseEntity<ApplicationResponse<String>> save(
 		Principal principal,
 		@RequestPart("data") CommunityRequest communityRequest,
-		@RequestPart("images") List<MultipartFile> images,
+		@RequestPart(value = "images", required = false) List<MultipartFile> images,
 		@RequestParam("type") String communityType) {
 		return ResponseEntity.ok(ApplicationResponse.success(communityService.save(communityType, principal.getName(), communityRequest, images)));
 	}
