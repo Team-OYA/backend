@@ -88,7 +88,7 @@
             (SELECT COUNT(*) FROM POPUP P, PLAN PL WHERE P.PLAN_ID = PL.ID AND PL.USER_ID = #{userId}) AS TOTAL,
             (SELECT COUNT(*) FROM POPUP_ADVERTISEMENT PA, POPUP PU, PLAN PL
                 WHERE PA.POPUP_ID = PU.ID AND PU.PLAN_ID = PL.ID AND PL.USER_ID = #{userId}) AS AD
-        FROM dual;
+        FROM dual
     </select>
 
     <insert id="save" parameterType="popupSaveMapperRequest">
