@@ -3,6 +3,8 @@ package com.oya.kr.global.config.security;
 import static com.oya.kr.global.exception.GlobalErrorCodeList.*;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -47,13 +49,19 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
 
-		logger.info("request 값 : " + String.valueOf(request));
 		String authorizationHeader = request.getHeader(HEADER_AUTHORIZATION);
 		logger.info("token : " + authorizationHeader);
-		if (!isAuthenticationRequired(request)) {
+
+		if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")){
+			logger.error("잘못된 헤더 형식 : {}", authorizationHeader);
 			filterChain.doFilter(request, response);
 			return;
 		}
+
+		// if (!isAuthenticationRequired(request)) {
+		// 	filterChain.doFilter(request, response);
+		// 	return;
+		// }
 
 		try {
 			String accessToken = getAccessToken(authorizationHeader);
@@ -90,6 +98,11 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 		return null;
 	}
 
+	private static final List<String> PUBLIC_URIS = Arrays.asList(
+		"/chat/room",
+		"/ws/chat","/ws",
+		"/api/v1/login", "/api/v1/join", "/api/v1/oauth/login");
+
 	/**
 	 * security 적용안되는 url 찾기
 	 *
@@ -98,6 +111,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 	 */
 	private boolean isAuthenticationRequired(HttpServletRequest request) {
 		String requestURI = request.getRequestURI();
-		return !("/api/v1/login".equals(requestURI) || "/api/v1/join".equals(requestURI) || "/api/v1/oauth/login".equals(requestURI));
+		return !PUBLIC_URIS.contains(requestURI);
 	}
 }

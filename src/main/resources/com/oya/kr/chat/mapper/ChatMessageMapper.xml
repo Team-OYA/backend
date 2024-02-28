@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.chat.mapper.ChatMessageMapper">
+
+    <!-- @author 이상민 -->
+    <!-- @since 2024.02.28-->
+    <insert id="save" parameterType="com.oya.kr.chat.mapper.dto.request.CreateMessageMapperRequest">
+        INSERT INTO CHAT_MESSAGE(chat_room_id, content)
+        VALUES(#{chatRoomId}, #{content})
+    </insert>
+
+    <select id="findByChatRoomId" resultType="com.oya.kr.chat.mapper.dto.response.MessageDetailMapperResponse">
+        SELECT CONTENT, CREATED_DATE, MODIFIED_DATE
+        FROM CHAT_MESSAGE
+        WHERE chat_room_id = #{roomId}
+    </select>
+
+</mapper>

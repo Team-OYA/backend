@@ -22,7 +22,6 @@ import com.oya.kr.global.config.security.SecurityConfig;
 @EnableWebMvc
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer
     implements WebMvcConfigurer {
-
 	@Override
 	protected Class<?>[] getRootConfigClasses() {
 		return new Class[] {RootConfig.class};

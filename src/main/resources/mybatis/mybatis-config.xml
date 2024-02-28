@@ -29,6 +29,10 @@
 
         <!-- mapper request -->
 
+        <!-- chat -->
+        <typeAlias type="com.oya.kr.chat.mapper.dto.request.CreateChatRoomMapperRequest" alias="createChatRoomMapperRequest"/>
+        <typeAlias type="com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse" alias="chatRoomDetailMapperResponse"/>
+
         <!-- community -->
         <typeAlias type="com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest" alias="saveBasicMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest" alias="saveVoteMapperRequest"/>
