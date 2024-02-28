@@ -23,11 +23,13 @@ import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.dto.response.ApplicationResponse;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 
 /**
  * @author 이상민
  * @since 2024.02.17
  */
+@Log
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/communities")
@@ -47,8 +49,11 @@ public class CommunityController {
 	public ResponseEntity<ApplicationResponse<String>> save(
 		Principal principal,
 		@RequestPart("data") CommunityRequest communityRequest,
-		@RequestPart("images") List<MultipartFile> images,
+		@RequestPart(value = "images", required = false) List<MultipartFile> images,
 		@RequestParam("type") String communityType) {
+		log.info(communityRequest.toString());
+		log.info(images.toString());
+		log.info(communityType);
 		return ResponseEntity.ok(ApplicationResponse.success(communityService.save(communityType, principal.getName(), communityRequest, images)));
 	}
 
