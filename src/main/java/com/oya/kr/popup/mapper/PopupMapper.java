@@ -10,6 +10,7 @@ import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.PopupTopMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.StatisticsPopupMapperResponse;
 
 /**
@@ -41,4 +42,6 @@ public interface PopupMapper {
     void deleteAll();
 
     List<PopupDetailMapperResponse> findMe(@Param("request")PopupSearchMapperRequest request, @Param("userId")Long userId);
+
+	List<PopupTopMapperResponse> findByTop();
 }

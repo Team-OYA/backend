@@ -136,4 +136,21 @@
         OFFSET #{request.pageNo} ROWS FETCH NEXT #{request.amount} ROWS ONLY
     </select>
 
+    <!--
+    팝업스토어 순위
+
+    @return PopupTopMapperResponse
+    @author 이상민
+    @since 2024.02.29
+   -->
+    <select id="findByTop" resultType="com.oya.kr.popup.mapper.dto.response.PopupTopMapperResponse">
+        SELECT pl.USER_ID, p.ID as planId, p.TITLE, COUNT(p.ID) AS viewSum
+        FROM POPUP p
+                 LEFT JOIN POPUP_VIEW pv ON p.ID = pv.POPUP_ID
+                 LEFT JOIN PLAN pl ON p.PLAN_ID = pl.ID
+                 LEFT JOIN USERS u ON u.ID = pl.USER_ID
+        GROUP BY p.ID, p.TITLE, pl.USER_ID
+        ORDER BY viewSum desc
+    </select>
+
 </mapper>

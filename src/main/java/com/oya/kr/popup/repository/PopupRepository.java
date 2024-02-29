@@ -2,12 +2,16 @@ package com.oya.kr.popup.repository;
 
 import static com.oya.kr.popup.exception.PopupErrorCodeList.NOT_EXIST_POPUP;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.popup.controller.dto.response.PopupLankListResponse;
+import com.oya.kr.popup.controller.dto.response.PopupLankResponse;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.PopupImage;
@@ -27,6 +31,7 @@ import com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupCollectionMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.PopupTopMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.StatisticsPopupMapperResponse;
 import com.oya.kr.user.domain.User;
 
@@ -189,4 +194,29 @@ public class PopupRepository {
         PopupViewCreateOrUpdateMapperRequest request = new PopupViewCreateOrUpdateMapperRequest(userId, id);
         popupViewMapper.createOrUpdatePopupView(request);
     }
+
+    /**
+     * 나와 TOP5 팝업스토어 순위
+     *
+     * @parameter Principal
+     * @return PopupLankResponse
+     * @author 이상민
+     * @since 2024.02.29
+     */
+	public PopupLankListResponse findByTopMe(User user) {
+        List<PopupTopMapperResponse> list = popupMapper.findByTop();
+
+        List<PopupLankResponse> myPopupLankResponse = new ArrayList();
+        List<PopupLankResponse> popupLankResponses = new ArrayList<>();
+
+        for(int i=0; i<list.size(); i++){
+            if(i == 5) break;
+            PopupLankResponse popupLankResponse = new PopupLankResponse(i+1, list.get(i));
+            if(list.get(i).getUserId() == user.getId()){
+                myPopupLankResponse.add(popupLankResponse);
+            }
+            popupLankResponses.add(popupLankResponse);
+        }
+        return new PopupLankListResponse(myPopupLankResponse, popupLankResponses);
+	}
 }
