@@ -4,6 +4,8 @@ import static com.oya.kr.community.exception.CommunityErrorCodeList.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -106,6 +108,10 @@ public class CommunityService {
 		boolean collected = communityRepository.existCollection(communityId, loginUser.getId());
 
 		List<VoteResponse> voteResponseList = getVoteList(community.getCommunityType().getName(), loginUser, community.getId());
+
+		if(voteResponseList != null){
+			voteResponseList.sort(Comparator.comparing(VoteResponse::getVote_id));
+		}
 		return CommunityDetailResponse.from(imageList, community, countView, voteResponseList, loginUser.getId(), collected);
 	}
 
