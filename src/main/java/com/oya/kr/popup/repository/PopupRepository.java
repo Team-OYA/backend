@@ -23,6 +23,7 @@ import com.oya.kr.popup.mapper.PopupImageMapper;
 import com.oya.kr.popup.mapper.PopupMapper;
 import com.oya.kr.popup.mapper.PopupViewMapper;
 import com.oya.kr.popup.mapper.dto.request.PopupAdSaveMapperRequest;
+import com.oya.kr.popup.mapper.dto.request.PopupAdUpdateMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupCollectionMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupCollectionSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest;
@@ -31,6 +32,7 @@ import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.MyPopupDetailMapper;
+import com.oya.kr.popup.mapper.dto.response.PopupAdMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupCollectionMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
@@ -81,6 +83,18 @@ public class PopupRepository {
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
         countView(id, userId);
         return response;
+    }
+
+    /**
+     * orderId 를 이용하여 팝업스토어 게시글 광고 정보 조회
+     *
+     * @parameter String
+     * @return Optional<PopupAdMapperResponse>
+     * @author 김유빈
+     * @since 2024.02.29
+     */
+    public Optional<PopupAdMapperResponse> findAdByOrderId(String orderId) {
+        return popupAdMapper.findAdByOrderId(orderId);
     }
 
     /**
@@ -166,15 +180,13 @@ public class PopupRepository {
     /**
      * 팝업스토어 게시글 광고 저장
      *
-     * @parameter Popup, Long
-     * @return long
+     * @parameter Popup, String, Long
      * @author 김유빈
      * @since 2024.02.28
      */
-    public long saveAd(Popup popup, Long amount) {
-        PopupAdSaveMapperRequest request = new PopupAdSaveMapperRequest(popup.getId(), amount);
+    public void saveAd(Popup popup, String orderId, Long amount) {
+        PopupAdSaveMapperRequest request = new PopupAdSaveMapperRequest(popup.getId(), orderId, amount);
         popupAdMapper.save(request);
-        return request.getId();
     }
 
     /**
@@ -208,11 +220,6 @@ public class PopupRepository {
         return popupMapper.statistics(userId);
     }
 
-    private void countView(Long id, Long userId) {
-        PopupViewCreateOrUpdateMapperRequest request = new PopupViewCreateOrUpdateMapperRequest(userId, id);
-        popupViewMapper.createOrUpdatePopupView(request);
-    }
-
     /**
      * 나와 TOP5 팝업스토어 순위
      *
@@ -221,7 +228,7 @@ public class PopupRepository {
      * @author 이상민
      * @since 2024.02.29
      */
-	public PopupLankListResponse findByTopMe(User user) {
+    public PopupLankListResponse findByTopMe(User user) {
         List<PopupTopMapperResponse> list = popupMapper.findByTop();
 
         List<PopupLankResponse> myPopupLankResponse = new ArrayList();
@@ -237,7 +244,7 @@ public class PopupRepository {
             }
         }
         return new PopupLankListResponse(myPopupLankResponse, popupLankResponses);
-	}
+    }
 
     /**
      * 팝업이미지 불러오기
@@ -261,5 +268,21 @@ public class PopupRepository {
      */
     public MyPopupDetailMapper findByPlanId(Long planId) {
         return popupMapper.findByPlanId(planId);
+    }
+
+    /**
+     * 팝업스토어 게시글 결제 정보 저장
+     *
+     * @parameter String, String
+     * @author 김유빈
+     * @since 2024.02.29
+     */
+    public void updateAdPaymentKey(String orderId, String paymentKey) {
+        popupAdMapper.updateAdPaymentKey(new PopupAdUpdateMapperRequest(orderId, paymentKey));
+    }
+
+    private void countView(Long id, Long userId) {
+        PopupViewCreateOrUpdateMapperRequest request = new PopupViewCreateOrUpdateMapperRequest(userId, id);
+        popupViewMapper.createOrUpdatePopupView(request);
     }
 }

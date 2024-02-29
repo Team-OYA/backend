@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class CommunityAdSaveMapperRequest {
+public class CommunityAdUpdateMapperRequest {
 
-    private long id;
-    private final Long communityId;
     private final String orderId;
-    private final Long amount;
+    private final String paymentKey;
 }

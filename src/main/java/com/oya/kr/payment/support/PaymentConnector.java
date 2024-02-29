@@ -1,5 +1,7 @@
 package com.oya.kr.payment.support;
 
+import org.springframework.http.ResponseEntity;
+
 import com.oya.kr.payment.support.dto.request.PaymentRequest;
 
 /**
@@ -8,5 +10,5 @@ import com.oya.kr.payment.support.dto.request.PaymentRequest;
  */
 public interface PaymentConnector {
 
-    void confirm(PaymentRequest request);
+    ResponseEntity<Void> success(PaymentRequest request);
 }

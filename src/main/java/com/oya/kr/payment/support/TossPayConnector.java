@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.oya.kr.global.support.ApiConnector;
@@ -29,16 +30,17 @@ public class TossPayConnector implements PaymentConnector {
     private final PaymentProvider tossPayProvider;
 
     /**
-     * 토스페이 결제 검증
+     * 토스페이 결제 처리
      *
      * @parameter PaymentRequest
+     * @return ResponseEntity<Void>
      * @author 김유빈
      * @since 2024.02.29
      */
     @Override
-    public void confirm(PaymentRequest request) {
+    public ResponseEntity<Void> success(PaymentRequest request) {
         HttpEntity<Map<String, Object>> entity = createRequest(request);
-        ApiConnector.post(tossPayProvider.url(), entity, Void.class);
+        return ApiConnector.post(tossPayProvider.url(), entity, Void.class);
     }
 
     private HttpEntity<Map<String, Object>> createRequest(PaymentRequest request) {

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class TossPayConfirmRequest {
 
-    private String paymentKey;
+    private String orderId;
     private Long postId;
     private String postType;
     private Long amount;

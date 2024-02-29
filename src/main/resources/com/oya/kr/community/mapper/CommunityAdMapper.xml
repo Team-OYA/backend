@@ -2,13 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.oya.kr.community.mapper.CommunityAdMapper">
 
+    <select id="findAdByOrderId" parameterType="String" resultType="communityAdMapperResponse">
+        SELECT ID, AMOUNT, COMMUNITY_ID, ORDER_ID, PAYMENT_KEY
+        FROM COMMUNITY_ADVERTISEMENT
+        WHERE ORDER_ID = #{orderId}
+    </select>
+
     <insert id="save" parameterType="communityAdSaveMapperRequest">
-        INSERT INTO COMMUNITY_ADVERTISEMENT(COMMUNITY_ID, AMOUNT)
-        VALUES (#{communityId}, #{amount})
+        INSERT INTO COMMUNITY_ADVERTISEMENT(COMMUNITY_ID, AMOUNT, ORDER_ID)
+        VALUES (#{communityId}, #{amount}, #{orderId})
         <selectKey keyProperty="id" resultType="long" order="AFTER">
             SELECT NVL(MAX(ID), 0)
             FROM COMMUNITY_ADVERTISEMENT
         </selectKey>
     </insert>
+
+    <update id="updateAdPaymentKey" parameterType="communityAdUpdateMapperRequest">
+        UPDATE COMMUNITY_ADVERTISEMENT
+        SET PAYMENT_KEY = #{paymentKey}
+        WHERE ORDER_ID = #{orderId}
+    </update>
 
 </mapper>

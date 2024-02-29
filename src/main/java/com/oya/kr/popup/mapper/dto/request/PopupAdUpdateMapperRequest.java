@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class PopupAdSaveMapperRequest {
+public class PopupAdUpdateMapperRequest {
 
-    private long id;
-    private final Long popupId;
     private final String orderId;
-    private final Long amount;
+    private final String paymentKey;
 }
