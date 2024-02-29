@@ -43,6 +43,7 @@
                  LEFT JOIN VOTE_CHECK ON VOTE.ID = VOTE_CHECK.VOTE_ID
         WHERE POST_ID = #{postId}
         GROUP BY VOTE.ID, VOTE.CREATED_DATE, VOTE_CHECK.VOTE_ID, VOTE.CONTENT
+        ORDER BY VOTE.CREATED_DATE
     </select>
 
     <select id="findByVoteIdAndUserId" resultType="java.lang.String">
