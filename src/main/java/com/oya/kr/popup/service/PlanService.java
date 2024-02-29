@@ -314,6 +314,13 @@ public class PlanService {
         sesSender.send(request);
     }
 
+    /**
+     * 나의 사업계획서 조회 구현
+     *
+     * @parameter String, Long
+     * @author 이상민
+     * @since 2024.02.29
+     */
 	public UserPlanResponse findById(Long planId) {
         return new UserPlanResponse(planRepository.findById(planId));
 	}
