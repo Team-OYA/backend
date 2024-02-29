@@ -22,6 +22,7 @@ import com.oya.kr.user.controller.dto.request.DuplicatedEmailRequest;
 import com.oya.kr.user.controller.dto.request.DuplicatedNicknameRequest;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.request.LoginRequest;
+import com.oya.kr.user.controller.dto.response.AdUserDetailResponse;
 import com.oya.kr.user.controller.dto.response.BasicUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.service.UserService;
@@ -149,6 +150,20 @@ public class UserController {
 	@GetMapping("/admin/users")
 	public ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>> reads(Principal principal, @RequestParam("type") String type) {
 		return ResponseEntity.ok(ApplicationResponse.success(userService.reads(type)));
+	}
+
+	/**
+	 * 결제 주문자 상세정보 조회
+	 *
+	 * @parameter  Principal
+	 * @return ResponseEntity<ApplicationResponse<AdUserDetailResponse>>
+	 * @author 김유빈
+	 * @since 2024.02.28
+	 */
+	@GetMapping("/ad/users")
+	public ResponseEntity<ApplicationResponse<AdUserDetailResponse>> findMeForAb(Principal principal) {
+		AdUserDetailResponse response = userService.findMeForAb(principal.getName());
+		return ResponseEntity.ok(ApplicationResponse.success(response));
 	}
 
 	private String getAccessToken() {

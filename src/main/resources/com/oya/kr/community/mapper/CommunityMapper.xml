@@ -95,6 +95,15 @@
         GROUP BY CATEGORY_CODE
     </select>
 
+    <select id="statisticsForBusiness" parameterType="Long" resultType="statisticsCommunityMapperResponse">
+        SELECT
+            (SELECT COUNT(*) FROM COMMUNITY WHERE WRITE_ID = #{userId}) AS TOTAL,
+            (SELECT COUNT(*) FROM COMMUNITY_ADVERTISEMENT CA
+                JOIN COMMUNITY C ON CA.COMMUNITY_ID = C.ID
+             WHERE C.WRITE_ID = #{userId}) AS AD
+        FROM dual
+    </select>
+
     <select id="findSizeByAll" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM COMMUNITY

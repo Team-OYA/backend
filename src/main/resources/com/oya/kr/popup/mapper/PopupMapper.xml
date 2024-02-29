@@ -83,6 +83,14 @@
         ORDER BY COUNT DESC
     </select>
 
+    <select id="statistics" parameterType="Long" resultType="statisticsPopupMapperResponse">
+        SELECT
+            (SELECT COUNT(*) FROM POPUP P, PLAN PL WHERE P.PLAN_ID = PL.ID AND PL.USER_ID = #{userId}) AS TOTAL,
+            (SELECT COUNT(*) FROM POPUP_ADVERTISEMENT PA, POPUP PU, PLAN PL
+                WHERE PA.POPUP_ID = PU.ID AND PU.PLAN_ID = PL.ID AND PL.USER_ID = #{userId}) AS AD
+        FROM dual
+    </select>
+
     <insert id="save" parameterType="popupSaveMapperRequest">
         INSERT INTO POPUP(TITLE, DESCRIPTION, WITHDRAWAL_STATUS, PLAN_ID)
         VALUES (#{title}, #{description}, #{withdrawalStatus}, #{planId})

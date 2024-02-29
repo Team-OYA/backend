@@ -8,6 +8,7 @@ import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.StatisticsPopupMapperResponse;
 
 /**
  * @author 김유빈
@@ -30,6 +31,8 @@ public interface PopupMapper {
     List<PopupDetailMapperResponse> findCollections(PopupSearchMapperRequest request);
 
     List<PopupDetailMapperResponse> findAllRecommended(PopupSearchMapperRequest request);
+
+    StatisticsPopupMapperResponse statistics(Long userId);
 
     void save(PopupSaveMapperRequest request);
 

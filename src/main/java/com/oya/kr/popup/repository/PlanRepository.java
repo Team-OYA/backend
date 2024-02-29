@@ -18,6 +18,7 @@ import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse;
 import com.oya.kr.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -134,5 +135,17 @@ public class PlanRepository {
     public void updateEntranceStatus(Plan plan) {
         PlanUpdateEntranceStatusMapperRequest mapperRequest = PlanUpdateEntranceStatusMapperRequest.from(plan);
         planMapper.updateEntranceStatus(mapperRequest);
+    }
+
+    /**
+     * 사업계획서 통계 정보 조회
+     *
+     * @parameter Long
+     * @return StatisticsPlanMapperResponse
+     * @author 김유빈
+     * @since 2024.02.28
+     */
+    public StatisticsPlanMapperResponse statistics(Long userId) {
+        return planMapper.statistics(userId);
     }
 }

@@ -20,6 +20,7 @@ import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.popup.mapper.dto.response.StatisticsCommunityMapperResponse;
 import com.oya.kr.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -223,5 +224,17 @@ public class CommunityRepository {
      */
     public boolean existCollection(long communityId, Long userId) {
         return communityMapper.existCollection(communityId, userId);
+    }
+
+    /**
+     * 커뮤니티 게시글 통계 정보 조회
+     *
+     * @parameter Long
+     * @return StatisticsCommunityMapperResponse
+     * @author 김유빈
+     * @since 2024.02.28
+     */
+    public StatisticsCommunityMapperResponse statisticsForBusiness(Long userId) {
+        return communityMapper.statisticsForBusiness(userId);
     }
 }
