@@ -52,7 +52,13 @@ public class CommunityController {
 		@RequestPart(value = "images", required = false) List<MultipartFile> images,
 		@RequestParam("type") String communityType) {
 		log.info(communityRequest.toString());
-		log.info(images.toString());
+
+		if(images.size() != 0){
+			for(MultipartFile multipartFile : images){
+				log.info(multipartFile.getOriginalFilename());
+			}
+		}
+
 		log.info(communityType);
 		return ResponseEntity.ok(ApplicationResponse.success(communityService.save(communityType, principal.getName(), communityRequest, images)));
 	}
@@ -85,7 +91,7 @@ public class CommunityController {
 	}
 
 	/**
-	 * 커뮤니티 게시글 리스트 조회 (sort : all, business, user, collections)
+	 * 커뮤니티 게시글 리스트 조회 (sort : all, business, user, collections, me)
 	 *
 	 * @param type, pageNo, amount
 	 * @return ResponseEntity<ApplicationResponse<String>>

@@ -156,7 +156,9 @@ public class CommunityService {
 
 		if(type.equals("all")){
 			responseList = communityRepository.findAll(null, pagination.getPageNo(), pagination.getAmount());
-		}else if(type.equals("collections")){
+		}else if(type.equals("me")){
+			responseList = communityRepository.findAllMe(loginUser.getId(), pagination.getPageNo(), pagination.getAmount());
+		} else if(type.equals("collections")){
 			responseList = communityRepository.findAllCollections(loginUser.getId(), pagination.getPageNo(), pagination.getAmount());
 		}else{
 			String userType = UserType.from(type).getName();
