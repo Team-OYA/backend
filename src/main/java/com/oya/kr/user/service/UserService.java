@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.repository.RedisRepository;
 import com.oya.kr.global.domain.Header;
 import com.oya.kr.global.exception.ApplicationException;
@@ -179,7 +180,7 @@ public class UserService {
 	public List<? extends BasicUserResponse> read(long userId) {
 		User user = userRepository.findByUserId(userId);
 		UserType userType = user.getUserType();
-		return getUserResponses(userId, userType);
+		return getUserResponses(userId, userType, new PaginationRequest(0,1));
 	}
 
 	/**
@@ -188,11 +189,11 @@ public class UserService {
 	 * @author 이상민
 	 * @since 2024.02.23
 	 */
-	public UserListResponse reads(String type) {
+	public UserListResponse reads(String type, PaginationRequest paginationRequest) {
 		UserType userType = UserType.from(type);
 		// 유저 총 수
 		int sum = userRepository.countUser(type);
-		return new UserListResponse(sum,getUserResponses(null, userType));
+		return new UserListResponse(sum,getUserResponses(null, userType,paginationRequest));
 	}
 
 	/**
@@ -209,13 +210,14 @@ public class UserService {
 		return AdUserDetailResponse.from(response);
 	}
 
-	private List<? extends BasicUserResponse> getUserResponses(Long userId, UserType userType) {
+	private List<? extends BasicUserResponse> getUserResponses(Long userId, UserType userType,
+		PaginationRequest pagination) {
 		List<? extends BasicUserResponse> result;
 		List<? extends BasicMapperResponse> basicMapperResponses;
 		if(userType.isBusiness()){
-			basicMapperResponses = userRepository.findByBusiness(userId);
+			basicMapperResponses = userRepository.findByBusiness(userId,pagination.getPageNo(), pagination.getAmount());
 		}else{
-			basicMapperResponses = userRepository.findByBasic(userId);
+			basicMapperResponses = userRepository.findByBasic(userId,pagination.getPageNo(), pagination.getAmount());
 		}
 		return basicMapperResponses.stream()
 			.map(response->{

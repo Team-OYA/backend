@@ -1,10 +1,6 @@
 package com.oya.kr.global.dto.request;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 public class PaginationRequest {

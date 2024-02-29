@@ -13,6 +13,7 @@ import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.response.KakaoInfo;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
+import com.oya.kr.user.mapper.dto.request.FindByUserMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
 import com.oya.kr.user.mapper.dto.response.AdUserDetailMapperResponse;
@@ -144,8 +145,8 @@ public class UserRepository {
      * @author 이상민
      * @since 2024.02.23
      */
-    public List<BusinessMapperResponse> findByBusiness(Long userId) {
-        return userMapper.findByBusiness(userId);
+    public List<BusinessMapperResponse> findByBusiness(Long userId,int pageNo, int amount) {
+        return userMapper.findByBusiness(new FindByUserMapperRequest(userId,pageNo,amount));
     }
 
     /**
@@ -154,8 +155,8 @@ public class UserRepository {
      * @author 이상민
      * @since 2024.02.23
      */
-    public List<BasicMapperResponse> findByBasic(Long userId) {
-        return userMapper.findByBasic(userId);
+    public List<BasicMapperResponse> findByBasic(Long userId,int pageNo, int amount) {
+        return userMapper.findByBasic(new FindByUserMapperRequest(userId,pageNo,amount));
     }
 
     /**
