@@ -15,11 +15,13 @@ import com.oya.kr.community.mapper.CommunityViewMapper;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
+import com.oya.kr.community.mapper.dto.request.ReadMeMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.popup.mapper.dto.response.StatisticsCommunityMapperResponse;
 import com.oya.kr.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
