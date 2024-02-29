@@ -51,6 +51,12 @@
         WHERE NICKNAME = #{email}
     </select>
 
+    <select id="countUser" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM USERS
+        WHERE USER_TYPE = #{type}
+    </select>
+
     <select id="findByEmail" resultType="userMapperResponse">
         SELECT ID,
                NICKNAME,

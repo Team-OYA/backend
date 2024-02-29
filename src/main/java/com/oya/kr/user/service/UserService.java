@@ -22,6 +22,7 @@ import com.oya.kr.user.controller.dto.response.AdUserDetailResponse;
 import com.oya.kr.user.controller.dto.response.BusinessUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.controller.dto.response.BasicUserResponse;
+import com.oya.kr.user.controller.dto.response.UserListResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.domain.enums.UserType;
 import com.oya.kr.user.mapper.dto.response.AdUserDetailMapperResponse;
@@ -187,9 +188,11 @@ public class UserService {
 	 * @author 이상민
 	 * @since 2024.02.23
 	 */
-	public List<? extends BasicUserResponse> reads(String type) {
+	public UserListResponse reads(String type) {
 		UserType userType = UserType.from(type);
-		return getUserResponses(null, userType);
+		// 유저 총 수
+		int sum = userRepository.countUser(type);
+		return new UserListResponse(sum,getUserResponses(null, userType));
 	}
 
 	/**

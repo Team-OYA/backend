@@ -168,4 +168,14 @@ public class UserRepository {
         return userMapper.findMeForAb(userId)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
     }
+
+    /**
+     * type에 따른 사용자 수
+     *
+     * @author 이상민
+     * @since 2024.02.29
+     */
+	public int countUser(String type) {
+        return userMapper.countUser(type);
+	}
 }

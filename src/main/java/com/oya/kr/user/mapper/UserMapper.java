@@ -39,4 +39,6 @@ public interface UserMapper {
 	List<BusinessMapperResponse> findByBusiness(Long userId);
 
 	Optional<AdUserDetailMapperResponse> findMeForAb(Long userId);
+
+	int countUser(String type);
 }

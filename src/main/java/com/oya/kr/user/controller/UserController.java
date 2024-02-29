@@ -25,6 +25,7 @@ import com.oya.kr.user.controller.dto.request.LoginRequest;
 import com.oya.kr.user.controller.dto.response.AdUserDetailResponse;
 import com.oya.kr.user.controller.dto.response.BasicUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
+import com.oya.kr.user.controller.dto.response.UserListResponse;
 import com.oya.kr.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -148,7 +149,7 @@ public class UserController {
 	 * @since 2024.02.22
 	 */
 	@GetMapping("/admin/users")
-	public ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>> reads(Principal principal, @RequestParam("type") String type) {
+	public ResponseEntity<ApplicationResponse<UserListResponse>> reads(Principal principal, @RequestParam("type") String type) {
 		return ResponseEntity.ok(ApplicationResponse.success(userService.reads(type)));
 	}
 
