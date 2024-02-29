@@ -15,7 +15,6 @@ import com.oya.kr.community.mapper.CommunityViewMapper;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
-import com.oya.kr.community.mapper.dto.request.ReadMeMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
@@ -208,9 +207,7 @@ public class CommunityRepository {
     public int findSizeByType(User loginUser, String type) {
         if(type.equals("all")){
             return communityMapper.findSizeByAll();
-        }else if(type.equals("me")){
-            return communityMapper.findByWriteId(loginUser.getId());
-        } else if(type.equals("collections")){
+        }else if(type.equals("collections")){
             return communityMapper.findSizeByCollection(loginUser.getId());
         }else{
             return communityMapper.findSizeByType(type);
@@ -238,5 +235,17 @@ public class CommunityRepository {
      */
     public List<CommunityBasicMapperResponse> findAllMe(Long userId, int pageNo, int amount) {
         return communityMapper.findAllMe(new ReadMeMapperRequest(userId, pageNo, amount));
+    }
+
+    /**
+     * 커뮤니티 게시글 통계 정보 조회
+     *
+     * @parameter Long
+     * @return StatisticsCommunityMapperResponse
+     * @author 김유빈
+     * @since 2024.02.28
+     */
+    public StatisticsCommunityMapperResponse statisticsForBusiness(Long userId) {
+        return communityMapper.statisticsForBusiness(userId);
     }
 }

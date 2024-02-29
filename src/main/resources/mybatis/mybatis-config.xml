@@ -80,9 +80,13 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupCollectionMapperResponse" alias="popupCollectionMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse" alias="planAboutMeMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse" alias="allPlanMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse" alias="statisticsPlanMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.StatisticsPopupMapperResponse" alias="statisticsPopupMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.StatisticsCommunityMapperResponse" alias="statisticsCommunityMapperResponse"/>
 
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.response.UserMapperResponse" alias="userMapperResponse"/>
+        <typeAlias type="com.oya.kr.user.mapper.dto.response.AdUserDetailMapperResponse" alias="adUserDetailMapperResponse"/>
 
     </typeAliases>
 </configuration>

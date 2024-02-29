@@ -27,6 +27,7 @@ import com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.PopupCollectionMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.StatisticsPopupMapperResponse;
 import com.oya.kr.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
@@ -170,6 +171,18 @@ public class PopupRepository {
         } else {
             popupCollectionMapper.save(new PopupCollectionSaveMapperRequest(user.getId(), popup.getId()));
         }
+    }
+
+    /**
+     * 팝업스토어 게시글 통계 정보 조회
+     *
+     * @parameter Long
+     * @return StatisticsPopupMapperResponse
+     * @author 김유빈
+     * @since 2024.02.28
+     */
+    public StatisticsPopupMapperResponse statistics(Long userId) {
+        return popupMapper.statistics(userId);
     }
 
     private void countView(Long id, Long userId) {

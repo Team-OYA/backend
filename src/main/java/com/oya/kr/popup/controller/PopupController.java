@@ -18,6 +18,7 @@ import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
 import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
+import com.oya.kr.popup.controller.dto.response.StatisticsResponse;
 import com.oya.kr.popup.service.PopupService;
 
 import lombok.AccessLevel;
@@ -125,5 +126,19 @@ public class PopupController {
     public ResponseEntity<ApplicationResponse<Void>> collect(Principal principal, @PathVariable Long popupId) {
         popupService.collect(principal.getName(), popupId);
         return ResponseEntity.ok(ApplicationResponse.success(null));
+    }
+
+    /**
+     * 사업체 팝업스토어 현황 조회 기능 구현
+     *
+     * @parameter Principal
+     * @return ResponseEntity<ApplicationResponse<StatisticsResponse>>
+     * @author 김유빈
+     * @since 2024.02.28
+     */
+    @GetMapping("/statistics")
+    public ResponseEntity<ApplicationResponse<StatisticsResponse>> statistics(Principal principal) {
+        StatisticsResponse response = popupService.statistics(principal.getName());
+        return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 }

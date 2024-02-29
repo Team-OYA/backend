@@ -18,11 +18,13 @@ import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.jwt.TokenProvider;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.controller.dto.request.LoginRequest;
+import com.oya.kr.user.controller.dto.response.AdUserDetailResponse;
 import com.oya.kr.user.controller.dto.response.BusinessUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.controller.dto.response.BasicUserResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.domain.enums.UserType;
+import com.oya.kr.user.mapper.dto.response.AdUserDetailMapperResponse;
 import com.oya.kr.user.mapper.dto.response.BasicMapperResponse;
 import com.oya.kr.user.mapper.dto.response.BusinessMapperResponse;
 import com.oya.kr.user.repository.UserRepository;
@@ -188,6 +190,20 @@ public class UserService {
 	public List<? extends BasicUserResponse> reads(String type) {
 		UserType userType = UserType.from(type);
 		return getUserResponses(null, userType);
+	}
+
+	/**
+	 * 결제 주문자 상세정보 조회
+	 *
+	 * @parameter String
+	 * @return AdUserDetailResponse
+	 * @author 김유빈
+	 * @since 2024.02.28
+	 */
+	public AdUserDetailResponse findMeForAb(String email) {
+		User savedUser = userRepository.findByEmail(email);
+		AdUserDetailMapperResponse response = userRepository.findMeForAd(savedUser.getId());
+		return AdUserDetailResponse.from(response);
 	}
 
 	private List<? extends BasicUserResponse> getUserResponses(Long userId, UserType userType) {
