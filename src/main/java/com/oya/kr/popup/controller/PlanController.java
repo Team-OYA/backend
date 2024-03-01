@@ -21,6 +21,7 @@ import com.oya.kr.popup.controller.dto.response.DepartmentsResponse;
 import com.oya.kr.popup.controller.dto.response.EntranceStatusResponses;
 import com.oya.kr.popup.controller.dto.response.MyPlansResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
+import com.oya.kr.popup.controller.dto.response.PopupDetailResponse;
 import com.oya.kr.popup.controller.dto.response.UserPlanResponse;
 import com.oya.kr.popup.service.PlanService;
 
@@ -224,5 +225,20 @@ public class PlanController {
     @GetMapping("/{planId}")
     public ResponseEntity<ApplicationResponse<UserPlanResponse>> findById(Principal principal, @PathVariable Long planId) {
         return ResponseEntity.ok(ApplicationResponse.success(planService.findById(planId)));
+    }
+
+    /**
+     * 사업계획서에 따른 팝업스토어 상세 정보 보기
+     *
+     * @parameter Principal
+     * @return ResponseEntity<ApplicationResponse<PopupDetailResponse>>
+     * @author 이상민
+     * @since 2024.03.01
+     */
+    @GetMapping("/{planId}/popup")
+    public ResponseEntity<ApplicationResponse<PopupDetailResponse>> myPopup(Principal principal,
+        @PathVariable long planId) {
+        PopupDetailResponse response = planService.myPopup(principal.getName(),planId);
+        return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 }

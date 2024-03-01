@@ -28,6 +28,7 @@ import com.oya.kr.popup.mapper.dto.request.PopupImageSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupViewCreateOrUpdateMapperRequest;
+import com.oya.kr.popup.mapper.dto.response.MyPopupDetailMapper;
 import com.oya.kr.popup.mapper.dto.response.PopupCollectionMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
@@ -219,4 +220,28 @@ public class PopupRepository {
         }
         return new PopupLankListResponse(myPopupLankResponse, popupLankResponses);
 	}
+
+    /**
+     * 팝업이미지 불러오기
+     *
+     * @parameter Principal
+     * @return List<String>
+     * @author 이상민
+     * @since 2024.03.01
+     */
+    public List<String> findByImages(long popId) {
+        return popupImageMapper.findById(popId);
+    }
+
+    /**
+     * 사업계획서 ID로 정보 불러오기
+     *
+     * @parameter Principal
+     * @return MyPopupDetailMapper
+     * @author 이상민
+     * @since 2024.03.01
+     */
+    public MyPopupDetailMapper findByPlanId(Long planId) {
+        return popupMapper.findByPlanId(planId);
+    }
 }

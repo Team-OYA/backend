@@ -93,7 +93,7 @@ public class PopupController {
     @PostMapping
     public ResponseEntity<ApplicationResponse<Void>> save(
         Principal principal,
-        @RequestPart("file") MultipartFile thumbnail,
+        @RequestPart(value = "file",required = false) MultipartFile thumbnail,
         @RequestPart("data") PopupSaveRequest request) {
         popupService.save(principal.getName(), request, thumbnail);
         return ResponseEntity.ok(ApplicationResponse.success(null));

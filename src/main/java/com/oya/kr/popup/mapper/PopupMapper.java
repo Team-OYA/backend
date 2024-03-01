@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PopupSearchMapperRequest;
+import com.oya.kr.popup.mapper.dto.response.MyPopupDetailMapper;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupTopMapperResponse;
@@ -44,4 +45,6 @@ public interface PopupMapper {
     List<PopupDetailMapperResponse> findMe(@Param("request")PopupSearchMapperRequest request, @Param("userId")Long userId);
 
 	List<PopupTopMapperResponse> findByTop();
+
+    MyPopupDetailMapper findByPlanId(Long planId);
 }
