@@ -120,7 +120,10 @@ public class PopupService {
         savedPlan.validateEntranceStatusIsApprove();
         validatePlanDoesNotHavePopup(savedPlan);
 
-        String thumbnailUrl = s3Connector.save(thumbnail);
+        String thumbnailUrl = "not";
+        if(thumbnail != null){
+            thumbnailUrl = s3Connector.save(thumbnail);
+        }
 
         Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription());
         popupRepository.save(popup, savedPlan, thumbnailUrl);

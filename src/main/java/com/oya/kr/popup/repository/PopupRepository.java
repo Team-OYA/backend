@@ -209,14 +209,15 @@ public class PopupRepository {
 
         List<PopupLankResponse> myPopupLankResponse = new ArrayList();
         List<PopupLankResponse> popupLankResponses = new ArrayList<>();
-
-        for(int i=0; i<list.size(); i++){
-            if(i == 5) break;
-            PopupLankResponse popupLankResponse = new PopupLankResponse(i+1, list.get(i));
-            if(list.get(i).getUserId() == user.getId()){
+        for (int i = 0; i < list.size(); i++) {
+            PopupTopMapperResponse popupTop = list.get(i);
+            PopupLankResponse popupLankResponse = new PopupLankResponse(i + 1, popupTop);
+            if (popupTop.getUserId() == user.getId()) {
                 myPopupLankResponse.add(popupLankResponse);
             }
-            popupLankResponses.add(popupLankResponse);
+            if (i < 5) {
+                popupLankResponses.add(popupLankResponse);
+            }
         }
         return new PopupLankListResponse(myPopupLankResponse, popupLankResponses);
 	}
