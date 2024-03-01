@@ -86,9 +86,15 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-ses</artifactId>
-            <version>1.11.227</version>
+            <version>1.12.669</version>
         </dependency>
 
+        <!-- aws s3 -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <version>1.12.669</version>
+        </dependency>
 
         <!-- Spring -->
         <dependency>
@@ -183,13 +189,6 @@
                 </exclusion>
             </exclusions>
             <scope>runtime</scope>
-        </dependency>
-
-        <!-- amazon s3 -->
-        <dependency>
-            <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.12.638</version>
         </dependency>
 
 
