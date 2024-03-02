@@ -2,6 +2,7 @@ package com.oya.kr.global.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -65,6 +66,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		http.authorizeRequests()
+			.antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
 			.antMatchers("/ws/**", "/chat/**", "/api/v1/chat/**").permitAll()
 			.antMatchers("/api/v1/join", "/api/v1/login", "/api/v1/oauth/login").permitAll()
 			.anyRequest().authenticated();
