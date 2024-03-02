@@ -13,4 +13,5 @@ public class StatisticsDetailResponse {
 
 	private final String categoryCode;
 	private final int count;
+	private final String categoryName;
 }

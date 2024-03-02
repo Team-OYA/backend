@@ -214,7 +214,7 @@ public class CommunityService {
 			.collect(Collectors.toMap(StatisticsResponseMapper::getCategoryCode, StatisticsResponseMapper::getCount));
 		return new StatisticsResponse(
 			Arrays.stream(Category.values())
-				.map(category -> new StatisticsDetailResponse(category.getCode(), categoryCounts.getOrDefault(category.getCode(), 0)))
+				.map(category -> new StatisticsDetailResponse(category.getCode(), categoryCounts.getOrDefault(category.getCode(), 0), Category.from(category.getCode()).getDescription()))
 				.collect(Collectors.toUnmodifiableList()));
 	}
 }
