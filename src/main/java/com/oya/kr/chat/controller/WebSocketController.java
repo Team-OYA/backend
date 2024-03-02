@@ -12,6 +12,10 @@ import com.oya.kr.chat.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.28
+ */
 @Controller
 @RequiredArgsConstructor
 public class WebSocketController {

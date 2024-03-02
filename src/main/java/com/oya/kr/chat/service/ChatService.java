@@ -24,6 +24,10 @@ import com.oya.kr.user.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.28
+ */
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -94,10 +98,12 @@ public class ChatService {
 		chatMessageRepository.save(new CreateMessageMapperRequest(message));
 	}
 
-	public User findByEmail(String email) {
-		return userRepository.findByEmail(email);
-	}
-
+	/**
+	 * 메시지 저장하기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.27
+	 */
 	public List<ChatMessageRequest> findByChatRoomId(Long roomId) {
 		List<ChatMessageDetailResponse> responses = chatMessageRepository.findByChatRoomId(roomId);
 		List<ChatMessageRequest> list = new ArrayList<>();
@@ -106,5 +112,4 @@ public class ChatService {
 		});
 		return list;
 	}
-
 }

@@ -12,16 +12,32 @@ import com.oya.kr.chat.mapper.dto.response.MessageDetailMapperResponse;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.28
+ */
 @RequiredArgsConstructor
 @Repository
 public class ChatMessageRepository {
 
 	private final ChatMessageMapper chatMessageMapper;
 
+	/**
+	 * 채팅 메시지 저장
+	 *
+	 * @author 이상민
+	 * @since 2024.02.28
+	 */
 	public void save(CreateMessageMapperRequest createMessageMapperRequest) {
 		chatMessageMapper.save(createMessageMapperRequest);
 	}
 
+	/**
+	 * 이전 채팅 글 불러오기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.28
+	 */
 	public List<ChatMessageDetailResponse> findByChatRoomId(Long roomId) {
 		List<ChatMessageDetailResponse> responses = new ArrayList<>();
 		List<MessageDetailMapperResponse> list = chatMessageMapper.findByChatRoomId(roomId);

@@ -14,6 +14,10 @@ import com.oya.kr.global.dto.request.PaginationRequest;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.28
+ */
 @RequiredArgsConstructor
 @Repository
 public class ChatRoomRepository { // 채팅 방 생성 및 정보 조회
@@ -50,18 +54,42 @@ public class ChatRoomRepository { // 채팅 방 생성 및 정보 조회
 		return detailResponses;
 	}
 
+	/**
+	 * 채팅방 조회
+	 *
+	 * @author 이상민
+	 * @since 2024.02.28
+	 */
 	public ChatRoomDetailResponse findRoomById(Long roomId){
 		return new ChatRoomDetailResponse(chatRoomMapper.findRoomById(roomId));
 	}
 
+	/**
+	 * 채팅방 생성하기
+	 *
+	 * @author 이상민
+	 * @since 2024.02.28
+	 */
 	public void createChatRoom(CreateChatRoomMapperRequest createChatRoomMapperRequest){
 		chatRoomMapper.save(createChatRoomMapperRequest);
 	}
 
+	/**
+	 * 채팅방 리스트  총 개수 조회
+	 *
+	 * @author 이상민
+	 * @since 2024.03.02
+	 */
 	public int count(Long userId) {
 		return chatRoomMapper.count(userId);
 	}
 
+	/**
+	 * 관리자 채팅방 리스트 총 개수 조회
+	 *
+	 * @author 이상민
+	 * @since 2024.03.02
+	 */
 	public int countAll() {
 		return chatRoomMapper.countAll();
 	}
