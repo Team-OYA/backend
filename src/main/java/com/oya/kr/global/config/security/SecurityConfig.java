@@ -1,7 +1,5 @@
 package com.oya.kr.global.config.security;
 
-import javax.servlet.Filter;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
