@@ -12,17 +12,34 @@
     <select id="findByAll" resultType="com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse">
         SELECT ID, NAME, CREATOR, CREATED_DATE, MODIFIED_DATE
         FROM CHAT_ROOM
+        ORDER BY MODIFIED_DATE DESC
+        OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
     </select>
 
-    <select id="findRoomByUser" resultType="com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse">
+    <select id="findRoomByUser"
+            parameterType="com.oya.kr.chat.mapper.dto.request.ChatRoomMapperRequest"
+            resultType="com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse">
         SELECT ID, NAME, CREATOR, CREATED_DATE, MODIFIED_DATE
         FROM CHAT_ROOM
         WHERE CREATOR = #{userId}
+        ORDER BY MODIFIED_DATE DESC
+        OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
     </select>
 
     <select id="findRoomById" resultType="com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse">
         SELECT ID, NAME, CREATOR, CREATED_DATE, MODIFIED_DATE
         FROM CHAT_ROOM
         WHERE ID = #{roomId}
+    </select>
+
+    <select id="count" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM CHAT_ROOM
+        WHERE CREATOR = #{userId}
+    </select>
+
+    <select id="countAll" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM CHAT_ROOM
     </select>
 </mapper>

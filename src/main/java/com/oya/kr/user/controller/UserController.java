@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.user.controller.dto.request.AccessTokenRequest;
 import com.oya.kr.user.controller.dto.request.DuplicatedEmailRequest;
@@ -25,6 +26,7 @@ import com.oya.kr.user.controller.dto.request.LoginRequest;
 import com.oya.kr.user.controller.dto.response.AdUserDetailResponse;
 import com.oya.kr.user.controller.dto.response.BasicUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
+import com.oya.kr.user.controller.dto.response.UserListResponse;
 import com.oya.kr.user.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -148,8 +150,9 @@ public class UserController {
 	 * @since 2024.02.22
 	 */
 	@GetMapping("/admin/users")
-	public ResponseEntity<ApplicationResponse<List<? extends BasicUserResponse>>> reads(Principal principal, @RequestParam("type") String type) {
-		return ResponseEntity.ok(ApplicationResponse.success(userService.reads(type)));
+	public ResponseEntity<ApplicationResponse<UserListResponse>> reads(Principal principal, @RequestParam("type") String type,
+		@RequestParam("pageNo") int pageNo, @RequestParam("amount") int amount) {
+		return ResponseEntity.ok(ApplicationResponse.success(userService.reads(type,new PaginationRequest(pageNo, amount))));
 	}
 
 	/**

@@ -136,4 +136,45 @@
         OFFSET #{request.pageNo} ROWS FETCH NEXT #{request.amount} ROWS ONLY
     </select>
 
+    <!--
+    팝업스토어 순위
+
+    @return PopupTopMapperResponse
+    @author 이상민
+    @since 2024.02.29
+   -->
+    <select id="findByTop" resultType="com.oya.kr.popup.mapper.dto.response.PopupTopMapperResponse">
+        SELECT pl.USER_ID, p.ID as planId, p.TITLE, COUNT(p.ID) AS viewSum
+        FROM POPUP p
+                 LEFT JOIN POPUP_VIEW pv ON p.ID = pv.POPUP_ID
+                 LEFT JOIN PLAN pl ON p.PLAN_ID = pl.ID
+                 LEFT JOIN USERS u ON u.ID = pl.USER_ID
+        GROUP BY p.ID, p.TITLE, pl.USER_ID
+        ORDER BY viewSum desc
+    </select>
+
+    <!--
+    사업계획서에 따른 팝업스토어 상세 정보 보기
+
+    @return MyPopupDetailMapper
+    @author 이상민
+    @since 2024.03.01
+   -->
+    <select id="findByPlanId" resultType="com.oya.kr.popup.mapper.dto.response.MyPopupDetailMapper">
+        SELECT p.ID,
+               p.TITLE,
+               p.DESCRIPTION,
+               p.CREATED_DATE,
+               p.MODIFIED_DATE,
+               p.WITHDRAWAL_STATUS,
+               pa.AMOUNT,
+               COUNT(pv.POPUP_ID) as popupView
+        FROM POPUP p
+                 LEFT JOIN PLAN pl ON pl.ID = p.PLAN_ID
+                 LEFT JOIN POPUP_VIEW pv ON p.ID = pv.POPUP_ID
+                 LEFT JOIN POPUP_ADVERTISEMENT pa ON p.ID = pa.POPUP_ID
+        WHERE p.PLAN_ID = #{planId}
+        GROUP BY p.WITHDRAWAL_STATUS, p.ID, p.TITLE, p.DESCRIPTION, p.CREATED_DATE, p.MODIFIED_DATE, pa.AMOUNT
+    </select>
+
 </mapper>

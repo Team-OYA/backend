@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.repository.RedisRepository;
 import com.oya.kr.global.domain.Header;
 import com.oya.kr.global.exception.ApplicationException;
@@ -22,6 +23,7 @@ import com.oya.kr.user.controller.dto.response.AdUserDetailResponse;
 import com.oya.kr.user.controller.dto.response.BusinessUserResponse;
 import com.oya.kr.user.controller.dto.response.JwtTokenResponse;
 import com.oya.kr.user.controller.dto.response.BasicUserResponse;
+import com.oya.kr.user.controller.dto.response.UserListResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.domain.enums.UserType;
 import com.oya.kr.user.mapper.dto.response.AdUserDetailMapperResponse;
@@ -178,7 +180,7 @@ public class UserService {
 	public List<? extends BasicUserResponse> read(long userId) {
 		User user = userRepository.findByUserId(userId);
 		UserType userType = user.getUserType();
-		return getUserResponses(userId, userType);
+		return getUserResponses(userId, userType, new PaginationRequest(0,1));
 	}
 
 	/**
@@ -187,9 +189,11 @@ public class UserService {
 	 * @author 이상민
 	 * @since 2024.02.23
 	 */
-	public List<? extends BasicUserResponse> reads(String type) {
+	public UserListResponse reads(String type, PaginationRequest paginationRequest) {
 		UserType userType = UserType.from(type);
-		return getUserResponses(null, userType);
+		// 유저 총 수
+		int sum = userRepository.countUser(type);
+		return new UserListResponse(sum,getUserResponses(null, userType,paginationRequest));
 	}
 
 	/**
@@ -206,13 +210,14 @@ public class UserService {
 		return AdUserDetailResponse.from(response);
 	}
 
-	private List<? extends BasicUserResponse> getUserResponses(Long userId, UserType userType) {
+	private List<? extends BasicUserResponse> getUserResponses(Long userId, UserType userType,
+		PaginationRequest pagination) {
 		List<? extends BasicUserResponse> result;
 		List<? extends BasicMapperResponse> basicMapperResponses;
 		if(userType.isBusiness()){
-			basicMapperResponses = userRepository.findByBusiness(userId);
+			basicMapperResponses = userRepository.findByBusiness(userId,pagination.getPageNo(), pagination.getAmount());
 		}else{
-			basicMapperResponses = userRepository.findByBasic(userId);
+			basicMapperResponses = userRepository.findByBasic(userId,pagination.getPageNo(), pagination.getAmount());
 		}
 		return basicMapperResponses.stream()
 			.map(response->{

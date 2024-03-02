@@ -13,7 +13,10 @@ import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.S3Connector;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
+import com.oya.kr.popup.controller.dto.response.PopupDetailResponse;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
+import com.oya.kr.popup.controller.dto.response.PopupLankListResponse;
+import com.oya.kr.popup.controller.dto.response.PopupLankResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
 import com.oya.kr.popup.controller.dto.response.StatisticsResponse;
@@ -117,7 +120,10 @@ public class PopupService {
         savedPlan.validateEntranceStatusIsApprove();
         validatePlanDoesNotHavePopup(savedPlan);
 
-        String thumbnailUrl = s3Connector.save(thumbnail);
+        String thumbnailUrl = "not";
+        if(thumbnail != null){
+            thumbnailUrl = s3Connector.save(thumbnail);
+        }
 
         Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription());
         popupRepository.save(popup, savedPlan, thumbnailUrl);
@@ -171,5 +177,18 @@ public class PopupService {
         if (!popupRepository.findAllByPlanId(plan.getId()).isEmpty()) {
             throw new ApplicationException(PLAN_HAS_POPUP);
         }
+    }
+
+    /**
+     * 팝업스토어 순위
+     *
+     * @parameter Principal
+     * @return ResponseEntity<ApplicationResponse<PopupLankListResponse>>
+     * @author 이상민
+     * @since 2024.02.29
+     */
+    public PopupLankListResponse top(String email) {
+        User user = userRepository.findByEmail(email);
+        return popupRepository.findByTopMe(user);
     }
 }

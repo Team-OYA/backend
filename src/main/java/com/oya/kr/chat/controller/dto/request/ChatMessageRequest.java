@@ -1,4 +1,4 @@
-package com.oya.kr.chat.controller.dto;
+package com.oya.kr.chat.controller.dto.request;
 
 import com.oya.kr.chat.controller.dto.response.ChatMessageDetailResponse;
 
@@ -27,13 +27,4 @@ public class ChatMessageRequest {
 		this.message = detail.getMessage();
 		this.sendingTime = detail.getSendingTime();
 	}
-
-	// //메시지 타입 :  입장 채팅
-	// public enum MessageType{
-	// 	ENTER, TALK, JOIN
-	// }
-	// private MessageType type; //메시지 타입
-	// private String roomId;// 방 번호
-	// private String sender;//채팅을 보낸 사람
-	// private String message;// 메세지
 }

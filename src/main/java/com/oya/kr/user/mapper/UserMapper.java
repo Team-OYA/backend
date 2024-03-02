@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.oya.kr.user.mapper.dto.request.FindByUserMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupBasicMapperRequest;
 import com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest;
 import com.oya.kr.user.mapper.dto.response.AdUserDetailMapperResponse;
@@ -34,9 +35,11 @@ public interface UserMapper {
 
 	void deleteFromUserId(Long id);
 
-	List<BasicMapperResponse> findByBasic(Long userId);
+	List<BasicMapperResponse> findByBasic(FindByUserMapperRequest findByUserMapperRequest);
 
-	List<BusinessMapperResponse> findByBusiness(Long userId);
+	List<BusinessMapperResponse> findByBusiness(FindByUserMapperRequest findByUserMapperRequest);
 
 	Optional<AdUserDetailMapperResponse> findMeForAb(Long userId);
+
+	int countUser(String type);
 }

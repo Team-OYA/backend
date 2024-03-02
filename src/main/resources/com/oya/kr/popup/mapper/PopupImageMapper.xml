@@ -16,4 +16,10 @@
         FROM POPUP_IMAGE
     </delete>
 
+    <select id="findById">
+        SELECT URL
+        FROM POPUP_IMAGE
+        WHERE POPUP_ID =#{popupId}
+    </select>
+
 </mapper>

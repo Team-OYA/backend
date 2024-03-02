@@ -7,11 +7,15 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import com.oya.kr.chat.controller.dto.ChatMessageRequest;
+import com.oya.kr.chat.controller.dto.request.ChatMessageRequest;
 import com.oya.kr.chat.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * @author 이상민
+ * @since 2024.02.28
+ */
 @Controller
 @RequiredArgsConstructor
 public class WebSocketController {

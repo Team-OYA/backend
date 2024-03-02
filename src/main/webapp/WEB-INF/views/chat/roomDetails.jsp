@@ -77,59 +77,8 @@
 
         document.getElementById('messages').appendChild(messageDiv);
     }
-
     connect(); // Connect to the WebSocket when the page loads
 </script>
-
-<style>
-    body {
-        font-family: 'Arial', sans-serif;
-        margin: 20px;
-    }
-    h1 {
-        color: #333;
-    }
-    p {
-        color: #666;
-    }
-    button {
-        padding: 10px;
-        margin: 5px;
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-    }
-    #messages {
-        margin-top: 20px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        max-height: 300px;
-        overflow-y: auto;
-    }
-    input[type="text"] {
-        padding: 10px;
-        margin: 5px;
-        width: 70%;
-    }
-    button[type="button"] {
-        width: 28%;
-    }
-    input[type="text"], button[type="button"] {
-        display: inline-block;
-    }
-    input[type="text"]:focus {
-        outline: none;
-    }
-    button[type="button"]:hover {
-        background-color: #45a049;
-    }
-    button[type="button"]:focus {
-        outline: none;
-    }
-</style>
 
 </body>
 </html>

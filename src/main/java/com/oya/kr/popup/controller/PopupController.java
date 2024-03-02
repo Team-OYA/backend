@@ -16,6 +16,7 @@ import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.dto.response.ApplicationResponse;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
+import com.oya.kr.popup.controller.dto.response.PopupLankListResponse;
 import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.controller.dto.response.StatisticsResponse;
@@ -92,7 +93,7 @@ public class PopupController {
     @PostMapping
     public ResponseEntity<ApplicationResponse<Void>> save(
         Principal principal,
-        @RequestPart("file") MultipartFile thumbnail,
+        @RequestPart(value = "file",required = false) MultipartFile thumbnail,
         @RequestPart("data") PopupSaveRequest request) {
         popupService.save(principal.getName(), request, thumbnail);
         return ResponseEntity.ok(ApplicationResponse.success(null));
@@ -139,6 +140,20 @@ public class PopupController {
     @GetMapping("/statistics")
     public ResponseEntity<ApplicationResponse<StatisticsResponse>> statistics(Principal principal) {
         StatisticsResponse response = popupService.statistics(principal.getName());
+        return ResponseEntity.ok(ApplicationResponse.success(response));
+    }
+
+    /**
+     * 팝업스토어 순위
+     *
+     * @parameter Principal
+     * @return ResponseEntity<ApplicationResponse<PopupLankListResponse>>
+     * @author 이상민
+     * @since 2024.02.29
+     */
+    @GetMapping("/top")
+    public ResponseEntity<ApplicationResponse<PopupLankListResponse>> top(Principal principal) {
+        PopupLankListResponse response = popupService.top(principal.getName());
         return ResponseEntity.ok(ApplicationResponse.success(response));
     }
 }

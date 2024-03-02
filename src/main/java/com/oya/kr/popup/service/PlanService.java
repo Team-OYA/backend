@@ -25,14 +25,20 @@ import com.oya.kr.popup.controller.dto.response.MyPlanResponse;
 import com.oya.kr.popup.controller.dto.response.MyPlansResponse;
 import com.oya.kr.popup.controller.dto.response.PlanResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
+import com.oya.kr.popup.controller.dto.response.PopupDetailResponse;
 import com.oya.kr.popup.controller.dto.response.UserPlanResponse;
+import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.domain.enums.Department;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.enums.EntranceStatus;
 import com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.MyPopupDetailMapper;
 import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
+import com.oya.kr.popup.repository.PopupRepository;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
 
@@ -46,17 +52,19 @@ public class PlanService {
 
     private final UserRepository userRepository;
     private final PlanRepository planRepository;
+    private final PopupRepository popupRepository;
     private final StorageConnector s3Connector;
     private final MailSender sesSender;
 
     public PlanService(
         UserRepository userRepository,
-        PlanRepository planRepository,
+        PlanRepository planRepository, PopupRepository popupRepository,
         StorageConnector s3Connector,
         @Qualifier("SESSender") MailSender sesSender) {
         this.userRepository = userRepository;
         this.planRepository = planRepository;
-        this.s3Connector = s3Connector;
+		this.popupRepository = popupRepository;
+		this.s3Connector = s3Connector;
         this.sesSender = sesSender;
     }
 
@@ -324,4 +332,25 @@ public class PlanService {
 	public UserPlanResponse findById(Long planId) {
         return new UserPlanResponse(planRepository.findById(planId));
 	}
+
+    /**
+     * 사업계획서에 따른 팝업스토어 상세 정보 보기
+     *
+     * @parameter Principal
+     * @return PopupDetailResponse
+     * @author 이상민
+     * @since 2024.03.01
+     */
+    public PopupDetailResponse myPopup(String email, long planId) {
+        Plan plan = planRepository.findById(planId);
+        MyPopupDetailMapper myPopupDetailMapper = popupRepository.findByPlanId(plan.getId());
+
+        boolean popupWritten = false;
+        if(myPopupDetailMapper != null){
+            popupWritten = true;
+            List<String> images = popupRepository.findByImages(myPopupDetailMapper.getId()); // 팝업 이미지
+            return new PopupDetailResponse(popupWritten, myPopupDetailMapper, images);
+        }
+        return new PopupDetailResponse(popupWritten);
+    }
 }
