@@ -1,6 +1,6 @@
 package com.oya.kr.chat.mapper.dto.request;
 
-import com.oya.kr.chat.controller.dto.ChatMessageRequest;
+import com.oya.kr.chat.controller.dto.request.ChatMessageRequest;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

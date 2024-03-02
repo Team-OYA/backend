@@ -5,11 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.oya.kr.chat.controller.dto.ChatMessageRequest;
 import com.oya.kr.chat.controller.dto.response.ChatMessageDetailResponse;
 import com.oya.kr.chat.mapper.ChatMessageMapper;
 import com.oya.kr.chat.mapper.dto.request.CreateMessageMapperRequest;
-import com.oya.kr.chat.mapper.dto.response.ChatRoomDetailMapperResponse;
 import com.oya.kr.chat.mapper.dto.response.MessageDetailMapperResponse;
 
 import lombok.RequiredArgsConstructor;

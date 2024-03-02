@@ -8,14 +8,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.oya.kr.chat.controller.dto.ChatMessageRequest;
+import com.oya.kr.chat.controller.dto.request.ChatMessageRequest;
+import com.oya.kr.chat.controller.dto.response.ChatListResponse;
 import com.oya.kr.chat.controller.dto.response.ChatMessageDetailResponse;
 import com.oya.kr.chat.controller.dto.response.ChatRoomAndMessageResponse;
 import com.oya.kr.chat.controller.dto.response.ChatRoomDetailResponse;
+import com.oya.kr.chat.mapper.dto.request.ChatRoomMapperRequest;
 import com.oya.kr.chat.mapper.dto.request.CreateChatRoomMapperRequest;
 import com.oya.kr.chat.mapper.dto.request.CreateMessageMapperRequest;
 import com.oya.kr.chat.repository.ChatMessageRepository;
 import com.oya.kr.chat.repository.ChatRoomRepository;
+import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
 
@@ -50,9 +53,11 @@ public class ChatService {
 	 * @author 이상민
 	 * @since 2024.02.27
 	 */
-	public List<ChatRoomDetailResponse> findAllRoom(String email){
+	public ChatListResponse findAllRoom(String email, PaginationRequest paginationRequest){
 		User user = userRepository.findByEmail(email);
-		return chatRoomRepository.findRoomByUser(user.getId());
+		int sum = chatRoomRepository.count(user.getId());
+		List<ChatRoomDetailResponse> list = chatRoomRepository.findRoomByUser(new ChatRoomMapperRequest(user.getId(), paginationRequest));
+		return new ChatListResponse(sum, list);
 	}
 
 	/**
@@ -61,8 +66,10 @@ public class ChatService {
 	 * @author 이상민
 	 * @since 2024.02.27
 	 */
-	public List<ChatRoomDetailResponse> findAllRoom() {
-		return chatRoomRepository.findAllRoom();
+	public ChatListResponse findAllRoom(PaginationRequest paginationRequest) {
+		int sum = chatRoomRepository.countAll();
+		List<ChatRoomDetailResponse> list = chatRoomRepository.findAllRoom(paginationRequest);
+		return new ChatListResponse(sum, list);
 	}
 
 	/**

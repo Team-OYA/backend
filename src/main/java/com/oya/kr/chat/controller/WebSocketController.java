@@ -7,7 +7,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
-import com.oya.kr.chat.controller.dto.ChatMessageRequest;
+import com.oya.kr.chat.controller.dto.request.ChatMessageRequest;
 import com.oya.kr.chat.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
