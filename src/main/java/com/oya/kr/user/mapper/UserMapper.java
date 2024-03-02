@@ -39,7 +39,7 @@ public interface UserMapper {
 
 	List<BusinessMapperResponse> findByBusiness(FindByUserMapperRequest findByUserMapperRequest);
 
-	Optional<AdUserDetailMapperResponse> findMeForAb(Long userId);
+	Optional<AdUserDetailMapperResponse> findMeForAd(Long userId);
 
 	int countUser(String type);
 }

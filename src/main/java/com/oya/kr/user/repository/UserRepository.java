@@ -166,7 +166,7 @@ public class UserRepository {
      * @since 2024.02.28
      */
     public AdUserDetailMapperResponse findMeForAd(Long userId) {
-        return userMapper.findMeForAb(userId)
+        return userMapper.findMeForAd(userId)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_USER));
     }
 
