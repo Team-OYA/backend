@@ -1,5 +1,7 @@
 package com.oya.kr.global.config.security;
 
+import javax.servlet.Filter;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -10,7 +12,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
+import com.oya.kr.global.config.AuthInterceptor;
 import com.oya.kr.global.jwt.TokenProvider;
 import com.oya.kr.global.repository.RedisRepository;
 
@@ -66,6 +70,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		http.authorizeRequests()
+			.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
 			.antMatchers(HttpMethod.OPTIONS, "/**/*").permitAll()
 			.antMatchers("/ws/**", "/chat/**", "/api/v1/chat/**").permitAll()
 			.antMatchers("/api/v1/join", "/api/v1/login", "/api/v1/oauth/login").permitAll()
