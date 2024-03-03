@@ -11,4 +11,5 @@ public class PopupAdSaveMapperRequest {
     private final Long popupId;
     private final String orderId;
     private final Long amount;
+    private final String mainImageUrl;
 }

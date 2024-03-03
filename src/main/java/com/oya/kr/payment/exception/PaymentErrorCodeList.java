@@ -17,6 +17,8 @@ public enum PaymentErrorCodeList implements ErrorCode {
     ALREADY_PAY("PY0002", HttpStatus.BAD_REQUEST, "이미 결제된 주문 내역입니다."),
     NOT_EQUAL_AMOUNT("PY0003", HttpStatus.BAD_REQUEST, "광고 금액과 결제 금액이 상이합니다."),
     INVALID_ORDER_ID("PY0004", HttpStatus.BAD_REQUEST, "잘못된 주문 아이디입니다."),
+    NOT_EXIST_POPUP_MAIN_IMAGE("PY0005", HttpStatus.BAD_REQUEST, "팝업스토어 게시글의 메인 이미지가 없습니다."),
+    NOT_EXIST_POST_TYPE("PY0006", HttpStatus.BAD_REQUEST, "존재하지 않는 게시글 유형입니다."),
     ;
 
     private final String code;

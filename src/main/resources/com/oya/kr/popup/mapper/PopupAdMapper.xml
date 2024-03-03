@@ -9,8 +9,8 @@
     </select>
 
     <insert id="save" parameterType="popupAdSaveMapperRequest">
-        INSERT INTO POPUP_ADVERTISEMENT(AMOUNT, POPUP_ID, ORDER_ID)
-        VALUES (#{amount}, #{popupId}, #{orderId})
+        INSERT INTO POPUP_ADVERTISEMENT(AMOUNT, POPUP_ID, ORDER_ID, MAIN_IMAGE_URL)
+        VALUES (#{amount}, #{popupId}, #{orderId}, #{mainImageUrl})
         <selectKey keyProperty="id" resultType="long" order="AFTER">
             SELECT NVL(MAX(ID), 0)
             FROM POPUP_ADVERTISEMENT

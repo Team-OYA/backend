@@ -180,12 +180,12 @@ public class PopupRepository {
     /**
      * 팝업스토어 게시글 광고 저장
      *
-     * @parameter Popup, String, Long
+     * @parameter Popup, String, Long, String
      * @author 김유빈
      * @since 2024.02.28
      */
-    public void saveAd(Popup popup, String orderId, Long amount) {
-        PopupAdSaveMapperRequest request = new PopupAdSaveMapperRequest(popup.getId(), orderId, amount);
+    public void saveAd(Popup popup, String orderId, Long amount, String mainImageUrl) {
+        PopupAdSaveMapperRequest request = new PopupAdSaveMapperRequest(popup.getId(), orderId, amount, mainImageUrl);
         popupAdMapper.save(request);
     }
 
