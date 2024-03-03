@@ -185,10 +185,10 @@
         <include refid="offsetForPaging" />
     </select>
 
-    <select id="findMeForAb" resultType="adUserDetailMapperResponse">
+    <select id="findMeForAd" resultType="adUserDetailMapperResponse">
         SELECT U.ID, NICKNAME, EMAIL, BUSINESS_REGISTRATION_NUMBER, CONNECTED_NUMBER
         FROM USERS U
-            JOIN BUSINESS B
+            LEFT JOIN BUSINESS B
                 ON U.ID = B.USER_ID
         WHERE U.ID = #{userId}
     </select>
