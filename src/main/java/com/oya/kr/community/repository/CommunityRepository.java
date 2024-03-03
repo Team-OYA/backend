@@ -3,6 +3,7 @@ package com.oya.kr.community.repository;
 import static com.oya.kr.community.exception.CommunityErrorCodeList.FAIL_COMMUNITY_COLLECTION;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -10,9 +11,12 @@ import com.oya.kr.community.controller.dto.request.CommunityRequest;
 import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.community.exception.CommunityErrorCodeList;
 import com.oya.kr.community.mapper.CollectionMapper;
+import com.oya.kr.community.mapper.CommunityAdMapper;
 import com.oya.kr.community.mapper.CommunityMapper;
 import com.oya.kr.community.mapper.CommunityViewMapper;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
+import com.oya.kr.community.mapper.dto.request.CommunityAdSaveMapperRequest;
+import com.oya.kr.community.mapper.dto.request.CommunityAdUpdateMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.community.mapper.dto.request.ReadMeMapperRequest;
@@ -21,6 +25,7 @@ import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.global.exception.ApplicationException;
+import com.oya.kr.community.mapper.dto.response.CommunityAdMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.StatisticsCommunityMapperResponse;
 import com.oya.kr.user.domain.User;
 
@@ -33,6 +38,7 @@ public class CommunityRepository {
     private final CommunityMapper communityMapper;
     private final CommunityViewMapper communityViewMapper;
     private final CollectionMapper collectionMapper;
+    private final CommunityAdMapper communityAdMapper;
 
     /**
      * 게시글 기본 정보 조회
@@ -249,5 +255,40 @@ public class CommunityRepository {
      */
     public StatisticsCommunityMapperResponse statisticsForBusiness(Long userId) {
         return communityMapper.statisticsForBusiness(userId);
+    }
+
+    /**
+     * 커뮤니티 게시글 광고 저장
+     *
+     * @parameter CommunityBasicMapperResponse, String, Long
+     * @author 김유빈
+     * @since 2024.02.28
+     */
+    public void saveAd(CommunityBasicMapperResponse community, String orderId, Long amount) {
+        CommunityAdSaveMapperRequest request = new CommunityAdSaveMapperRequest(community.getId(), orderId, amount);
+        communityAdMapper.save(request);
+    }
+
+    /**
+     * 주문 아이디를 이용하여 커뮤니티 게시글 광고 정보 조회
+     *
+     * @parameter String
+     * @return Optional<CommunityAdMapperResponse>
+     * @author 김유빈
+     * @since 2024.02.29
+     */
+    public Optional<CommunityAdMapperResponse> findAdByOrderId(String orderId) {
+        return communityAdMapper.findAdByOrderId(orderId);
+    }
+
+    /**
+     * 커뮤니티 게시글 결제 정보 등록
+     *
+     * @parameter String, String
+     * @author 김유빈
+     * @since 2024.02.29
+     */
+    public void updateAdPaymentKey(String orderId, String paymentKey) {
+        communityAdMapper.updateAdPaymentKey(new CommunityAdUpdateMapperRequest(orderId, paymentKey));
     }
 }

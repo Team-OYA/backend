@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.popup.mapper.PopupAdMapper">
+
+    <select id="findAdByOrderId" parameterType="String" resultType="popupAdMapperResponse">
+        SELECT ID, AMOUNT, POPUP_ID, ORDER_ID, PAYMENT_KEY
+        FROM POPUP_ADVERTISEMENT
+        WHERE ORDER_ID = #{orderId}
+    </select>
+
+    <insert id="save" parameterType="popupAdSaveMapperRequest">
+        INSERT INTO POPUP_ADVERTISEMENT(AMOUNT, POPUP_ID, ORDER_ID, MAIN_IMAGE_URL)
+        VALUES (#{amount}, #{popupId}, #{orderId}, #{mainImageUrl})
+        <selectKey keyProperty="id" resultType="long" order="AFTER">
+            SELECT NVL(MAX(ID), 0)
+            FROM POPUP_ADVERTISEMENT
+        </selectKey>
+    </insert>
+
+    <update id="updateAdPaymentKey" parameterType="popupAdUpdateMapperRequest">
+        UPDATE POPUP_ADVERTISEMENT
+        SET PAYMENT_KEY = #{paymentKey}
+        WHERE ORDER_ID = #{orderId}
+    </update>
+
+</mapper>

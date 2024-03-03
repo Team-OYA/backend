@@ -41,6 +41,8 @@
         <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest" alias="readCollectionsMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.CollectionMapperRequest" alias="collectionMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.CommunityAdSaveMapperRequest" alias="communityAdSaveMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.request.CommunityAdUpdateMapperRequest" alias="communityAdUpdateMapperRequest"/>
 
         <!-- global -->
 
@@ -57,6 +59,8 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupDetailMapperRequest" alias="popupDetailMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.PlanAboutMeMapperRequest" alias="planAboutMeMapperRequest"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.request.AllPlanMapperRequest" alias="allPlanMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupAdSaveMapperRequest" alias="popupAdSaveMapperRequest"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.request.PopupAdUpdateMapperRequest" alias="popupAdUpdateMapperRequest"/>
 
         <!-- user -->
         <typeAlias type="com.oya.kr.user.mapper.dto.request.SignupAdministratorMapperRequest" alias="SignupUserRequest"/>
@@ -71,6 +75,7 @@
         <typeAlias type="com.oya.kr.community.controller.dto.response.VoteResponse" alias="voteResponse"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper" alias="statisticsResponseMapper"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadMeMapperRequest" alias="readMeMapperRequest"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.response.CommunityAdMapperResponse" alias="communityAdMapperResponse"/>
 
         <!-- popup -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse" alias="categoryMapperResponse"/>
@@ -80,6 +85,7 @@
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupCollectionMapperResponse" alias="popupCollectionMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse" alias="planAboutMeMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse" alias="allPlanMapperResponse"/>
+        <typeAlias type="com.oya.kr.popup.mapper.dto.response.PopupAdMapperResponse" alias="popupAdMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse" alias="statisticsPlanMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.StatisticsPopupMapperResponse" alias="statisticsPopupMapperResponse"/>
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.StatisticsCommunityMapperResponse" alias="statisticsCommunityMapperResponse"/>
