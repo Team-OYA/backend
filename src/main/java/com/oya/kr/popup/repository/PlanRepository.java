@@ -17,6 +17,7 @@ import com.oya.kr.popup.mapper.dto.request.PlanAboutMeMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.MyPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse;
 import com.oya.kr.user.domain.User;
@@ -160,5 +161,16 @@ public class PlanRepository {
      */
     public StatisticsPlanMapperResponse statistics(Long userId) {
         return planMapper.statistics(userId);
+    }
+
+    /**
+     * 나의 사업계획서 조회 구현
+     *
+     * @parameter String, Long
+     * @author 이상민
+     * @since 2024.02.29
+     */
+    public MyPlanMapperResponse findByMyPlan(Long planId) {
+        return planMapper.findByMyPlan(planId);
     }
 }

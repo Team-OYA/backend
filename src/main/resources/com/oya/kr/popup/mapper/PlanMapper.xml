@@ -107,4 +107,15 @@
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
     </sql>
 
+    <!--
+    나의 사업계획서 불러오기
+    @Author 이상민
+    -->
+    <select id="findByMyPlan" parameterType="long" resultType="com.oya.kr.popup.mapper.dto.response.MyPlanMapperResponse">
+        SELECT ID, OFFICE, FLOOR, LOCATION, OPEN_DATE, CLOSE_DATE, BUSINESS_PLAN_URL, ENTRANCE_STATUS,
+               CONTACT_INFORMATION, CATEGORY, USER_ID, CREATED_DATE
+        FROM PLAN
+        WHERE ID = #{id} AND DELETED = 0
+    </select>
+
 </mapper>
