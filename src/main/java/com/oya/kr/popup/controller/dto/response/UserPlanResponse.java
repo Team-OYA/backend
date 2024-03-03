@@ -2,7 +2,11 @@ package com.oya.kr.popup.controller.dto.response;
 
 import com.oya.kr.global.domain.DateConvertor;
 import com.oya.kr.popup.domain.Plan;
+import com.oya.kr.popup.domain.enums.Category;
+import com.oya.kr.popup.domain.enums.DepartmentBranch;
+import com.oya.kr.popup.domain.enums.DepartmentFloor;
 import com.oya.kr.popup.domain.enums.EntranceStatus;
+import com.oya.kr.popup.mapper.dto.response.MyPlanMapperResponse;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,16 +29,16 @@ public class UserPlanResponse {
 	private final String createdDate; // 작성일
 	private final String businessPlanUrl; // 사업 계획서
 
-	public UserPlanResponse(Plan plan){
-		this.planId = plan.getId();
-		this.openDate = DateConvertor.convertDateFormatForResponse(plan.getOpenDate());
-		this.entranceStatus = plan.getEntranceStatus().getDescription();
-		this.category = plan.getCategory().getDescription();
-		this.office = plan.getDepartmentBranch().getDescription();
-		this.floor = plan.getFloor().getDescription();
-		this.location = plan.getLocation();
-		this.contactInformation = plan.getContactInformation();
-		this.createdDate = DateConvertor.convertDateFormatForResponse(plan.getCreatedDate());
-		this.businessPlanUrl = plan.getBusinessPlanUrl();
+	public UserPlanResponse(MyPlanMapperResponse myPlanMapperResponse){
+		this.planId = myPlanMapperResponse.getId();
+		this.openDate = DateConvertor.convertDateFormatForResponse(myPlanMapperResponse.getOpenDate());
+		this.entranceStatus = EntranceStatus.from(myPlanMapperResponse.getEntranceStatus()).getDescription();
+		this.category = Category.from(myPlanMapperResponse.getCategory()).getDescription();
+		this.office = DepartmentBranch.from(myPlanMapperResponse.getOffice()).getDescription();
+		this.floor = DepartmentFloor.from(myPlanMapperResponse.getFloor()).getDescription();
+		this.location = myPlanMapperResponse.getLocation();
+		this.contactInformation = myPlanMapperResponse.getContactInformation();
+		this.createdDate = DateConvertor.convertDateFormatForResponse(myPlanMapperResponse.getCreatedDate());
+		this.businessPlanUrl = myPlanMapperResponse.getBusinessPlanUrl();
 	}
 }

@@ -8,6 +8,7 @@ import com.oya.kr.popup.mapper.dto.request.PlanAboutMeMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanSaveMapperRequest;
 import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest;
 import com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.MyPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse;
@@ -37,4 +38,6 @@ public interface PlanMapper {
     void updateEntranceStatus(PlanUpdateEntranceStatusMapperRequest request);
 
     void deleteAll();
+
+    MyPlanMapperResponse findByMyPlan(Long id);
 }

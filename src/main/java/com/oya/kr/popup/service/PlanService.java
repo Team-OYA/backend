@@ -33,8 +33,10 @@ import com.oya.kr.popup.domain.enums.Department;
 import com.oya.kr.popup.domain.Plan;
 import com.oya.kr.popup.domain.enums.EntranceStatus;
 import com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.MyPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.MyPopupDetailMapper;
 import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.PlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
@@ -330,7 +332,8 @@ public class PlanService {
      * @since 2024.02.29
      */
 	public UserPlanResponse findById(Long planId) {
-        return new UserPlanResponse(planRepository.findById(planId));
+        MyPlanMapperResponse myPlanMapperResponse = planRepository.findByMyPlan(planId);
+        return new UserPlanResponse(myPlanMapperResponse);
 	}
 
     /**
