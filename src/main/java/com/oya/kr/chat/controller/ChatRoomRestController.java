@@ -4,6 +4,7 @@ import java.security.Principal;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.oya.kr.chat.controller.dto.request.ChatRoomCreateRequest;
 import com.oya.kr.chat.controller.dto.response.ChatListResponse;
+import com.oya.kr.chat.controller.dto.response.ChatRoomAndMessageResponse;
 import com.oya.kr.chat.service.ChatService;
 import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.dto.response.ApplicationResponse;
@@ -65,5 +67,17 @@ public class ChatRoomRestController {
 	public ResponseEntity<ApplicationResponse<?>> createChatRoom(Principal principal, @RequestBody ChatRoomCreateRequest chatRoomCreateRequest) {
 		chatService.createChatRoom(chatRoomCreateRequest.getRoomName(), principal.getName());
 		return ResponseEntity.ok(ApplicationResponse.success("채팅방이 생성되었습니다."));
+	}
+
+	/**
+	 * 메시지 불러오기
+	 *
+	 * @author 이상민
+	 * @since 2024.03.03
+	 */
+	@GetMapping("/rooms/{roomId}")
+	public ResponseEntity<ApplicationResponse<ChatRoomAndMessageResponse>> getMessages(Principal principal, @PathVariable Long roomId) {
+		ChatRoomAndMessageResponse response =  chatService.findRoomById(roomId, principal.getName());
+		return ResponseEntity.ok(ApplicationResponse.success(response));
 	}
 }

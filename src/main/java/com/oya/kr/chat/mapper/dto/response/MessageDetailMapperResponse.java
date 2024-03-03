@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MessageDetailMapperResponse {
 
+	private final Long sender;
+	private final String NICKNAME;
 	private final String content;
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifiedDate;

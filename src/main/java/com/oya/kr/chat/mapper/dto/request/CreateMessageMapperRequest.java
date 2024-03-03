@@ -10,10 +10,11 @@ import lombok.RequiredArgsConstructor;
 public class CreateMessageMapperRequest {
 	private final Long chatRoomId;
 	private final String content;
-	// private final Long sender;
+	private final Long sender;
 
-	public CreateMessageMapperRequest(ChatMessageRequest message) {
+	public CreateMessageMapperRequest(ChatMessageRequest message, Long userId) {
 		this.chatRoomId = message.getRoomId();
 		this.content = message.getMessage();
+		this.sender = userId;
 	}
 }

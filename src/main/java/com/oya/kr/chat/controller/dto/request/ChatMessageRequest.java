@@ -21,9 +21,9 @@ public class ChatMessageRequest {
 	private String message;
 	private String sendingTime;
 
-	public ChatMessageRequest(ChatMessageDetailResponse detail) {
-		this.roomId = 1L;
-		this.sender = null;
+	public ChatMessageRequest(ChatMessageDetailResponse detail,Long roomId) {
+		this.roomId = roomId;
+		this.sender = detail.getSenderNickname();
 		this.message = detail.getMessage();
 		this.sendingTime = detail.getSendingTime();
 	}
