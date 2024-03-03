@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="chatRoomResponse" items="${chatRoomResponses}">
+        <c:forEach var="chatRoomResponse" items="${chatRoomResponses.list}">
             <tr>
                 <td>${chatRoomResponse.chatRoomId}</td>
                 <td><a href="/chat/room/${chatRoomResponse.chatRoomId}">${chatRoomResponse.name}</a></td>

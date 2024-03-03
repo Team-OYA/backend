@@ -5,14 +5,16 @@
     <!-- @author 이상민 -->
     <!-- @since 2024.02.28-->
     <insert id="save" parameterType="com.oya.kr.chat.mapper.dto.request.CreateMessageMapperRequest">
-        INSERT INTO CHAT_MESSAGE(chat_room_id, content)
-        VALUES(#{chatRoomId}, #{content})
+        INSERT INTO CHAT_MESSAGE(chat_room_id, content, sender)
+        VALUES(#{chatRoomId}, #{content}, #{sender})
     </insert>
 
     <select id="findByChatRoomId" resultType="com.oya.kr.chat.mapper.dto.response.MessageDetailMapperResponse">
-        SELECT CONTENT, CREATED_DATE, MODIFIED_DATE
-        FROM CHAT_MESSAGE
+        SELECT SENDER, NICKNAME, CONTENT, CM.CREATED_DATE, CM.MODIFIED_DATE
+        FROM CHAT_MESSAGE CM
+                 LEFT JOIN USERS U ON CM.SENDER = U.ID
         WHERE chat_room_id = #{roomId}
+        ORDER BY CM.CREATED_DATE
     </select>
 
 </mapper>

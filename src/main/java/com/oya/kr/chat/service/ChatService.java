@@ -82,9 +82,10 @@ public class ChatService {
 	 * @author 이상민
 	 * @since 2024.02.27
 	 */
-	public ChatRoomAndMessageResponse findRoomById(Long roomId){
+	public ChatRoomAndMessageResponse findRoomById(Long roomId, String email){
+		User user = userRepository.findByEmail(email);
 		ChatRoomDetailResponse chatRoomDetailResponse = chatRoomRepository.findRoomById(roomId);
-		List<ChatMessageDetailResponse> chatMessageDetailResponse = chatMessageRepository.findByChatRoomId(roomId);
+		List<ChatMessageDetailResponse> chatMessageDetailResponse = chatMessageRepository.findByChatRoomId(roomId,user);
 		return new ChatRoomAndMessageResponse(chatRoomDetailResponse, chatMessageDetailResponse);
 	}
 
@@ -94,8 +95,8 @@ public class ChatService {
 	 * @author 이상민
 	 * @since 2024.02.27
 	 */
-	public void saveMessage(ChatMessageRequest message){
-		chatMessageRepository.save(new CreateMessageMapperRequest(message));
+	public void saveMessage(ChatMessageRequest message, Long userId){
+		chatMessageRepository.save(new CreateMessageMapperRequest(message, userId));
 	}
 
 	/**
@@ -104,11 +105,12 @@ public class ChatService {
 	 * @author 이상민
 	 * @since 2024.02.27
 	 */
-	public List<ChatMessageRequest> findByChatRoomId(Long roomId) {
-		List<ChatMessageDetailResponse> responses = chatMessageRepository.findByChatRoomId(roomId);
+	public List<ChatMessageRequest> findByChatRoomId(Long roomId, Long userId) {
+		User user = userRepository.findByUserId(userId);
+		List<ChatMessageDetailResponse> responses = chatMessageRepository.findByChatRoomId(roomId, user);
 		List<ChatMessageRequest> list = new ArrayList<>();
 		responses.forEach(detail ->{
-			list.add(new ChatMessageRequest(detail));
+			list.add(new ChatMessageRequest(detail, roomId));
 		});
 		return list;
 	}

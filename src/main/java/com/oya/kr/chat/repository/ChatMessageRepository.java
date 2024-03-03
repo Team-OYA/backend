@@ -9,6 +9,7 @@ import com.oya.kr.chat.controller.dto.response.ChatMessageDetailResponse;
 import com.oya.kr.chat.mapper.ChatMessageMapper;
 import com.oya.kr.chat.mapper.dto.request.CreateMessageMapperRequest;
 import com.oya.kr.chat.mapper.dto.response.MessageDetailMapperResponse;
+import com.oya.kr.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
 
@@ -38,11 +39,11 @@ public class ChatMessageRepository {
 	 * @author 이상민
 	 * @since 2024.02.28
 	 */
-	public List<ChatMessageDetailResponse> findByChatRoomId(Long roomId) {
+	public List<ChatMessageDetailResponse> findByChatRoomId(Long roomId, User user) {
 		List<ChatMessageDetailResponse> responses = new ArrayList<>();
 		List<MessageDetailMapperResponse> list = chatMessageMapper.findByChatRoomId(roomId);
 		list.forEach(message -> {
-			responses.add(new ChatMessageDetailResponse(message));
+			responses.add(new ChatMessageDetailResponse(message, user));
 		});
 		return responses;
 	}
