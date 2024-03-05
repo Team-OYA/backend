@@ -19,7 +19,7 @@ import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.community.mapper.dto.request.ReadCollectionsMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
-import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicWithProfileMapperResponse;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.mapper.UserMapper;
@@ -154,7 +154,7 @@ class CollectionMapperTest extends SpringApplicationTest {
 		// when
 		collectionMapper.save(collectionMapperRequest);
 		ReadCollectionsMapperRequest request = new ReadCollectionsMapperRequest(user.getId(),false,false, null, 0, 5);
-		List<CommunityBasicMapperResponse> responses = collectionMapper.findByAll(request);
+		List<CommunityBasicWithProfileMapperResponse> responses = collectionMapper.findByAll(request);
 		// then
 		assertNotNull(responses);
 	}
