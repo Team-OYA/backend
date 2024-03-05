@@ -173,7 +173,7 @@ class CommunityMapperTest extends SpringApplicationTest {
 	@Test
 	void findByAll(){
 		// given & when
-		List<CommunityBasicMapperResponse> responseList =
+		List<CommunityBasicWithProfileMapperResponse> responseList =
 			communityMapper.findByAll(new ReadCommunityMapperRequest(false, null, 1, 1));
 		// then
 		assertNotNull(responseList);

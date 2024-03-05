@@ -24,7 +24,6 @@ import com.oya.kr.community.controller.dto.response.StatisticsResponse;
 import com.oya.kr.community.controller.dto.response.VoteResponse;
 import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
-import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.domain.Community;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicWithProfileMapperResponse;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
@@ -158,7 +157,7 @@ public class CommunityService {
 	@Transactional(readOnly = true)
 	public CommunityResponse reads(String type,String email, PaginationRequest pagination) {
 		User loginUser = userRepository.findByEmail(email);
-		List<CommunityBasicMapperResponse> responseList;
+		List<CommunityBasicWithProfileMapperResponse> responseList;
 
 		// 전체 리스트 사이즈 찾기
 		int sum = communityRepository.findSizeByType(loginUser, type);
@@ -176,7 +175,7 @@ public class CommunityService {
 		return mapToCommunityResponses(loginUser, responseList, sum);
 	}
 
-	private CommunityResponse mapToCommunityResponses(User loginUser, List<CommunityBasicMapperResponse> responseList, int sum) {
+	private CommunityResponse mapToCommunityResponses(User loginUser, List<CommunityBasicWithProfileMapperResponse> responseList, int sum) {
 		List<CommunityDetailResponse> communityDetailRespons = new ArrayList<>();
 		responseList.forEach(response -> {
 			CommunityDetailResponse communityDetailResponse = read(loginUser.getEmail(), response.getId());
