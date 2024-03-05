@@ -14,4 +14,5 @@ public class MessageDetailMapperResponse {
 	private final String content;
 	private final LocalDateTime createdDate;
 	private final LocalDateTime modifiedDate;
+	private final String userType;
 }
