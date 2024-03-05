@@ -26,6 +26,7 @@ import com.oya.kr.community.domain.enums.CommunityType;
 import com.oya.kr.community.mapper.dto.request.CollectionMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.domain.Community;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicWithProfileMapperResponse;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.community.repository.CommunityRepository;
 import com.oya.kr.community.repository.VoteRepository;
@@ -90,21 +91,22 @@ public class CommunityService {
 	 * @return CommunityDetailResponse
 	 * @author 이상민
 	 * @since 2024.02.18
-	 *
-	 * 커뮤니티 게시글 스크랩 여부 추가
-	 *
-	 * @author 김유빈
-	 * @since 2024.02.16
 	 */
 	public CommunityDetailResponse read(String email, long communityId) {
 		User loginUser = userRepository.findByEmail(email);
-		CommunityBasicMapperResponse response = communityRepository.findByIdWithView(communityId, loginUser.getId());
+		CommunityBasicWithProfileMapperResponse response = communityRepository.findByIdWithView(communityId, loginUser.getId());
 
 		User writeUser = userRepository.findByUserId(response.getWriteId());
 		List<String> imageList = communityRepository.findImageById(response.getId());
 		Community community = response.toDomain(writeUser);
 		int countView = response.getCountView();
 
+		/**
+		 * 커뮤니티 게시글 스크랩 여부 추가
+		 *
+		 * @author 김유빈
+		 * @since 2024.02.16
+		 */
 		boolean collected = communityRepository.existCollection(communityId, loginUser.getId());
 
 		List<VoteResponse> voteResponseList = getVoteList(community.getCommunityType().getName(), loginUser, community.getId());
@@ -112,7 +114,8 @@ public class CommunityService {
 		if(voteResponseList != null){
 			voteResponseList.sort(Comparator.comparing(VoteResponse::getVote_id));
 		}
-		return CommunityDetailResponse.from(imageList, community, countView, voteResponseList, loginUser.getId(), collected);
+		return CommunityDetailResponse.from(imageList, community, countView, voteResponseList, loginUser.getId(),
+			collected, response.getProfileUrl());
 	}
 
 	/**

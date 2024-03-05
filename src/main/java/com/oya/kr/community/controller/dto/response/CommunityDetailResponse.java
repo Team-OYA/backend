@@ -36,9 +36,10 @@ public class CommunityDetailResponse {
 
 	private final boolean written;
 	private final boolean collected;
+	private final String profileUrl;
 
 	public static CommunityDetailResponse from(List<String> imageList, Community community, int countView,
-		List<VoteResponse> voteResponseList, Long userId, boolean collected) {
+		List<VoteResponse> voteResponseList, Long userId, boolean collected, String profileUrl) {
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 		String createdDateString = community.getCreatedDate().format(formatter);
@@ -61,7 +62,8 @@ public class CommunityDetailResponse {
 			voteResponseList,
 			imageList,
 			userId.equals(community.getUser().getId()),
-			collected
+			collected,
+			profileUrl
 		);
 	}
 }

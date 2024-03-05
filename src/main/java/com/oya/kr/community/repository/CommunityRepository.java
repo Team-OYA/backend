@@ -23,6 +23,7 @@ import com.oya.kr.community.mapper.dto.request.ReadMeMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicWithProfileMapperResponse;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.community.mapper.dto.response.CommunityAdMapperResponse;
@@ -44,12 +45,12 @@ public class CommunityRepository {
      * 게시글 기본 정보 조회
      *
      * @parameter Long
-     * @return CommunityBasicMapperResponse
+     * @return CommunityBasicWithProfileMapperResponse
      * @author 이상민
      * @since 2024.02.18
      */
-    public CommunityBasicMapperResponse findById(Long id) {
-        CommunityBasicMapperResponse response = communityMapper.findById(id)
+    public CommunityBasicWithProfileMapperResponse findById(Long id) {
+        CommunityBasicWithProfileMapperResponse response = communityMapper.findById(id)
             .orElseThrow(() -> new ApplicationException(CommunityErrorCodeList.NOT_EXIST_COMMUNITY));
         if (response.isDeleted()) {
             throw new ApplicationException(CommunityErrorCodeList.DELETED_COMMUNITY);
@@ -61,12 +62,12 @@ public class CommunityRepository {
      * 게시글 기본 정보 조회
      *
      * @parameter Long, Long
-     * @return CommunityBasicMapperResponse
+     * @return CommunityBasicWithProfileMapperResponse
      * @author 이상민
      * @since 2024.02.18
      */
-    public CommunityBasicMapperResponse findByIdWithView(Long id, Long userId) {
-        CommunityBasicMapperResponse response = communityMapper.findById(id)
+    public CommunityBasicWithProfileMapperResponse findByIdWithView(Long id, Long userId) {
+        CommunityBasicWithProfileMapperResponse response = communityMapper.findById(id)
             .orElseThrow(() -> new ApplicationException(CommunityErrorCodeList.NOT_EXIST_COMMUNITY));
         communityViewMapper.createOrUpdateCommunityView(id, userId); // 조회수 증가
         if (response.isDeleted()) {
@@ -198,7 +199,7 @@ public class CommunityRepository {
      * @since 2024.02.21
      */
     public void delete(Long id, Long userId) {
-        CommunityBasicMapperResponse response = findById(id);
+        CommunityBasicWithProfileMapperResponse response = findById(id);
         if (userId != response.getWriteId()) {
             throw new ApplicationException(CommunityErrorCodeList.INVALID_COMMUNITY);
         }
@@ -264,7 +265,7 @@ public class CommunityRepository {
      * @author 김유빈
      * @since 2024.02.28
      */
-    public void saveAd(CommunityBasicMapperResponse community, String orderId, Long amount) {
+    public void saveAd(CommunityBasicWithProfileMapperResponse community, String orderId, Long amount) {
         CommunityAdSaveMapperRequest request = new CommunityAdSaveMapperRequest(community.getId(), orderId, amount);
         communityAdMapper.save(request);
     }

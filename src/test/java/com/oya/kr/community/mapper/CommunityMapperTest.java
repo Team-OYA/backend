@@ -24,6 +24,7 @@ import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicWithProfileMapperResponse;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.user.controller.dto.request.JoinRequest;
@@ -108,7 +109,7 @@ class CommunityMapperTest extends SpringApplicationTest {
 
 		// when
 		SaveBasicMapperRequest request = saveCommunity(CommunityType.BASIC.getName(), votes);
-		CommunityBasicMapperResponse response = communityMapper.findById(request.getPostId())
+		CommunityBasicWithProfileMapperResponse response = communityMapper.findById(request.getPostId())
 			.orElseThrow(()-> new ApplicationException(NOT_EXIST_COMMUNITY));
 
 		// then

@@ -76,6 +76,7 @@
         <typeAlias type="com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper" alias="statisticsResponseMapper"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.request.ReadMeMapperRequest" alias="readMeMapperRequest"/>
         <typeAlias type="com.oya.kr.community.mapper.dto.response.CommunityAdMapperResponse" alias="communityAdMapperResponse"/>
+        <typeAlias type="com.oya.kr.community.mapper.dto.response.CommunityBasicWithProfileMapperResponse" alias="communityBasicWithProfileMapperResponse"/>
 
         <!-- popup -->
         <typeAlias type="com.oya.kr.popup.mapper.dto.response.CategoryMapperResponse" alias="categoryMapperResponse"/>

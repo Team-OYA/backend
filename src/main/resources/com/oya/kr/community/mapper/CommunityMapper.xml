@@ -23,15 +23,19 @@
         VALUES (#{content},#{postId})
     </insert>
 
-    <select id="findById" resultType="communityBasicMapperResponse">
-        <include refid="selecCommunity" />
+    <!-- 커뮤니티 게시글 조회 시 profile url 컬럼 추가  -->
+    <!-- @author 김유빈 -->
+    <!-- @since 2024.03.05-->
+    <select id="findById" resultType="communityBasicWithProfileMapperResponse">
+        <include refid="selectCommunityWithProfile" />
         FROM
             COMMUNITY c
                 LEFT JOIN COMMUNITY_VIEW cv ON c.ID = cv.COMMUNITY_ID
+                LEFT JOIN USERS u ON u.ID = c.WRITE_ID
         WHERE
             c.ID = #{communityId}
         GROUP BY
-            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
+            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, PROFILE_URL, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
     </select>
 
     <select id="findByAll" parameterType="readCommunityMapperRequest" resultType="communityBasicMapperResponse">
@@ -179,6 +183,21 @@
             COMMUNITY_TYPE,
             WRITE_ID,
             CATEGORY_CODE,
+            c.CREATED_DATE,
+            c.MODIFIED_DATE,
+            c.DELETED,
+            COUNT(cv.COMMUNITY_ID) as countView
+    </sql>
+
+    <sql id="selectCommunityWithProfile">
+        SELECT
+            c.ID,
+            TITLE,
+            DESCRIPTION,
+            COMMUNITY_TYPE,
+            WRITE_ID,
+            CATEGORY_CODE,
+            u.PROFILE_URL,
             c.CREATED_DATE,
             c.MODIFIED_DATE,
             c.DELETED,

@@ -10,6 +10,7 @@ import com.oya.kr.community.mapper.dto.request.SaveBasicMapperRequest;
 import com.oya.kr.community.mapper.dto.request.SaveVoteMapperRequest;
 import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
 import com.oya.kr.community.mapper.dto.request.ReadCommunityMapperRequest;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicWithProfileMapperResponse;
 import com.oya.kr.community.mapper.dto.response.StatisticsResponseMapper;
 import com.oya.kr.popup.mapper.dto.response.StatisticsCommunityMapperResponse;
 
@@ -21,7 +22,7 @@ public interface CommunityMapper {
 
 	void saveBasic(SaveBasicMapperRequest saveBasicMapperRequest);
 	void saveVote(SaveVoteMapperRequest saveVoteMapperRequest);
-	Optional<CommunityBasicMapperResponse> findById(long communityId);
+	Optional<CommunityBasicWithProfileMapperResponse> findById(long communityId);
 	List<CommunityBasicMapperResponse> findByAll(ReadCommunityMapperRequest readCommunityMapperRequest);
 	List<CommunityBasicMapperResponse> findByType(ReadCommunityMapperRequest readCommunityMapperRequest);
 	void delete(long communityId);
