@@ -20,11 +20,16 @@ public class ChatMessageRequest {
 	private String sender;
 	private String message;
 	private String sendingTime;
+	private String role;
 
 	public ChatMessageRequest(ChatMessageDetailResponse detail,Long roomId) {
 		this.roomId = roomId;
 		this.sender = detail.getSenderNickname();
 		this.message = detail.getMessage();
 		this.sendingTime = detail.getSendingTime();
+	}
+
+	public void updateSender(String sender){
+		this.sender = sender;
 	}
 }

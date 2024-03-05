@@ -14,12 +14,19 @@ public class ChatMessageDetailResponse {
 	private final String senderNickname;
 	private final String message;
 	private final String sendingTime;
+	private final String userType;
 	private final boolean isCheckedMe;
 
 	public ChatMessageDetailResponse(MessageDetailMapperResponse message, User user) {
 		this.senderNickname = message.getNICKNAME();
 		this.message = message.getContent();
 		this.sendingTime = DateConvertor.convertDateFormatForResponse(message.getModifiedDate());
+
+		if(message.getUserType().equals("administrator")){
+			this.userType = "admin";
+		}else{
+			this.userType = "user";
+		}
 
 		if(user.getNickname().equals(this.senderNickname)){
 			this.isCheckedMe = true;

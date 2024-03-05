@@ -10,7 +10,7 @@
     </insert>
 
     <select id="findByChatRoomId" resultType="com.oya.kr.chat.mapper.dto.response.MessageDetailMapperResponse">
-        SELECT SENDER, NICKNAME, CONTENT, CM.CREATED_DATE, CM.MODIFIED_DATE
+        SELECT SENDER, NICKNAME, CONTENT, CM.CREATED_DATE, CM.MODIFIED_DATE, USER_TYPE
         FROM CHAT_MESSAGE CM
                  LEFT JOIN USERS U ON CM.SENDER = U.ID
         WHERE chat_room_id = #{roomId}

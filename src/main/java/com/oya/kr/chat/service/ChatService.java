@@ -114,4 +114,9 @@ public class ChatService {
 		});
 		return list;
 	}
+
+	public String findBySender(Long userId) {
+		User user = userRepository.findByUserId(userId);
+		return user.getNickname();
+	}
 }
