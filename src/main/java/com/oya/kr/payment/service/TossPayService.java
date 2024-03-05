@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.oya.kr.community.mapper.dto.response.CommunityBasicMapperResponse;
+import com.oya.kr.community.mapper.dto.response.CommunityBasicWithProfileMapperResponse;
 import com.oya.kr.community.repository.CommunityRepository;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.StorageConnector;
@@ -64,7 +64,7 @@ public class TossPayService {
             Popup savedPopup = popupRepository.findById(request.getPostId(), null);
             popupRepository.saveAd(savedPopup, request.getOrderId(), request.getAmount(), mainImageUrl);
         } else if (request.getPostType().equals("community")) {
-            CommunityBasicMapperResponse savedCommunity = communityRepository.findById(request.getPostId());
+            CommunityBasicWithProfileMapperResponse savedCommunity = communityRepository.findById(request.getPostId());
             communityRepository.saveAd(savedCommunity, request.getOrderId(), request.getAmount());
         } else {
             throw new ApplicationException(NOT_EXIST_POST_TYPE);

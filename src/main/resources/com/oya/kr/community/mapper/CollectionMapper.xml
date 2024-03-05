@@ -28,7 +28,10 @@
         WHERE COMMUNITY_ID = #{communityId} AND USER_ID = #{userId}
     </update>
 
-    <select id="findByAll" parameterType="readCollectionsMapperRequest" resultType="communityBasicMapperResponse">
+    <!-- profile url 컬럼 추가  -->
+    <!-- @author 김유빈 -->
+    <!-- @since 2024.03.05-->
+    <select id="findByAll" parameterType="readCollectionsMapperRequest" resultType="CommunityBasicWithProfileMapperResponse">
         SELECT
             c.ID,
             TITLE,
@@ -36,6 +39,7 @@
             COMMUNITY_TYPE,
             WRITE_ID,
             CATEGORY_CODE,
+            u.PROFILE_URL,
             c.CREATED_DATE,
             c.MODIFIED_DATE,
             c.DELETED,
@@ -45,12 +49,13 @@
                 LEFT JOIN USERS u on c.WRITE_ID = u.ID
                 LEFT JOIN COMMUNITY_VIEW cv ON c.ID = cv.COMMUNITY_ID
                 LEFT JOIN COMMUNITY_COLLECTION cc ON c.ID = cc.COMMUNITY_ID
+                LEFT JOIN USERS u ON u.ID = c.WRITE_ID
         WHERE
             c.DELETED = #{communityDeleted}
           AND cc.DELETED = #{collectionDeleted}
           AND cc.USER_ID = #{userId}
         GROUP BY
-            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
+            c.ID, TITLE, DESCRIPTION, COMMUNITY_TYPE, WRITE_ID, CATEGORY_CODE, u.PROFILE_URL, c.CREATED_DATE, c.MODIFIED_DATE, c.DELETED
         ORDER BY MODIFIED_DATE DESC
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
     </select>
