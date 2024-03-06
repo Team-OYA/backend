@@ -17,7 +17,6 @@ public class PopupListResponse {
     private final long planId;
     private final long popupId;
     private final String title;
-    private final String content;
     private final String description;
     private final LocalDateTime pulledDate;
     private final LocalDate openDate;
@@ -30,7 +29,6 @@ public class PopupListResponse {
             response.getPlanId(),
             response.getId(),
             response.getTitle(),
-            response.getContent(),
             response.getDescription(),
             response.getPulledDate(),
             response.getOpenDate(),

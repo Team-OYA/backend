@@ -30,7 +30,7 @@ public class PopupDetailResponse {
 		this.popupWritten = popupWritten;
 		this.popupId = myPopupDetailMapper.getId();
 		this.title = myPopupDetailMapper.getTitle();
-		this.description = myPopupDetailMapper.getDescription();
+		this.description = myPopupDetailMapper.getContent();
 		this.popupImages = images;
 		this.createdDate = DateConvertor.convertDateFormatForResponse(myPopupDetailMapper.getCreatedDate());
 		this.modifiedDate = DateConvertor.convertDateFormatForResponse(myPopupDetailMapper.getModifiedDate());
