@@ -12,6 +12,7 @@ public class PopupDetailMapperResponse {
 
     private final long id;
     private final String title;
+    private final String content;
     private final String description;
     private final LocalDateTime pulledDate;
     private final String withdrawalStatus;

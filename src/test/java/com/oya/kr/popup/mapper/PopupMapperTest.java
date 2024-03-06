@@ -110,7 +110,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest request = PopupSaveMapperRequest.from(popup);
         popupMapper.save(request);
 
@@ -133,7 +133,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest request = PopupSaveMapperRequest.from(popup);
         popupMapper.save(request);
 
@@ -158,7 +158,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest request = PopupSaveMapperRequest.from(popup);
         popupMapper.save(request);
 
@@ -181,7 +181,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
@@ -209,7 +209,7 @@ public class PopupMapperTest extends SpringApplicationTest {
 
         User savedUser = savedUser();
         Plan savedPlan = savedPlanWithOpenAndCloseDate(savedUser, openDate, closeDate);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
@@ -237,7 +237,7 @@ public class PopupMapperTest extends SpringApplicationTest {
 
         User savedUser = savedUser();
         Plan savedPlan = savedPlanWithOpenAndCloseDate(savedUser, openDate, closeDate);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
@@ -262,7 +262,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
@@ -289,7 +289,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
@@ -314,7 +314,7 @@ public class PopupMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest request = PopupSaveMapperRequest.from(popup);
 
         // when & then

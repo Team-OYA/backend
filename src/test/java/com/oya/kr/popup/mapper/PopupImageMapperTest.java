@@ -143,7 +143,7 @@ public class PopupImageMapperTest extends SpringApplicationTest {
     }
 
     private Popup savedPopup(Plan savedPlan) {
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest request = PopupSaveMapperRequest.from(popup);
         popupMapper.save(request);
         return popupMapper.findById(request.getPopupId()).get().toDomain(savedPlan);

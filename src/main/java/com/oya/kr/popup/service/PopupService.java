@@ -13,10 +13,8 @@ import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.S3Connector;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
-import com.oya.kr.popup.controller.dto.response.PopupDetailResponse;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
 import com.oya.kr.popup.controller.dto.response.PopupLankListResponse;
-import com.oya.kr.popup.controller.dto.response.PopupLankResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
 import com.oya.kr.popup.controller.dto.response.StatisticsResponse;
@@ -125,7 +123,7 @@ public class PopupService {
             thumbnailUrl = s3Connector.save(thumbnail);
         }
 
-        Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription());
+        Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription(), request.getDescription());
         popupRepository.save(popup, savedPlan, thumbnailUrl);
     }
 

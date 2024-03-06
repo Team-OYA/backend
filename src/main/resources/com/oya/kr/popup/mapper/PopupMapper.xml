@@ -92,8 +92,8 @@
     </select>
 
     <insert id="save" parameterType="popupSaveMapperRequest">
-        INSERT INTO POPUP(TITLE, DESCRIPTION, WITHDRAWAL_STATUS, PLAN_ID)
-        VALUES (#{title}, #{description}, #{withdrawalStatus}, #{planId})
+        INSERT INTO POPUP(TITLE, CONTENT, DESCRIPTION, WITHDRAWAL_STATUS, PLAN_ID)
+        VALUES (#{title}, #{content}, #{description}, #{withdrawalStatus}, #{planId})
         <selectKey keyProperty="popupId" resultType="long" order="AFTER">
             SELECT NVL(MAX(ID), 0)
             FROM POPUP
@@ -106,7 +106,7 @@
     </delete>
 
     <sql id="selectPopupWithPlanAndPopupImage">
-        SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
+        SELECT P.ID, TITLE, CONTENT, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
             PI.URL thumbnail, PN.USER_ID userId, PN.CATEGORY,
             OPEN_DATE, CLOSE_DATE, 1
         FROM POPUP P
