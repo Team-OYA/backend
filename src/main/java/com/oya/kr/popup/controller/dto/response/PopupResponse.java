@@ -30,7 +30,7 @@ public class PopupResponse {
             response.getId(),
             response.getPlanId(),
             response.getTitle(),
-            response.getDescription(),
+            response.getContent(),
             response.getPulledDate(),
             CategoryResponse.from(Category.from(response.getCategory())),
             response.getOpenDate(),

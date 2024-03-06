@@ -19,6 +19,7 @@ import com.oya.kr.popup.mapper.dto.request.PlanUpdateEntranceStatusMapperRequest
 import com.oya.kr.popup.mapper.dto.response.AllPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.MyPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.PlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse;
 import com.oya.kr.user.domain.User;
 
@@ -46,6 +47,19 @@ public class PlanRepository {
         return planMapper.findById(id)
             .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN))
             .toDomain(user);
+    }
+
+    /**
+     * 사용자 정보 없이 사업계획서 정보 조회 구현
+     *
+     * @parameter Long
+     * @return PlanMapperResponse
+     * @author 김유빈
+     * @since 2024.03.06
+     */
+    public PlanMapperResponse findByIdWithoutUser(Long id) {
+        return planMapper.findById(id)
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_PLAN));
     }
 
     /**
@@ -118,12 +132,14 @@ public class PlanRepository {
      * repository 계층으로 분리
      *
      * @parameter Plan
+     * @return long
      * @author 김유빈
      * @since 2024.02.21
      */
-    public void save(Plan plan) {
+    public long save(Plan plan) {
         PlanSaveMapperRequest mapperRequest = PlanSaveMapperRequest.from(plan);
         planMapper.save(mapperRequest);
+        return mapperRequest.getPlanId();
     }
 
     /**

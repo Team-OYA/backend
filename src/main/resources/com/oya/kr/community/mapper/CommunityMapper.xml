@@ -121,9 +121,14 @@
         WHERE COMMUNITY_ID = #{communityId}
     </select>
 
+
+    <!-- 커뮤니티 통계 조회 시 삭제된 게시글 제외 조건 추가  -->
+    <!-- @author 김유빈 -->
+    <!-- @since 2024.03.06-->
     <select id="statistics" resultType="statisticsResponseMapper">
         SELECT CATEGORY_CODE, COUNT(CATEGORY_CODE)
         FROM COMMUNITY
+        WHERE DELETED = 0
         GROUP BY CATEGORY_CODE
     </select>
 

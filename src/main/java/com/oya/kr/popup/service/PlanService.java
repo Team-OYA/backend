@@ -209,10 +209,11 @@ public class PlanService {
      * 사업계획서 제안 기능 구현
      *
      * @parameter String, PlanSaveRequest, MultipartFile
+     * @return long
      * @author 김유빈
      * @since 2024.02.16
      */
-    public void save(String email, PlanSaveRequest request, MultipartFile businessPlan) {
+    public long save(String email, PlanSaveRequest request, MultipartFile businessPlan) {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsBusiness();
 
@@ -220,7 +221,7 @@ public class PlanService {
 
         Plan plan = Plan.saved(savedUser, request.getOffice(), request.getFloor(), request.getOpenDate(), request.getCloseDate(),
             businessPlanUrl, request.getContactInformation(), request.getCategory());
-        planRepository.save(plan);
+        return planRepository.save(plan);
     }
 
     /**
@@ -250,7 +251,10 @@ public class PlanService {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsAdministrator();
 
-        Plan savedPlan = planRepository.findById(planId, savedUser);
+        PlanMapperResponse response = planRepository.findByIdWithoutUser(planId);
+        User businessUser = userRepository.findByUserId(response.getUserId());
+
+        Plan savedPlan = response.toDomain(businessUser);
         savedPlan.waiting();
         planRepository.updateEntranceStatus(savedPlan);
 
@@ -264,7 +268,7 @@ public class PlanService {
                 + "THEPOP 드림", savedUser.getNickname());
 
         SenderRequest request = new SenderRequest(
-            savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), title, content);
+            savedUser.getEmail(), List.of(businessUser.getEmail()), title, content);
         sesSender.send(request);
     }
 
@@ -279,7 +283,10 @@ public class PlanService {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsAdministrator();
 
-        Plan savedPlan = planRepository.findById(planId, savedUser);
+        PlanMapperResponse response = planRepository.findByIdWithoutUser(planId);
+        User businessUser = userRepository.findByUserId(response.getUserId());
+
+        Plan savedPlan = response.toDomain(businessUser);
         savedPlan.approve();
         planRepository.updateEntranceStatus(savedPlan);
 
@@ -307,7 +314,10 @@ public class PlanService {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsAdministrator();
 
-        Plan savedPlan = planRepository.findById(planId, savedUser);
+        PlanMapperResponse response = planRepository.findByIdWithoutUser(planId);
+        User businessUser = userRepository.findByUserId(response.getUserId());
+
+        Plan savedPlan = response.toDomain(businessUser);
         savedPlan.deny();
         planRepository.updateEntranceStatus(savedPlan);
 

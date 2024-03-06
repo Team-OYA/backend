@@ -106,7 +106,7 @@ public class PopupCollectionMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
@@ -134,7 +134,7 @@ public class PopupCollectionMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
@@ -163,7 +163,7 @@ public class PopupCollectionMapperTest extends SpringApplicationTest {
         // given
         User savedUser = savedUser();
         Plan savedPlan = savedPlan(savedUser);
-        Popup popup = Popup.saved(savedPlan, "title", "description");
+        Popup popup = Popup.saved(savedPlan, "title", "content", "description");
         PopupSaveMapperRequest popupSaveMapperRequest = PopupSaveMapperRequest.from(popup);
         popupMapper.save(popupSaveMapperRequest);
 
