@@ -251,7 +251,10 @@ public class PlanService {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsAdministrator();
 
-        Plan savedPlan = planRepository.findById(planId, savedUser);
+        PlanMapperResponse response = planRepository.findByIdWithoutUser(planId);
+        User businessUser = userRepository.findByUserId(response.getUserId());
+
+        Plan savedPlan = response.toDomain(businessUser);
         savedPlan.waiting();
         planRepository.updateEntranceStatus(savedPlan);
 
@@ -265,7 +268,7 @@ public class PlanService {
                 + "THEPOP 드림", savedUser.getNickname());
 
         SenderRequest request = new SenderRequest(
-            savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), title, content);
+            savedUser.getEmail(), List.of(businessUser.getEmail()), title, content);
         sesSender.send(request);
     }
 
@@ -280,7 +283,10 @@ public class PlanService {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsAdministrator();
 
-        Plan savedPlan = planRepository.findById(planId, savedUser);
+        PlanMapperResponse response = planRepository.findByIdWithoutUser(planId);
+        User businessUser = userRepository.findByUserId(response.getUserId());
+
+        Plan savedPlan = response.toDomain(businessUser);
         savedPlan.approve();
         planRepository.updateEntranceStatus(savedPlan);
 
@@ -308,7 +314,10 @@ public class PlanService {
         User savedUser = userRepository.findByEmail(email);
         savedUser.validateUserIsAdministrator();
 
-        Plan savedPlan = planRepository.findById(planId, savedUser);
+        PlanMapperResponse response = planRepository.findByIdWithoutUser(planId);
+        User businessUser = userRepository.findByUserId(response.getUserId());
+
+        Plan savedPlan = response.toDomain(businessUser);
         savedPlan.deny();
         planRepository.updateEntranceStatus(savedPlan);
 
