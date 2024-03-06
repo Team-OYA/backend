@@ -142,6 +142,11 @@
     @return PopupTopMapperResponse
     @author 이상민
     @since 2024.02.29
+
+    삭제된 팝업스토어 게시글 제외
+
+    @author 김유빈
+    @since 2024.03.06
    -->
     <select id="findByTop" resultType="com.oya.kr.popup.mapper.dto.response.PopupTopMapperResponse">
         SELECT pl.USER_ID, p.ID as planId, p.TITLE, COUNT(p.ID) AS viewSum
@@ -149,6 +154,7 @@
                  LEFT JOIN POPUP_VIEW pv ON p.ID = pv.POPUP_ID
                  LEFT JOIN PLAN pl ON p.PLAN_ID = pl.ID
                  LEFT JOIN USERS u ON u.ID = pl.USER_ID
+        WHERE P.DELETED = 0
         GROUP BY p.ID, p.TITLE, pl.USER_ID
         ORDER BY viewSum desc
     </select>
