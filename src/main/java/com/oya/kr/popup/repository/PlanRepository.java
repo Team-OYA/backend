@@ -118,12 +118,14 @@ public class PlanRepository {
      * repository 계층으로 분리
      *
      * @parameter Plan
+     * @return long
      * @author 김유빈
      * @since 2024.02.21
      */
-    public void save(Plan plan) {
+    public long save(Plan plan) {
         PlanSaveMapperRequest mapperRequest = PlanSaveMapperRequest.from(plan);
         planMapper.save(mapperRequest);
+        return mapperRequest.getPlanId();
     }
 
     /**
