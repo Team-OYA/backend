@@ -30,6 +30,7 @@ import com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.StatisticsPopupMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.popup.repository.PopupRepository;
+import com.oya.kr.popup.support.EscapeStringConverter;
 import com.oya.kr.popup.support.PopupChatGPTConnector;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
@@ -52,6 +53,7 @@ public class PopupService {
     private final CommunityRepository communityRepository;
     private final S3Connector s3Connector;
     private final PopupChatGPTConnector chatGPTConnector;
+    private final EscapeStringConverter escapeStringConverter;
 
     /**
      * 팝업스토어 게시글 상세정보 조회 기능 구현
@@ -133,8 +135,9 @@ public class PopupService {
             throw new ApplicationException(CHAT_GPT_FAIL);
         }
         String description = response.getBody().getChoices().get(0).getMessage().getContent();
+        String replacedDescription = escapeStringConverter.convert(description);
 
-        Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription(), description);
+        Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription(), replacedDescription);
         popupRepository.save(popup, savedPlan, thumbnailUrl);
     }
 
