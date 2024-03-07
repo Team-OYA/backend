@@ -26,6 +26,7 @@ public class PlanMapperResponse {
     private final String entranceStatus;
     private final String contactInformation;
     private final String category;
+    private final long userId;
 
     public Plan toDomain() {
         return createPlan(null);

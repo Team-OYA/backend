@@ -145,17 +145,17 @@ public class PlanController {
      * 사업계획서 제안 기능 구현
      *
      * @parameter Principal, MultipartFile, PlanSaveRequest
-     * @return ResponseEntity<ApplicationResponse<Void>>
+     * @return ResponseEntity<ApplicationResponse<Long>>
      * @author 김유빈
      * @since 2024.02.14
      */
     @PostMapping
-    public ResponseEntity<ApplicationResponse<Void>> save(
+    public ResponseEntity<ApplicationResponse<Long>> save(
         Principal principal,
         @RequestPart("file") MultipartFile businessPlan,
         @RequestPart("data") PlanSaveRequest request) {
-        planService.save(principal.getName(), request, businessPlan);
-        return ResponseEntity.ok(ApplicationResponse.success(null));
+        long id = planService.save(principal.getName(), request, businessPlan);
+        return ResponseEntity.ok(ApplicationResponse.success(id));
     }
 
     /**

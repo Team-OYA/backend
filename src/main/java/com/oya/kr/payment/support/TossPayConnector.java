@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TossPayConnector implements PaymentConnector {
 
-    private static final Base64.Encoder ENCODER = Base64.getEncoder();
     private static final String TOKEN_TYPE = "Basic";
 
     private final PaymentProvider tossPayProvider;
@@ -58,7 +57,7 @@ public class TossPayConnector implements PaymentConnector {
     }
 
     private HttpHeaders createHeaders() {
-        byte[] encodedBytes = ENCODER.encode((tossPayProvider.secretKey() + ":").getBytes(StandardCharsets.UTF_8));
+        byte[] encodedBytes = Base64.getEncoder().encode((tossPayProvider.secretKey() + ":").getBytes(StandardCharsets.UTF_8));
         String authorizations = TOKEN_TYPE + " " + new String(encodedBytes);
 
         HttpHeaders headers = new HttpHeaders();

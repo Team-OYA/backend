@@ -1,9 +1,11 @@
 package com.oya.kr.popup.service;
 
 import static com.oya.kr.popup.exception.PlanErrorCodeList.PLAN_HAS_POPUP;
+import static com.oya.kr.popup.exception.PopupErrorCodeList.CHAT_GPT_FAIL;
 
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,11 +14,10 @@ import com.oya.kr.community.repository.CommunityRepository;
 import com.oya.kr.global.dto.request.PaginationRequest;
 import com.oya.kr.global.exception.ApplicationException;
 import com.oya.kr.global.support.S3Connector;
+import com.oya.kr.global.support.dto.response.ChatGPTResponse;
 import com.oya.kr.popup.controller.dto.request.PopupSaveRequest;
-import com.oya.kr.popup.controller.dto.response.PopupDetailResponse;
 import com.oya.kr.popup.controller.dto.response.PopupImageResponse;
 import com.oya.kr.popup.controller.dto.response.PopupLankListResponse;
-import com.oya.kr.popup.controller.dto.response.PopupLankResponse;
 import com.oya.kr.popup.controller.dto.response.PopupResponse;
 import com.oya.kr.popup.controller.dto.response.PopupsListResponse;
 import com.oya.kr.popup.controller.dto.response.StatisticsResponse;
@@ -29,6 +30,8 @@ import com.oya.kr.popup.mapper.dto.response.StatisticsPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.StatisticsPopupMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.popup.repository.PopupRepository;
+import com.oya.kr.popup.support.EscapeStringConverter;
+import com.oya.kr.popup.support.PopupChatGPTConnector;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
 
@@ -49,6 +52,8 @@ public class PopupService {
     private final PopupRepository popupRepository;
     private final CommunityRepository communityRepository;
     private final S3Connector s3Connector;
+    private final PopupChatGPTConnector chatGPTConnector;
+    private final EscapeStringConverter escapeStringConverter;
 
     /**
      * 팝업스토어 게시글 상세정보 조회 기능 구현
@@ -125,7 +130,14 @@ public class PopupService {
             thumbnailUrl = s3Connector.save(thumbnail);
         }
 
-        Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription());
+        ResponseEntity<ChatGPTResponse> response = chatGPTConnector.quest(request.getDescription());
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            throw new ApplicationException(CHAT_GPT_FAIL);
+        }
+        String description = response.getBody().getChoices().get(0).getMessage().getContent();
+        String replacedDescription = escapeStringConverter.convert(description);
+
+        Popup popup = Popup.saved(savedPlan, request.getTitle(), request.getDescription(), replacedDescription);
         popupRepository.save(popup, savedPlan, thumbnailUrl);
     }
 

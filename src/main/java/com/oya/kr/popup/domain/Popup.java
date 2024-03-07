@@ -18,14 +18,16 @@ public class Popup extends Base {
 
 	private Long id;
 	private Plan plan;
+	private String content;
 	private String title;
 	private String description;
 	private LocalDateTime pulledDate;
 	private WithdrawalStatus withdrawalStatus;
 
-	public Popup(Plan plan, String title, String description, LocalDateTime pulledDate, WithdrawalStatus withdrawalStatus) {
+	public Popup(Plan plan, String title, String content, String description, LocalDateTime pulledDate, WithdrawalStatus withdrawalStatus) {
 		this.plan = plan;
 		this.title = title;
+		this.content = content;
 		this.description = description;
 		this.pulledDate = pulledDate;
 		this.withdrawalStatus = withdrawalStatus;
@@ -42,7 +44,7 @@ public class Popup extends Base {
 		this.withdrawalStatus = withdrawalStatus;
 	}
 
-	public static Popup saved(Plan plan, String title, String description) {
-		return new Popup(plan, title, description, LocalDateTime.now(), WithdrawalStatus.DO_NOT_APPLY);
+	public static Popup saved(Plan plan, String title, String content, String description) {
+		return new Popup(plan, title, content, description, LocalDateTime.now(), WithdrawalStatus.DO_NOT_APPLY);
 	}
 }

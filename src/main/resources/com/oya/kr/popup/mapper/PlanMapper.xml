@@ -29,6 +29,7 @@
         WHERE P.USER_ID = #{userId}
             AND P.CATEGORY LIKE '%'||#{category}||'%'
             AND P.ENTRANCE_STATUS LIKE '%'||#{entranceStatus}||'%'
+        ORDER BY P.CREATED_DATE DESC
         <include refid="offsetForPaging" />
     </select>
 
@@ -48,6 +49,7 @@
                 AND B.DELETED = 0
         WHERE P.CATEGORY LIKE '%'||#{category}||'%'
             AND P.ENTRANCE_STATUS LIKE '%'||#{entranceStatus}||'%'
+        ORDER BY P.CREATED_DATE DESC
         <include refid="offsetForPaging"/>
     </select>
 

@@ -12,6 +12,7 @@ public class PopupSaveMapperRequest {
     private long popupId;
     private final long planId;
     private final String title;
+    private final String content;
     private final String description;
     private final String withdrawalStatus;
 
@@ -19,6 +20,7 @@ public class PopupSaveMapperRequest {
         return new PopupSaveMapperRequest(
             popup.getPlan().getId(),
             popup.getTitle(),
+            popup.getContent(),
             popup.getDescription(),
             popup.getWithdrawalStatus().getName()
         );

@@ -10,7 +10,7 @@
     </select>
 
     <select id="findByIdWithDate" parameterType="popupDetailMapperRequest" resultType="popupDetailMapperResponse">
-        SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, null, PN.USER_ID,
+        SELECT P.ID, TITLE, CONTENT, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID, null, PN.USER_ID,
             PN.CATEGORY, OPEN_DATE, CLOSE_DATE,
             NVL2(PC.ID, 1, 0) COLLECTED
         FROM POPUP P
@@ -92,8 +92,8 @@
     </select>
 
     <insert id="save" parameterType="popupSaveMapperRequest">
-        INSERT INTO POPUP(TITLE, DESCRIPTION, WITHDRAWAL_STATUS, PLAN_ID)
-        VALUES (#{title}, #{description}, #{withdrawalStatus}, #{planId})
+        INSERT INTO POPUP(TITLE, CONTENT, DESCRIPTION, WITHDRAWAL_STATUS, PLAN_ID)
+        VALUES (#{title}, #{content}, #{description}, #{withdrawalStatus}, #{planId})
         <selectKey keyProperty="popupId" resultType="long" order="AFTER">
             SELECT NVL(MAX(ID), 0)
             FROM POPUP
@@ -106,7 +106,7 @@
     </delete>
 
     <sql id="selectPopupWithPlanAndPopupImage">
-        SELECT P.ID, TITLE, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
+        SELECT P.ID, TITLE, CONTENT, DESCRIPTION, PULLED_DATE, WITHDRAWAL_STATUS, PLAN_ID,
             PI.URL thumbnail, PN.USER_ID userId, PN.CATEGORY,
             OPEN_DATE, CLOSE_DATE, 1
         FROM POPUP P
@@ -142,6 +142,11 @@
     @return PopupTopMapperResponse
     @author 이상민
     @since 2024.02.29
+
+    삭제된 팝업스토어 게시글 제외
+
+    @author 김유빈
+    @since 2024.03.06
    -->
     <select id="findByTop" resultType="com.oya.kr.popup.mapper.dto.response.PopupTopMapperResponse">
         SELECT pl.USER_ID, p.ID as planId, p.TITLE, COUNT(p.ID) AS viewSum
@@ -149,6 +154,7 @@
                  LEFT JOIN POPUP_VIEW pv ON p.ID = pv.POPUP_ID
                  LEFT JOIN PLAN pl ON p.PLAN_ID = pl.ID
                  LEFT JOIN USERS u ON u.ID = pl.USER_ID
+        WHERE P.DELETED = 0
         GROUP BY p.ID, p.TITLE, pl.USER_ID
         ORDER BY viewSum desc
     </select>
@@ -159,22 +165,18 @@
     @return MyPopupDetailMapper
     @author 이상민
     @since 2024.03.01
+
+    CLOB 타입 추가에 따른 GROUP BY 방식에서 서브쿼리 방식으로 쿼리문 변경
+
+    @author 김유빈
+    @since 2024.03.06
    -->
     <select id="findByPlanId" resultType="com.oya.kr.popup.mapper.dto.response.MyPopupDetailMapper">
-        SELECT p.ID,
-               p.TITLE,
-               p.DESCRIPTION,
-               p.CREATED_DATE,
-               p.MODIFIED_DATE,
-               p.WITHDRAWAL_STATUS,
-               pa.AMOUNT,
-               COUNT(pv.POPUP_ID) as popupView
-        FROM POPUP p
-                 LEFT JOIN PLAN pl ON pl.ID = p.PLAN_ID
-                 LEFT JOIN POPUP_VIEW pv ON p.ID = pv.POPUP_ID
-                 LEFT JOIN POPUP_ADVERTISEMENT pa ON p.ID = pa.POPUP_ID
-        WHERE p.PLAN_ID = #{planId}
-        GROUP BY p.WITHDRAWAL_STATUS, p.ID, p.TITLE, p.DESCRIPTION, p.CREATED_DATE, p.MODIFIED_DATE, pa.AMOUNT
+        SELECT ID, TITLE, CONTENT, CREATED_DATE, MODIFIED_DATE, WITHDRAWAL_STATUS,
+               (SELECT AMOUNT FROM POPUP_ADVERTISEMENT PA WHERE PA.POPUP_ID = P.ID AND DELETED = 0) AMOUNT,
+               (SELECT COUNT(PV.POPUP_ID) FROM POPUP_VIEW PV WHERE PV.POPUP_ID = P.ID AND DELETED = 0) POPUP_VIEW
+        FROM POPUP P
+        WHERE PLAN_ID = #{popupId} AND DELETED = 0
     </select>
 
 </mapper>
