@@ -93,4 +93,8 @@ public class ChatRoomRepository { // 채팅 방 생성 및 정보 조회
 	public int countAll() {
 		return chatRoomMapper.countAll();
 	}
+
+	public Long findByUserId(Long roomId) {
+		return chatRoomMapper.findByUserId(roomId);
+	}
 }

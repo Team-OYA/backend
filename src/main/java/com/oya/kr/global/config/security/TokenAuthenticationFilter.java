@@ -58,11 +58,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 			return;
 		}
 
-		// if (!isAuthenticationRequired(request)) {
-		// 	filterChain.doFilter(request, response);
-		// 	return;
-		// }
-
 		try {
 			String accessToken = getAccessToken(authorizationHeader);
 			if (tokenProvider.validToken(accessToken)) {

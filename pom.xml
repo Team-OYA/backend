@@ -29,6 +29,13 @@
     </dependencyManagement>
     <dependencies>
 
+        <!-- fcm -->
+        <dependency>
+            <groupId>com.google.firebase</groupId>
+            <artifactId>firebase-admin</artifactId>
+            <version>7.1.1</version>
+        </dependency>
+
         <!-- chat -->
         <dependency>
             <groupId>org.springframework</groupId>
