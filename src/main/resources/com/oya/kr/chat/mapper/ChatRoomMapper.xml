@@ -42,4 +42,10 @@
         SELECT COUNT(*)
         FROM CHAT_ROOM
     </select>
+
+    <select id="findByUserId" resultType="java.lang.Long">
+        SELECT CREATOR
+        FROM CHAT_ROOM
+        WHERE ID = #{roomId}
+    </select>
 </mapper>

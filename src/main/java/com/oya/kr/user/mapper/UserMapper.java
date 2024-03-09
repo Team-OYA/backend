@@ -42,4 +42,6 @@ public interface UserMapper {
 	Optional<AdUserDetailMapperResponse> findMeForAd(Long userId);
 
 	int countUser(String type);
+
+	Long findByName(String name);
 }

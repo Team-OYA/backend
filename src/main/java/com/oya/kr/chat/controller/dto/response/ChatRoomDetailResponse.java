@@ -15,9 +15,6 @@ public class ChatRoomDetailResponse {
 	private final String createdDate;
 	private final String modifiedDate;
 
-	// private final User sender;
-	// private final User receiver;
-
 	public ChatRoomDetailResponse(ChatRoomDetailMapperResponse response) {
 		this.chatRoomId = response.getId();
 		this.name = response.getName();

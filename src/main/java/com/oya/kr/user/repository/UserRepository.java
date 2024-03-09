@@ -179,4 +179,14 @@ public class UserRepository {
 	public int countUser(String type) {
         return userMapper.countUser(type);
 	}
+
+    /**
+     * name을 가지고 userId 찾기
+     *
+     * @author 이상민
+     * @since 2024.03.10
+     */
+	public Long findByName(String name) {
+        return userMapper.findByName(name);
+	}
 }

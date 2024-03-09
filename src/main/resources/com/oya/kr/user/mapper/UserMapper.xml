@@ -197,4 +197,10 @@
         OFFSET #{pageNo} ROWS FETCH NEXT #{amount} ROWS ONLY
     </sql>
 
+    <select id="findByName" resultType="java.lang.Long">
+        SELECT ID
+        FROM USERS U
+        WHERE U.NICKNAME = #{name}
+    </select>
+
 </mapper>

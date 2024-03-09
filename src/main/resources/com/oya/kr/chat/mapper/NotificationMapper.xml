@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oya.kr.chat.mapper.NotificationMapper">
+
+    <!-- @author 이상민 -->
+    <!-- @since 2024.03.08-->
+    <insert id="save" parameterType="com.oya.kr.chat.mapper.dto.request.NotificationMapperRequest">
+        INSERT INTO NOTIFICATION(user_id, token)
+        VALUES(#{userId}, #{token})
+    </insert>
+
+    <select id="findByUser" resultType="com.oya.kr.chat.mapper.dto.response.NotificationMapperResponse">
+        SELECT id, user_id, token
+        FROM notification
+        WHERE user_id =#{id}
+    </select>
+
+    <update id="update" parameterType="com.oya.kr.chat.mapper.dto.request.NotificationMapperRequest">
+        UPDATE NOTIFICATION
+        SET token = #{token}, modified_date=SYSTIMESTAMP
+        WHERE user_id =#{userId}
+    </update>
+
+    <select id="findAll" resultType="com.oya.kr.chat.mapper.dto.response.NotificationListMapperResponse">
+        SELECT n.id, user_id, token, USER_TYPE
+        FROM notification n
+        LEFT JOIN USERS u
+        ON n.USER_ID = u.ID
+    </select>
+
+    <select id="findByUserType" resultType="com.oya.kr.chat.mapper.dto.response.NotificationListMapperResponse">
+        SELECT n.id, user_id, token, USER_TYPE
+        FROM notification n
+                 LEFT JOIN USERS u
+                           ON n.USER_ID = u.ID
+        WHERE USER_TYPE = 'administrator'
+    </select>
+
+</mapper>

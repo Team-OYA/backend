@@ -16,4 +16,6 @@ public interface ChatRoomMapper {
 	int count(Long userId);
 
 	int countAll();
+
+	Long findByUserId(Long roomId);
 }
