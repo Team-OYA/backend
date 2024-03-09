@@ -23,6 +23,7 @@ jobs:
           echo "${{ secrets.APPLICATION_TEST }}" > src/main/resources/application-test.properties
           echo "${{ secrets.APPLICATION_LOCAL }}" > src/main/resources/application-local.properties
           echo "${{ secrets.APPLICATION_DEV }}" > src/main/resources/application-dev.properties
+          echo "${{ secrets.FIREBASE }}" > src/main/resources/firebase.json
 
       - name: Build with Maven
         run: mvn -e clean package -DskipTests
