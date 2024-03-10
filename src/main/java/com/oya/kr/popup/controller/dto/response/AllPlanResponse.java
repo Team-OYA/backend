@@ -22,6 +22,7 @@ public class AllPlanResponse {
     private final String closeDate;
     private final String entranceStatus;
     private final String category;
+    private final boolean writtenPopup;
     private final String createdDate;
 
     public static AllPlanResponse from(AllPlanMapperResponse response) {
@@ -34,6 +35,7 @@ public class AllPlanResponse {
             DateConvertor.convertDateFormatForResponse(response.getCloseDate()),
             EntranceStatus.from(response.getEntranceStatus()).getDescription(),
             Category.from(response.getCategory()).getDescription(),
+            response.isWrittenPopup(),
             DateConvertor.convertDateFormatForResponse(response.getCreatedDate())
         );
     }
