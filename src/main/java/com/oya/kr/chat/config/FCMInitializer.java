@@ -41,6 +41,7 @@ public class FCMInitializer {
 					.build();
 				FirebaseApp.initializeApp(options);
 				initialized = true;
+				log.info("FCM 성공");
 			} catch (IOException e) {
 				log.info("FCM 오류");
 				log.error("FCM 오류 메시지: " + e.getMessage());
