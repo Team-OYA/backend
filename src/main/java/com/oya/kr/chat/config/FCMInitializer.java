@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
@@ -49,14 +50,19 @@ public class FCMInitializer {
 				Resource resource = resources[0];
 				if (!initialized) {
 					try {
-						GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ByteArrayInputStream(getJsonBytes(resource)))
+						byte[] jsonBytes = getJsonBytes(resource);
+						String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
+
+						log.info("Firebase JSON 파일 내용:\n{}", jsonContent);
+
+						GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ByteArrayInputStream(jsonBytes))
 							.createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"));
 						FirebaseOptions options = new FirebaseOptions.Builder()
 							.setCredentials(googleCredentials)
 							.build();
 						FirebaseApp.initializeApp(options);
 						initialized = true;
-						log.info("FCM 성공");
+						log.info("FCM 초기화 성공");
 					} catch (IOException e) {
 						log.info("FCM 오류");
 						log.error("FCM 오류 메시지: " + e.getMessage());
