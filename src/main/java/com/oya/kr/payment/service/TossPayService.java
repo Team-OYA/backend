@@ -105,7 +105,6 @@ public class TossPayService {
             }
             communityRepository.updateAdPaymentKey(orderId, paymentKey);
         }
-        // todo: redirect
     }
 
     /**

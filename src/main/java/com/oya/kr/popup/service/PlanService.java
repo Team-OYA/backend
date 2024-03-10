@@ -27,7 +27,6 @@ import com.oya.kr.popup.controller.dto.response.PlanResponse;
 import com.oya.kr.popup.controller.dto.response.PlansResponse;
 import com.oya.kr.popup.controller.dto.response.PopupDetailResponse;
 import com.oya.kr.popup.controller.dto.response.UserPlanResponse;
-import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.popup.domain.enums.Category;
 import com.oya.kr.popup.domain.enums.Department;
 import com.oya.kr.popup.domain.Plan;
@@ -37,10 +36,10 @@ import com.oya.kr.popup.mapper.dto.response.MyPlanMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.MyPopupDetailMapper;
 import com.oya.kr.popup.mapper.dto.response.PlanAboutMeMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PlanMapperResponse;
-import com.oya.kr.popup.mapper.dto.response.PopupDetailMapperResponse;
-import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.popup.repository.PlanRepository;
 import com.oya.kr.popup.repository.PopupRepository;
+import com.oya.kr.popup.support.PlanMailTemplate;
+import com.oya.kr.popup.support.dto.response.MailResponse;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
 
@@ -57,17 +56,20 @@ public class PlanService {
     private final PopupRepository popupRepository;
     private final StorageConnector s3Connector;
     private final MailSender sesSender;
+    private final PlanMailTemplate planMailTemplate;
 
     public PlanService(
         UserRepository userRepository,
         PlanRepository planRepository, PopupRepository popupRepository,
         StorageConnector s3Connector,
-        @Qualifier("SESSender") MailSender sesSender) {
+        @Qualifier("SESSender") MailSender sesSender,
+        PlanMailTemplate planMailTemplate) {
         this.userRepository = userRepository;
         this.planRepository = planRepository;
 		this.popupRepository = popupRepository;
 		this.s3Connector = s3Connector;
         this.sesSender = sesSender;
+        this.planMailTemplate = planMailTemplate;
     }
 
     /**
@@ -258,17 +260,10 @@ public class PlanService {
         savedPlan.waiting();
         planRepository.updateEntranceStatus(savedPlan);
 
-        String title = "[THEPOP] 제안해주신 사업계획서가 대기 상태로 전환되었습니다.";
-        String content = String.format(
-            "%s 고객님, 안녕하세요.\n"
-                + "제안해주신 사업계획서가 대기 상태로 전환되었습니다.\n"
-                + "대기 상태에는 커뮤니티 게시글을 자유롭게 작성하실 수 있습니다.\n"
-                + "이후 제안이 승인되면 팝업스토어 게시글을 올려 팝업스토어를 홍보하실 수 있습니다.\n"
-                + "팝업스토어 제안에 감사드립니다.\n"
-                + "THEPOP 드림", savedUser.getNickname());
+        MailResponse mailResponse = planMailTemplate.messageForWait(savedUser.getNickname());
 
         SenderRequest request = new SenderRequest(
-            savedUser.getEmail(), List.of(businessUser.getEmail()), title, content);
+            savedUser.getEmail(), List.of(businessUser.getEmail()), mailResponse.getTitle(), mailResponse.getContent());
         sesSender.send(request);
     }
 
@@ -290,16 +285,10 @@ public class PlanService {
         savedPlan.approve();
         planRepository.updateEntranceStatus(savedPlan);
 
-        String title = "[THEPOP] 제안해주신 사업계획서가 승인되었습니다.";
-        String content = String.format(
-            "%s 고객님, 안녕하세요.\n"
-                + "팝업스토어 입점을 축하드립니다!\n"
-                + "사업계획서가 승인되어 팝업스토어 게시글을 올려 팝업스토어를 홍보하실 수 있습니다.\n"
-                + "팝업스토어 제안에 감사드립니다.\n"
-                + "THEPOP 드림", savedUser.getNickname());
+        MailResponse mailResponse = planMailTemplate.messageForApprove(savedUser.getNickname());
 
         SenderRequest request = new SenderRequest(
-            savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), title, content);
+            savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), mailResponse.getTitle(), mailResponse.getContent());
         sesSender.send(request);
     }
 
@@ -321,16 +310,10 @@ public class PlanService {
         savedPlan.deny();
         planRepository.updateEntranceStatus(savedPlan);
 
-        String title = "[THEPOP] 제안해주신 사업계획서가 거절되었습니다.";
-        String content = String.format(
-            "%s 고객님, 안녕하세요.\n"
-                + "안타깝지만 제안해주신 사업계획서는 현대백화점과 함께하지 못하게 되었습니다.\n"
-                + "이후에 더 좋은 사업계획서가 있다면 언제든 연락 바랍니다.\n"
-                + "팝업스토어 제안에 감사드립니다.\n"
-                + "THEPOP 드림", savedUser.getNickname());
+        MailResponse mailResponse = planMailTemplate.messageForDeny(savedUser.getNickname());
 
         SenderRequest request = new SenderRequest(
-            savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), title, content);
+            savedUser.getEmail(), List.of(savedPlan.getUser().getEmail()), mailResponse.getTitle(), mailResponse.getContent());
         sesSender.send(request);
     }
 
