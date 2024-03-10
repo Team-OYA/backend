@@ -1,6 +1,10 @@
 package com.oya.kr.chat.config;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
@@ -45,7 +49,8 @@ public class FCMInitializer {
 				Resource resource = resources[0];
 				if (!initialized) {
 					try {
-						GoogleCredentials googleCredentials = GoogleCredentials.fromStream(resource.getInputStream());
+						GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ByteArrayInputStream(getJsonBytes(resource)))
+							.createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"));
 						FirebaseOptions options = new FirebaseOptions.Builder()
 							.setCredentials(googleCredentials)
 							.build();
@@ -65,6 +70,18 @@ public class FCMInitializer {
 			}
 		} else {
 			log.warn("FirebaseApp 이름 [DEFAULT]으로 초기화된 앱이 이미 존재합니다.");
+		}
+	}
+
+	private byte[] getJsonBytes(Resource resource) throws IOException {
+		try (InputStream inputStream = resource.getInputStream()) {
+			ByteArrayOutputStream result = new ByteArrayOutputStream();
+			byte[] buffer = new byte[1024];
+			int length;
+			while ((length = inputStream.read(buffer)) != -1) {
+				result.write(buffer, 0, length);
+			}
+			return result.toByteArray();
 		}
 	}
 
