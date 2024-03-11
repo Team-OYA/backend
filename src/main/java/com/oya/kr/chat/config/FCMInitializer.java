@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -42,37 +43,26 @@ public class FCMInitializer {
 	@PostConstruct
 	public void initialize() throws IOException {
 		if (!initialized) {
+			try {
+				// EC2 root 디렉토리에 있는 파일에 접근하기 위해 FileSystemResource를 사용
+				Resource resource = new FileSystemResource("/firebase.json");
 
-			Resource[] resources = new PathMatchingResourcePatternResolver(new DefaultResourceLoader())
-				.getResources("classpath:firebase.json");
+				byte[] jsonBytes = getJsonBytes(resource);
+				String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
 
-			if (resources.length > 0) {
-				Resource resource = resources[0];
-				if (!initialized) {
-					try {
-						byte[] jsonBytes = getJsonBytes(resource);
-						String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
+				log.info("Firebase JSON 파일 내용:\n{}", jsonContent);
 
-						log.info("Firebase JSON 파일 내용:\n{}", jsonContent);
-
-						GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ByteArrayInputStream(jsonBytes))
-							.createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"));
-						FirebaseOptions options = new FirebaseOptions.Builder()
-							.setCredentials(googleCredentials)
-							.build();
-						FirebaseApp.initializeApp(options);
-						initialized = true;
-						log.info("FCM 초기화 성공");
-					} catch (IOException e) {
-						log.info("FCM 오류");
-						log.error("FCM 오류 메시지: " + e.getMessage());
-					}
-				} else {
-					log.warn("FirebaseApp 이름 [DEFAULT]으로 초기화된 앱이 이미 존재합니다.");
-				}
-			} else {
-				// 리소스를 찾을 수 없을 때의 처리 로직
-				log.error("Resource not found: firebase.json");
+				GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ByteArrayInputStream(jsonBytes))
+					.createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"));
+				FirebaseOptions options = new FirebaseOptions.Builder()
+					.setCredentials(googleCredentials)
+					.build();
+				FirebaseApp.initializeApp(options);
+				initialized = true;
+				log.info("FCM 초기화 성공");
+			} catch (IOException e) {
+				log.info("FCM 오류");
+				log.error("FCM 오류 메시지: " + e.getMessage(), e);
 			}
 		} else {
 			log.warn("FirebaseApp 이름 [DEFAULT]으로 초기화된 앱이 이미 존재합니다.");
