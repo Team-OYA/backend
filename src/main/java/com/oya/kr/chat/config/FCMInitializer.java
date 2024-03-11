@@ -45,7 +45,7 @@ public class FCMInitializer {
 	public void initialize() throws IOException {
 		if (!initialized) {
 			try {
-				Resource resource = new ClassPathResource("firebase.json");
+				Resource resource = new FileSystemResource("/home/ubuntu/firebase.json");
 				log.info("Resource path: {}", resource.getURI());
 
 				byte[] jsonBytes = getJsonBytes(resource);
