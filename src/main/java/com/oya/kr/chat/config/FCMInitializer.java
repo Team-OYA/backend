@@ -46,6 +46,7 @@ public class FCMInitializer {
 		if (!initialized) {
 			try {
 				Resource resource = new ClassPathResource("firebase.json");
+				log.info("Resource path: {}", resource.getURI());
 
 				byte[] jsonBytes = getJsonBytes(resource);
 				String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
