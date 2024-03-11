@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 import javax.annotation.PostConstruct;
 
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.InputStreamResource;
@@ -44,14 +45,11 @@ public class FCMInitializer {
 	public void initialize() throws IOException {
 		if (!initialized) {
 			try {
-				// EC2 root 디렉토리에 있는 파일에 접근하기 위해 FileSystemResource를 사용
-				Resource resource = new FileSystemResource("/home/ubuntu/firebase.json");
+				Resource resource = new ClassPathResource("firebase.json");
 
 				byte[] jsonBytes = getJsonBytes(resource);
 				String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
-
 				log.info("Firebase JSON 파일 내용:\n{}", jsonContent);
-
 				GoogleCredentials googleCredentials = GoogleCredentials.fromStream(new ByteArrayInputStream(jsonBytes))
 					.createScoped(Arrays.asList("https://www.googleapis.com/auth/cloud-platform"));
 				FirebaseOptions options = new FirebaseOptions.Builder()
