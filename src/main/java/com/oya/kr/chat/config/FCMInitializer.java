@@ -44,7 +44,7 @@ public class FCMInitializer {
 		if (!initialized) {
 
 			Resource[] resources = new PathMatchingResourcePatternResolver(new DefaultResourceLoader())
-				.getResources("/home/ubuntu/firebase.json");
+				.getResources("classpath:firebase.json");
 
 			if (resources.length > 0) {
 				Resource resource = resources[0];
