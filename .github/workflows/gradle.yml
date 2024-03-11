@@ -20,7 +20,6 @@ jobs:
 
       - name: Create application.properties
         run: |
-          echo "${{ secrets.FIREBASE }}" > src/main/resources/firebase.json
           echo "${{ secrets.APPLICATION_TEST }}" > src/main/resources/application-test.properties
           echo "${{ secrets.APPLICATION_LOCAL }}" > src/main/resources/application-local.properties
           echo "${{ secrets.APPLICATION_DEV }}" > src/main/resources/application-dev.properties
@@ -53,4 +52,4 @@ jobs:
             
             # Pull and run the application container
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_CONTAINER_NAME }}
-            sudo docker run -d -p 8080:8080 --name ${{ secrets.DOCKER_CONTAINER_NAME }} ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
+            sudo docker run -d -p 8080:8080 --name ${{ secrets.DOCKER_CONTAINER_NAME }} -v /home/ubuntu/firebase.json:/app/firebase.json ${{ secrets.DOCKER_USERNAME }}/${{ secrets.DOCKER_IMAGE_NAME }}
