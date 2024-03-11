@@ -45,7 +45,7 @@ public class FCMInitializer {
 		if (!initialized) {
 			try {
 				// EC2 root 디렉토리에 있는 파일에 접근하기 위해 FileSystemResource를 사용
-				Resource resource = new FileSystemResource("/firebase.json");
+				Resource resource = new FileSystemResource("/home/ubuntu/firebase.json");
 
 				byte[] jsonBytes = getJsonBytes(resource);
 				String jsonContent = new String(jsonBytes, StandardCharsets.UTF_8);
