@@ -71,6 +71,19 @@ public class PopupRepository {
     }
 
     /**
+     * 사용자 정보 없이 팝업스토어 정보 조회
+     *
+     * @parameter Long
+     * @return PopupMapperResponse
+     * @author 김유빈
+     * @since 2024.03.13
+     */
+    public PopupMapperResponse findByIdWithoutUser(Long id) {
+        return popupMapper.findById(id)
+            .orElseThrow(() -> new ApplicationException(NOT_EXIST_POPUP));
+    }
+
+    /**
      * repository 계층으로 분리
      *
      * @parameter Long, Long

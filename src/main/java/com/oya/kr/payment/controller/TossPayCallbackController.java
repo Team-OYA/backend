@@ -43,8 +43,8 @@ public class TossPayCallbackController {
         @RequestParam String paymentKey,
         @RequestParam Long amount
     ) {
-        tossPayService.success(orderId, paymentType, paymentKey, amount);
-        return String.format("redirect:%s", successCallback);
+        Long planId = tossPayService.success(orderId, paymentType, paymentKey, amount);
+        return String.format("redirect:%s?planId=%s", successCallback, planId);
     }
 
     /**

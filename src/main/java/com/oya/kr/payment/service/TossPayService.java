@@ -24,6 +24,7 @@ import com.oya.kr.payment.support.dto.request.PaymentRequest;
 import com.oya.kr.popup.domain.Popup;
 import com.oya.kr.community.mapper.dto.response.CommunityAdMapperResponse;
 import com.oya.kr.popup.mapper.dto.response.PopupAdMapperResponse;
+import com.oya.kr.popup.mapper.dto.response.PopupMapperResponse;
 import com.oya.kr.popup.repository.PopupRepository;
 import com.oya.kr.user.domain.User;
 import com.oya.kr.user.repository.UserRepository;
@@ -75,15 +76,17 @@ public class TossPayService {
      * 토스페이 결제 처리
      *
      * @parameter String, String, String, Long
+     * @return Long
      * @author 김유빈
      * @since 2024.02.29
      */
-    public void success(String orderId, String paymentType, String paymentKey, Long amount) {
+    public Long success(String orderId, String paymentType, String paymentKey, Long amount) {
         ResponseEntity<Void> response = tossPayConnector.success(new PaymentRequest(paymentKey, orderId, amount));
         if (!response.getStatusCode().is2xxSuccessful()) {
             throw new ApplicationException(FAIL);
         }
         Optional<PopupAdMapperResponse> popupAdvertisement = popupRepository.findAdByOrderId(orderId);
+        Long planId = null;
         if (popupAdvertisement.isPresent()) {
             if (popupAdvertisement.get().getPaymentKey() != null) {
                 throw new ApplicationException(ALREADY_PAY);
@@ -92,6 +95,8 @@ public class TossPayService {
                 throw new ApplicationException(NOT_EQUAL_AMOUNT);
             }
             popupRepository.updateAdPaymentKey(orderId, paymentKey);
+            PopupMapperResponse savedPopup = popupRepository.findByIdWithoutUser(popupAdvertisement.get().getPopupId());
+            planId = savedPopup.getPlanId();
         } else {
             Optional<CommunityAdMapperResponse> communityAdvertisement = communityRepository.findAdByOrderId(orderId);
             if (communityAdvertisement.isEmpty()) {
@@ -105,6 +110,7 @@ public class TossPayService {
             }
             communityRepository.updateAdPaymentKey(orderId, paymentKey);
         }
+        return planId;
     }
 
     /**
